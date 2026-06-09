@@ -15,6 +15,7 @@
             --success: #4caf50;
             --error: #f44336;
             --border: #333333;
+            --input-bg: #252525;
         }
 
         body {
@@ -30,7 +31,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 750px;
             width: 100%;
             background: var(--card-bg);
             border-radius: 12px;
@@ -38,6 +39,7 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
             border: 1px solid var(--border);
             margin-top: 20px;
+            box-sizing: border-box;
         }
 
         h1 {
@@ -57,13 +59,19 @@
         /* Sekcja kontrolna / Menu */
         .controls {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 15px;
             margin-bottom: 25px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
+        }
+
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .modes {
@@ -71,15 +79,29 @@
             gap: 10px;
         }
 
-        button {
-            background-color: #2c2c2c;
+        button, select, input {
+            background-color: var(--input-bg);
             color: var(--text-color);
             border: 1px solid var(--border);
             padding: 10px 16px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            font-family: inherit;
             transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        input[type="text"] {
+            cursor: text;
+            font-weight: normal;
+            flex-grow: 1;
+            min-width: 200px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
         button:hover:not(:disabled) {
@@ -100,6 +122,13 @@
             padding: 8px 14px;
             border-radius: 20px;
             border: 1px solid var(--border);
+        }
+
+        .search-jump-container {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            flex-wrap: wrap;
         }
 
         /* Karta pytania */
@@ -218,15 +247,24 @@
         <div class="subtitle">Inżynieria Materiałowa & Obróbka Cieplna</div>
 
         <div class="controls">
-            <div class="modes">
-                <button id="mode-normal" class="active" onclick="setMode('normal')">Tryb zwykły</button>
-                <button id="mode-learn" onclick="setMode('learn')">Tryb nauki (<span id="review-count">0</span>)</button>
+            <div class="controls-row">
+                <div class="modes">
+                    <button id="mode-normal" class="active" onclick="setMode('normal')">Tryb zwykły</button>
+                    <button id="mode-learn" onclick="setMode('learn')">Tryb nauki (<span id="review-count">0</span>)</button>
+                </div>
+                <div>
+                    <button id="shuffle-btn" onclick="toggleShuffle()">Losowe pytania: WYŁ</button>
+                </div>
+                <div class="stats">
+                    Pytanie: <span id="current-index">0</span>/<span id="total-count">0</span>
+                </div>
             </div>
-            <div>
-                <button id="shuffle-btn" onclick="toggleShuffle()">Losowe pytania: WYŁ</button>
-            </div>
-            <div class="stats">
-                Pytanie: <span id="current-index">0</span>/<span id="total-count">0</span>
+
+            <div class="search-jump-container">
+                <input type="text" id="search-input" placeholder="Szukaj pytania po słowach..." oninput="handleSearch()">
+                <select id="jump-select" onchange="handleJumpToQuestion()">
+                    <option value="">Skocz do pytania...</option>
+                </select>
             </div>
         </div>
 
@@ -293,7 +331,7 @@
             { id: 43, q: "Które z wymienionych parametrów służyć mogą do oceny plastyczności materiałów?", type: "normal", answers: ["granica plastyczności materiału", "wytrzymałość materiału na rozciąganie", "wydłużenie otrzymane z próby jednoosiowego rozciągania"], correct: 2 },
             { id: 44, q: "Zabieg patentowania stosuje się w technologii wytwarzania:", type: "normal", answers: ["prętów zbrojeniowych", "rur", "drutów"], correct: 2 },
             { id: 45, q: "Słabą zależność od mikrostruktury stali wykazuje:", type: "normal", answers: ["granica plastyczności", "moduł Younga", "twardość"], correct: 1 },
-            { id: 46, q: "Ogólnie dużą odpornością na pękanie (KIc) charakteryzują się:", type: "normal", answers: ["stopy metali", "ceramiki", "polimery"], correct: 1 }, // Zgodnie z drukiem b) ceramiki, choć fizycznie to dyskusyjne
+            { id: 46, q: "Ogólnie dużą odpornością na pękanie (KIc) charakteryzują się:", type: "normal", answers: ["stopy metali", "ceramiki", "polimery"], correct: 1 },
             { id: 47, q: "Równowagowe stężenie defektów punktowych:", type: "normal", answers: ["zmniejsza się ze wzrostem temperatury", "jest niezależne od temperatury", "zwiększa się ze wzrostem temperatury"], correct: 2 },
             { id: 48, q: "Odkształcaniu przez bliźniakowanie sprzyja:", type: "normal", answers: ["wysoka temperatura odkształcenia", "niska temperatura odkształcenia", "małe ziarno odkształcanego materiału"], correct: 1 },
             { id: 49, q: "Ogólnie twardość metali:", type: "normal", answers: ["zwiększa się ze wzrostem wytrzymałości", "maleje ze wzrostem wytrzymałości", "jest niezależna od wytrzymałości"], correct: 0 },
@@ -306,13 +344,13 @@
             { id: 56, q: "Po hartowaniu stali:", type: "normal", answers: ["objętość próbki zwiększa się", "objętość próbki zmniejsza się", "objętość próbki nie zmienia się"], correct: 0 },
             { id: 57, q: "W celu zapewnienia stali wysokiej twardości i odporności na ścieranie:", type: "normal", answers: ["stal nawęgla się po uprzednim jej zahartowaniu", "stal po nawęglaniu poddaje się ulepszaniu cieplnemu", "stal po nawęglaniu hartuje się i nisko odpuszcza"], correct: 2 },
             { id: 58, q: "Czy materiały funkcjonalne zmieniają swoje własności pod wpływem przyłożonego do takich materiałów zewnętrznego pola mechanicznego, elektrycznego lub magnetycznego?", type: "normal", answers: ["Tak. Takie zachowanie materiału identyfikuje materiały funkcjonalne.", "Tak, ale tylko dla materiałów poddanych działaniu pola elektrycznego.", "Tak, ale tylko dla materiałów poddanych działaniu pola mechanicznego."], correct: 0 },
-            { id: 59, q: "Stan naprężenia można rozłożyć na dwa stany podstawowe:", type: "normal", answers: ["stan hydrostatyczny oraz czyste ścinanie", "stan naprężeń głównych oraz stan naprężeń stycznych", "stan naprężeń średnich oraz stan naprężeń oktaedrycznych"], correct: 0 },
+            { id: 59, q: "Stan naprężenia można rozłożyć na dwa stany podstawowe:", type: "normal", answers: ["stan hydrostatyczny oraz czстые ścinanie", "stan naprężeń głównych oraz stan naprężeń stycznych", "stan naprężeń średnich oraz stan naprężeń oktaedrycznych"], correct: 0 },
             { id: 60, q: "Zanieczyszczenia w stali takie jak siarka i fosfor:", type: "normal", answers: ["nie wpływają na skrawalność", "pogarszają skrawalność", "polepszają skrawalność"], correct: 2 },
             { id: 61, q: "Podaj, który z procesów obróbki powierzchniowej wymaga koniecznie stosowania próżni:", type: "normal", answers: ["hartowanie laserowe", "hartowanie plazmowe", "hartowanie elektronowe"], correct: 1 },
-            { id: 62, q: "Która z wymienionych powłok na wyrobie stalowym ma charakter powłoki anodowej?", type: "normal", answers: ["Zn", "Sn", "Cu"], correct: 0 },
+            { id: 62, q: "Któria z wymienionych powłok na wyrobie stalowym ma charakter powłoki anodowej?", type: "normal", answers: ["Zn", "Sn", "Cu"], correct: 0 },
             { id: 63, q: "Który z wymienionych materiałów jest najwłaściwszym materiałem na pojemniki do przechowywania ciekłych gazów?", type: "normal", answers: ["Stop aluminium", "Stal niskostopowa o podwyższonej wytrzymałości", "Chromowa stal ferrytyczna"], correct: 1 },
             { id: 64, q: "Powstawanie stopów eutektycznych zachodzi, gdy:", type: "normal", answers: ["nieograniczona rozpuszczalność, podobna temp topnienia", "nieograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, podobna temp topnienia"], correct: 3 },
-            { id: 65, q: "Stal niskowęglowa jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
+            { id: 65, q: "Stal niskonapięciowa (niskowęglowa) jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
             { id: 66, q: "Na czym polega obróbka cieplna stali?", type: "ai", answers: ["Chodzi o to żeby rozpuścić niepożądane fazy", "Na mechanicznym usuwaniu zgorzeliny", "Na powierzchniowym utwardzaniu przez zgniot"], correct: 0 },
             { id: 67, q: "Spiekanie to:", type: "ai", answers: ["proces samorzutny i nieodwracalny", "proces wymuszony i w pełni odwracalny", "topnienie osnowy w łuku elektrycznym"], correct: 0 },
             { id: 68, q: "Dla kompozytów o osnowie ceramicznej najbardziej typowy napełniacz to:", type: "ai", answers: ["Ziarnisty", "Włóknisty ciągły", "Warstwowy (laminat)"], correct: 0 },
@@ -353,7 +391,7 @@
             { id: 103, q: "Mikrostruktura stali niestopowej konstrukcyjnej w stanie równowagi (wyżarzonym) składa się z:", type: "ai", answers: ["ferrytu i perlitu", "martenzytu i austenitu", "bainitu i cementytu"], correct: 0 },
             { id: 104, q: "Cementyt trzeciorzędowy wydziela się w stalach podczas chłodzenia:", type: "ai", answers: ["z ferrytu na skutek malejącej rozpuszczalności węgla", "z austenitu podczas przemiany martenzytycznej", "bezpośrednio z cieczy przy temp. 1147°C"], correct: 0 },
             { id: 105, q: "Pierwiastki austenitotwórcze to:", type: "ai", answers: ["mangan i nikiel", "chrom i wolfram", "tytan i wanad"], correct: 0 },
-            { id: 106, q: "Fazy Lavesa są to:", type: "ai", answers: ["fazy ........cyjne (?)", "roztwory graniczne", "odmiany alotropowe ferrytu"], correct: 0 },
+            { id: 106, q: "Fazy Lavesa są to:", type: "ai", answers: ["fazy międzymetaliczne", "roztwory graniczne", "odmiany alotropowe ferrytu"], correct: 0 },
             { id: 107, q: "Do defektów struktury krystalicznej należą:", type: "ai", answers: ["dyslokacje, błędy ułożenia, granice ziarn", "wtrącenia niemetaliczne, pęcherze gazowe", "pęknięcia zmęczeniowe, zgorzelina"], correct: 0 }
         ];
 
@@ -365,27 +403,65 @@
         let currentQuestionIndex = 0;
         let hasAnswered = false;
 
-        // Inicjalizacja aplikacji
         function initQuiz() {
             updateReviewCountDisplay();
             setupQuestions();
             showQuestion();
         }
 
+        // Przygotowanie puli pytań
         function setupQuestions() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+
+            // 1. Filtrowanie po trybie (zwykły vs nauki)
             if (currentMode === 'learn') {
                 activeQuestions = database.filter(q => wrongAnswersList.includes(q.id));
             } else {
                 activeQuestions = [...database];
             }
 
+            // 2. Filtrowanie po wyszukiwarce tekstowej
+            if (searchQuery !== '') {
+                activeQuestions = activeQuestions.filter(q => q.q.toLowerCase().includes(searchQuery));
+            }
+
+            // 3. Losowanie / Sortowanie sekwencyjne
             if (isShuffle) {
                 activeQuestions.sort(() => Math.random() - 0.5);
-            } else if (currentMode === 'normal') {
+            } else {
                 activeQuestions.sort((a, b) => a.id - b.id);
             }
             
             currentQuestionIndex = 0;
+            populateJumpSelect();
+        }
+
+        // Dynamiczne uzupełnianie listy rozwijanej (Select)
+        function populateJumpSelect() {
+            const select = document.getElementById('jump-select');
+            select.innerHTML = '<option value="">Skocz do pytania...</option>';
+            
+            activeQuestions.forEach((q, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.innerText = `Pytanie ${q.id}: ${q.q.substring(0, 40)}...`;
+                select.appendChild(opt);
+            });
+        }
+
+        // Obsługa wyboru konkretnego pytania z listy
+        function handleJumpToQuestion() {
+            const select = document.getElementById('jump-select');
+            if (select.value !== "") {
+                currentQuestionIndex = parseInt(select.value, 10);
+                showQuestion();
+            }
+        }
+
+        // Obsługa wpisywania haseł do wyszukiwarki
+        function handleSearch() {
+            setupQuestions();
+            showQuestion();
         }
 
         function setMode(mode) {
@@ -415,19 +491,22 @@
             const quizArea = document.getElementById('quiz-area');
             const totalCountSpan = document.getElementById('total-count');
             const currentIndexSpan = document.getElementById('current-index');
+            
+            // Aktualizacja aktualnie wybranej opcji w select
+            document.getElementById('jump-select').value = (activeQuestions.length > 0 && currentQuestionIndex < activeQuestions.length) ? currentQuestionIndex : "";
 
             if (activeQuestions.length === 0) {
-                if (currentMode === 'learn') {
-                    quizArea.innerHTML = `<div class="empty-state"><h3>Brak pytań do powtórki!</h3><p>Wszystkie odpowiedzi są poprawne lub lista jest pusta.</p></div>`;
-                } else {
-                    quizArea.innerHTML = `<div class="empty-state"><h3>Brak pytań.</h3></div>`;
-                }
+                const isSearching = document.getElementById('search-input').value.trim() !== '';
+                let msg = currentMode === 'learn' ? 'Brak pytań do powtórki!' : 'Brak pytań.';
+                if (isSearching) msg = 'Nie znaleziono pytań pasujących do frazy.';
+                
+                quizArea.innerHTML = `<div class="empty-state"><h3>${msg}</h3></div>`;
                 currentIndexSpan.innerText = "0";
                 totalCountSpan.innerText = "0";
                 return;
             }
 
-            // Przywrócenie pierwotnej struktury jeśli była pusta
+            // Odtworzenie struktury html quizu, jeśli została wcześniej zastąpiona przez empty-state
             if (!document.getElementById('question-id')) {
                 quizArea.innerHTML = `
                     <div class="question-box">
@@ -463,6 +542,12 @@
                 const optDiv = document.createElement('div');
                 optDiv.className = 'option';
                 optDiv.innerText = ans;
+                
+                // Pogrubienie poprawnej odpowiedzi przed kliknięciem
+                if (index === qData.correct) {
+                    optDiv.style.fontWeight = 'bold';
+                }
+
                 optDiv.onclick = () => selectOption(index, optDiv);
                 container.appendChild(optDiv);
             });
@@ -478,7 +563,6 @@
 
             if (selectedIndex === qData.correct) {
                 optElement.classList.add('correct');
-                // Jeśli odpowiedział dobrze w trybie nauki, usuwamy z błędnych po przejściu całego testu lub natychmiast
                 if (currentMode === 'learn') {
                     wrongAnswersList = wrongAnswersList.filter(id => id !== qData.id);
                     localStorage.setItem('wrongAnswersList', JSON.stringify(wrongAnswersList));
@@ -488,7 +572,6 @@
                 optElement.classList.add('wrong');
                 options[qData.correct].classList.add('correct');
                 
-                // Dodaj do listy błędnych jeśli jeszcze tam nie ma
                 if (!wrongAnswersList.includes(qData.id)) {
                     wrongAnswersList.push(qData.id);
                     localStorage.setItem('wrongAnswersList', JSON.stringify(wrongAnswersList));
@@ -496,7 +579,6 @@
                 }
             }
 
-            // Blokowanie opcji
             for (let i = 0; i < options.length; i++) {
                 options[i].classList.add('disabled');
             }
@@ -515,7 +597,6 @@
             }
         }
 
-        // Start
         window.onload = initQuiz;
     </script>
 </body>
