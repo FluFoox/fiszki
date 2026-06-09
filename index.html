@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiszki</title>
+    <title>Fiszki Inżynieria Materiałowa</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -29,6 +29,7 @@
             align-items: flex-start;
             min-height: 100vh;
             box-sizing: border-box;
+            position: relative; /* Potrzebne do pozycjonowania stopki autora */
         }
 
         /* Główny układ dwukolumnowy */
@@ -38,6 +39,7 @@
             max-width: 1150px;
             width: 100%;
             flex-wrap: wrap;
+            margin-bottom: 40px; /* Miejsce na stopkę */
         }
 
         .container {
@@ -53,7 +55,7 @@
 
         /* Panel boczny z PIONOWYM Pongiem */
         .pong-sidebar {
-            width: 180px; /* Węższy panel */
+            width: 180px; 
             background: var(--card-bg);
             border-radius: 12px;
             padding: 20px 15px;
@@ -79,6 +81,20 @@
             background-color: #000;
             border: 2px solid var(--border);
             border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .pong-controls {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .pong-btn {
+            flex: 1;
+            padding: 8px 4px;
+            font-size: 0.8rem;
+            text-align: center;
         }
 
         h1 {
@@ -278,14 +294,26 @@
             padding: 40px 20px;
             color: var(--text-muted);
         }
+
+        /* Stopka autora w prawym dolnym rogu */
+        .footer-credits {
+            position: fixed;
+            bottom: 12px;
+            right: 15px;
+            font-size: 0.75rem;
+            color: #555555;
+            user-select: none;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
 
     <div class="main-wrapper">
+        <!-- LEWA STRONA: FISZKI -->
         <div class="container">
             <h1>Fiszki Egzaminacyjne</h1>
-            <div class="subtitle">Fiszki z dopaminką</div>
+            <div class="subtitle">Inżynieria Materiałowa & Obróbka Cieplna</div>
 
             <div class="controls">
                 <div class="controls-row">
@@ -323,11 +351,19 @@
             </div>
         </div>
 
+        <!-- PRAWA STRONA: PIONOWY MINI PONG -->
         <div class="pong-sidebar">
-            <div class="pong-title">🤖 Vertical Pong</div>
+            <div class="pong-title">Troche dopaminy</div>
             <canvas id="pongCanvas" width="140" height="420"></canvas>
+            <div class="pong-controls">
+                <button id="pong-join-btn" class="pong-btn" onclick="setPongControl(true)">Dołącz</button>
+                <button id="pong-auto-btn" class="pong-btn active" onclick="setPongControl(false)">Auto</button>
+            </div>
         </div>
     </div>
+
+    <!-- Stopka autora -->
+    <div class="footer-credits">by FluFox</div>
 
     <script>
         // Baza wszystkich 107 pytań
@@ -399,7 +435,7 @@
             { id: 65, q: "Stal niskonapięciowa (niskowęglowa) jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
             { id: 66, q: "Na czym polega obróbka cieplna stali?", type: "ai", answers: ["Chodzi o to żeby rozpuścić niepożądane fazy", "Na mechanicznym usuwaniu zgorzeliny", "Na powierzchniowym utwardzaniu przez zgniot"], correct: 0 },
             { id: 67, q: "Spiekanie to:", type: "ai", answers: ["proces samorzutny i nieodwracalny", "proces wymuszony i w pełni odwracalny", "topnienie osnowy w łuku elektrycznym"], correct: 0 },
-            { id: 68, q: "Dla kompozytów o osnowie ceramicznej najbardziej typowy napełniacz to:", type: "ai", answers: ["Ziarnisty", "Włóknisty ciągły", "Warstwowy (laminat)"], correct: 0 },
+            { id: 68, q: "Dia kompozytów o osnowie ceramicznej najbardziej typowy napełniacz to:", type: "ai", answers: ["Ziarnisty", "Włóknisty ciągły", "Warstwowy (laminat)"], correct: 0 },
             { id: 69, q: "Materiały ogniotrwałe magnezjanowe należą do grupy:", type: "normal", answers: ["kwaśne", "zasadowe", "obojętne", "specjalne"], correct: 1 },
             { id: 70, q: "Jaki jest przeciętny współczynnik KIc dla ceramik?", type: "normal", answers: ["0,1-1 MPa·m^(1/2)", "1-10", "20-40", "40-100"], correct: 1 },
             { id: 71, q: "W jakiej próbie ceramika wykazuje największą wytrzymałość?", type: "ai", answers: ["Na ściskanie *(rozciąganie < zginanie << ściskanie)", "Na rozciąganie", "Na skręcanie"], correct: 0 },
@@ -448,6 +484,33 @@
         let activeQuestions = [...database];
         let currentQuestionIndex = 0;
         let hasAnswered = false;
+
+        // --- ZMIENNE PONGA I STEROWANIE ---
+        let playerControlled = false;
+        let keysPressed = {};
+
+        function setPongControl(isPlayer) {
+            playerControlled = isPlayer;
+            document.getElementById('pong-join-btn').classList.toggle('active', isPlayer);
+            document.getElementById('pong-auto-btn').classList.toggle('active', !isPlayer);
+            
+            // Usunięcie fokusu z przycisku, żeby spacja/enter nie klikały go ponownie podczas quizu
+            document.getElementById('pong-join-btn').blur();
+            document.getElementById('pong-auto-btn').blur();
+        }
+
+        // Listener klawiatury dla Ponga
+        window.addEventListener('keydown', function(e) {
+            keysPressed[e.key] = true;
+            // Zapobiegaj przewijaniu strony strzałkami, jeśli gracz kontroluje paletkę
+            if(playerControlled && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+                e.preventDefault();
+            }
+        });
+        window.addEventListener('keyup', function(e) {
+            keysPressed[e.key] = false;
+        });
+
 
         // --- SEKCJA AUDIO (Web Audio API) ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -558,7 +621,8 @@
         }
 
         document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
+            // Reaguj tylko, gdy użytkownik nie gra aktywnie w Ponga (np. za pomocą A/D)
+            if (e.key === 'Enter' || (e.key === ' ' && !playerControlled)) {
                 const nextBtn = document.getElementById('next-btn');
                 if (nextBtn && !nextBtn.disabled) {
                     nextQuestion();
@@ -691,12 +755,12 @@
             }
         }
 
-        // --- PIONOWY ENGINE PONGA (GÓRA VS DÓŁ – ASYMETRYCZNE BOTY) ---
+        // --- PIONOWY ENGINE PONGA (GÓRA VS DÓŁ – ASYMETRYCZNE BOTY / MANUAL) ---
         function initPong() {
             const canvas = document.getElementById("pongCanvas");
             const ctx = canvas.getContext("2d");
 
-            const paddleWidth = 45, paddleHeight = 6; // Szerokie, ale niskie paletki w poziomie
+            const paddleWidth = 45, paddleHeight = 6; 
             const ballRadius = 4;
 
             let topPaddleX = (canvas.width - paddleWidth) / 2;
@@ -707,9 +771,9 @@
             let ballSpeedX = 1.6;
             let ballSpeedY = 2.4;
 
-            // Różne prędkości i style gry botów
-            const topBotSpeed = 1.8;   // Wolniejszy, precyzyjny (celuje środkiem)
-            const bottomBotSpeed = 2.3; // Szybszy, agresywny (gra krawędziami)
+            const topBotSpeed = 1.8;   
+            const bottomBotSpeed = 2.3; 
+            const playerSpeed = 3.0; // Szybkość reakcji gracza przy sterowaniu manualnym
 
             function updatePong() {
                 // Ruch piłki
@@ -733,12 +797,22 @@
                     topPaddleX -= topBotSpeed;
                 }
 
-                // DOLNY BOT: Szybszy, dynamicznie przewiduje pozycję
-                const bottomPaddleCenter = bottomPaddleX + paddleWidth / 2;
-                if (bottomPaddleCenter < ballX - 8) {
-                    bottomPaddleX += bottomBotSpeed;
-                } else if (bottomPaddleCenter > ballX + 8) {
-                    bottomPaddleX -= bottomBotSpeed;
+                // DOLNA PALETKA: Manualna lub AI
+                if (playerControlled) {
+                    if (keysPressed["ArrowLeft"] || keysPressed["a"] || keysPressed["A"]) {
+                        bottomPaddleX -= playerSpeed;
+                    }
+                    if (keysPressed["ArrowRight"] || keysPressed["d"] || keysPressed["D"]) {
+                        bottomPaddleX += playerSpeed;
+                    }
+                } else {
+                    // Dolny bot (tryb Auto)
+                    const bottomPaddleCenter = bottomPaddleX + paddleWidth / 2;
+                    if (bottomPaddleCenter < ballX - 8) {
+                        bottomPaddleX += bottomBotSpeed;
+                    } else if (bottomPaddleCenter > ballX + 8) {
+                        bottomPaddleX -= bottomBotSpeed;
+                    }
                 }
 
                 // Blokada paletek na krawędziach
@@ -748,10 +822,9 @@
                 // KOLIZJA GÓRA (Paletka górna)
                 if (ballY - ballRadius <= paddleHeight + 4) {
                     if (ballX >= topPaddleX && ballX <= topPaddleX + paddleWidth) {
-                        ballY = paddleHeight + 4 + ballRadius; // Korekta pozycji (anty-utknięcie)
+                        ballY = paddleHeight + 4 + ballRadius; 
                         ballSpeedY = -ballSpeedY;
                         
-                        // Losowy wpływ odbicia zależny od miejsca uderzenia + drobny szum
                         let impact = (ballX - (topPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
                         ballSpeedX += impact * 0.8 + (Math.random() * 0.4 - 0.2);
                     } else if (ballY < 0) {
@@ -762,10 +835,9 @@
                 // KOLIZJA DÓŁ (Paletka dolna)
                 if (ballY + ballRadius >= canvas.height - paddleHeight - 4) {
                     if (ballX >= bottomPaddleX && ballX <= bottomPaddleX + paddleWidth) {
-                        ballY = canvas.height - paddleHeight - 4 - ballRadius; // Korekta pozycji (anty-utknięcie)
+                        ballY = canvas.height - paddleHeight - 4 - ballRadius; 
                         ballSpeedY = -ballSpeedY;
                         
-                        // Losowy wpływ odbicia dolnego bota
                         let impact = (ballX - (bottomPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
                         ballSpeedX += impact * 0.9 + (Math.random() * 0.4 - 0.2);
                     } else if (ballY > canvas.height) {
@@ -773,7 +845,7 @@
                     }
                 }
 
-                // Ograniczenie maksymalnej prędkości horyzontalnej, żeby gra nie zrobiła się nudna
+                // Ograniczenie prędkości horyzontalnej
                 if (Math.abs(ballSpeedX) > 3.5) ballSpeedX = Math.sign(ballSpeedX) * 3.5;
             }
 
@@ -788,7 +860,7 @@
                 ctx.fillStyle = "#000000";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Linia środkowa (przerywana w poprzek)
+                // Linia środkowa
                 ctx.strokeStyle = "#222222";
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
@@ -802,7 +874,7 @@
                 ctx.fillRect(topPaddleX, 4, paddleWidth, paddleHeight);
 
                 // Dolna paletka
-                ctx.fillStyle = "#bb86fc";
+                ctx.fillStyle = playerControlled ? "#4caf50" : "#bb86fc"; // Zielona, gdy steruje gracz
                 ctx.fillRect(bottomPaddleX, canvas.height - paddleHeight - 4, paddleWidth, paddleHeight);
 
                 // Piłeczka
