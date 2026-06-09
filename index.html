@@ -29,17 +29,16 @@
             align-items: flex-start;
             min-height: 100vh;
             box-sizing: border-box;
-            position: relative; /* Potrzebne do pozycjonowania stopki autora */
+            position: relative;
         }
 
-        /* Główny układ dwukolumnowy */
         .main-wrapper {
             display: flex;
             gap: 25px;
             max-width: 1150px;
             width: 100%;
             flex-wrap: wrap;
-            margin-bottom: 40px; /* Miejsce na stopkę */
+            margin-bottom: 40px;
         }
 
         .container {
@@ -53,7 +52,6 @@
             box-sizing: border-box;
         }
 
-        /* Panel boczny z PIONOWYM Pongiem */
         .pong-sidebar {
             width: 180px; 
             background: var(--card-bg);
@@ -111,7 +109,6 @@
             margin-bottom: 25px;
         }
 
-        /* Sekcja kontrolna / Menu */
         .controls {
             display: flex;
             flex-direction: column;
@@ -170,6 +167,12 @@
             border-color: var(--primary);
         }
 
+        .stats-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .stats {
             font-size: 0.95rem;
             color: var(--text-muted);
@@ -179,6 +182,17 @@
             border: 1px solid var(--border);
         }
 
+        /* Styl licznika Combo */
+        .combo-box {
+            font-size: 0.95rem;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #1a1a1a;
+            border: 1px dashed #444;
+            display: none; /* Pokazywane dynamicznie */
+        }
+
         .search-jump-container {
             display: flex;
             gap: 12px;
@@ -186,7 +200,21 @@
             flex-wrap: wrap;
         }
 
-        /* Karta pytania */
+        /* Nowa sekcja nawigacji nad pytaniem */
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .nav-arrow-btn {
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            background-color: #222;
+            border: 1px solid var(--border);
+        }
+
         .question-box {
             margin-bottom: 25px;
         }
@@ -219,7 +247,6 @@
             vertical-align: middle;
         }
 
-        /* Opcje odpowiedzi */
         .options-list {
             display: flex;
             flex-direction: column;
@@ -262,7 +289,6 @@
             cursor: not-allowed;
         }
 
-        /* Przycisk Dalej */
         .actions {
             display: flex;
             justify-content: flex-end;
@@ -295,7 +321,6 @@
             color: var(--text-muted);
         }
 
-        /* Stopka autora w prawym dolnym rogu */
         .footer-credits {
             position: fixed;
             bottom: 12px;
@@ -310,7 +335,6 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- LEWA STRONA: FISZKI -->
         <div class="container">
             <h1>Fiszki Egzaminacyjne</h1>
             <div class="subtitle">Fiszki APIR ;)</div>
@@ -324,8 +348,11 @@
                     <div>
                         <button id="shuffle-btn" onclick="toggleShuffle()">Losowe pytania: WYŁ</button>
                     </div>
-                    <div class="stats">
-                        Pytanie: <span id="current-index">0</span>/<span id="total-count">0</span>
+                    <div class="stats-wrapper">
+                        <div class="combo-box" id="combo-display"></div>
+                        <div class="stats">
+                            Pytanie: <span id="current-index">0</span>/<span id="total-count">0</span>
+                        </div>
                     </div>
                 </div>
 
@@ -338,6 +365,11 @@
             </div>
 
             <div id="quiz-area">
+                <div class="question-navigation">
+                    <button id="prev-arrow-btn" class="nav-arrow-btn" onclick="prevQuestion()">&◀ Poprzednie</button>
+                    <button id="next-arrow-btn" class="nav-arrow-btn" onclick="nextQuestion()">Następne ▶</button>
+                </div>
+
                 <div class="question-box">
                     <div class="q-number" id="question-id">Pytanie 1</div>
                     <div class="q-text" id="question-text">Treść pytania pojawi się tutaj...</div>
@@ -351,7 +383,6 @@
             </div>
         </div>
 
-        <!-- PRAWA STRONA: PIONOWY MINI PONG -->
         <div class="pong-sidebar">
             <div class="pong-title">Troche dopaminy</div>
             <canvas id="pongCanvas" width="140" height="420"></canvas>
@@ -362,11 +393,9 @@
         </div>
     </div>
 
-    <!-- Stopka autora -->
-    <div class="footer-credits"> Kontakt -> FB: Kacper Sobczyk</div>
+    <div class="footer-credits">Kontakt -> FB: Kacper Sobczyk</div>
 
     <script>
-        // Baza wszystkich 107 pytań
         const database = [
             { id: 1, q: "Odpuszczanie stali polega na:", type: "normal", answers: ["Wyżarzaniu stali odkształconej plastycznie", "Wyżarzaniu stali zahartowanej", "Wyżarzaniu stali w celu uzyskania drobnego ziarna"], correct: 1 },
             { id: 2, q: "Podstawowym mechanizmem umocnienia duraluminium jest:", type: "normal", answers: ["Umocnienie wydzieleniowe", "Umocnienie roztworowe", "Umocnienie odkształceniowe"], correct: 0 },
@@ -392,7 +421,7 @@
             { id: 22, q: "Podstawowym mechanizmem umocnienia duraluminium jest:", type: "normal", answers: ["Umocnienie odkształceniowe (dyslokacyjne)", "Umocnienie przez rozdrobnienie ziarna", "Umocnienie wydzieleniowe"], correct: 2 },
             { id: 23, q: "Ulepszanie cieplne stali jest to proces polegający na:", type: "normal", answers: ["Połączeniu procesów hartowania i odpuszczania", "Połączeniu procesów odkształcenia i rekrystalizacji", "Obróbce cieplnej stali bezpośrednio po odlewaniu"], correct: 0 },
             { id: 24, q: "Najbardziej skutecznym mechanizmem umocnienia metali przeznaczonych do zastosowań w podwyższonej temperaturze jest:", type: "normal", answers: ["Umocnienie granicami ziarn (przez rozdrobnienie ziarna)", "Umocnienie dyslokacjami (umocnienie odkształceniowe)", "Umocnienie cząstkami (umocnienie dyspersyjne)"], correct: 2 },
-            { id: 25, q: "Które z poniższych stwierdzeń NIE jest prawdziwe?", type: "normal", answers: ["Zmniejszenie ziarna w stali powoduje obniżenie temperatury przejścia w stan kruchy", "Zmniejszenie ziarna w stali powoduje zwiększenie odporności na pełzanie", "Zmniejszenie ziarna w stali powoduje wzrost granicy plastyczności"], correct: 1 },
+            { id: 25, q: "Ktøre z poniższych stwierdzeń NIE jest prawdziwe?", type: "normal", answers: ["Zmniejszenie ziarna w stali powoduje obniżenie temperatury przejścia w stan kruchy", "Zmniejszenie ziarna w stali powoduje zwiększenie odporności na pełzanie", "Zmniejszenie ziarna w stali powoduje wzrost granicy plastyczności"], correct: 1 },
             { id: 26, q: "Temperaturę przejścia w stan kruchy wykazują metale:", type: "normal", answers: ["O strukturze krystalicznej regularnej przestrzennie centrowanej A2", "O strukturze krystalicznej regularnej ściennie centrowanej A1", "O strukturze krystalicznej heksagonalnej zwartej A3"], correct: 0 },
             { id: 27, q: "W jakich jednostkach mierzy się udarność?", type: "normal", answers: ["Energii", "Naprężenia", "Siły"], correct: 0 },
             { id: 28, q: "Mosiądze są to stopy miedzi z:", type: "normal", answers: ["Cyną", "Cynkiem", "Aluminium"], correct: 1 },
@@ -432,7 +461,7 @@
             { id: 62, q: "Która z wymienionych powłok na wyrobie stalowym ma charakter powłoki anodowej?", type: "normal", answers: ["Zn", "Sn", "Cu"], correct: 0 },
             { id: 63, q: "Który z wymienionych materiałów jest najwłaściwszym materiałem na pojemniki do przechowywania ciekłych gazów?", type: "normal", answers: ["Stop aluminium", "Stal niskostopowa o podwyższonej wytrzymałości", "Chromowa stal ferrytyczna"], correct: 1 },
             { id: 64, q: "Powstawanie stopów eutektycznych zachodzi, gdy:", type: "normal", answers: ["nieograniczona rozpuszczalność, podobna temp topnienia", "nieograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, podobna temp topnienia"], correct: 3 },
-            { id: 65, q: "Stal niskonapięciowa (niskowęglowa) jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
+            { id: 65, q: "Stal niskonapięciowa (niskonapięciowa/niskowęglowa) jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
             { id: 66, q: "Na czym polega obróbka cieplna stali?", type: "ai", answers: ["Chodzi o to żeby rozpuścić niepożądane fazy", "Na mechanicznym usuwaniu zgorzeliny", "Na powierzchniowym utwardzaniu przez zgniot"], correct: 0 },
             { id: 67, q: "Spiekanie to:", type: "ai", answers: ["proces samorzutny i nieodwracalny", "proces wymuszony i w pełni odwracalny", "topnienie osnowy w łuku elektrycznym"], correct: 0 },
             { id: 68, q: "Dia kompozytów o osnowie ceramicznej najbardziej typowy napełniacz to:", type: "ai", answers: ["Ziarnisty", "Włóknisty ciągły", "Warstwowy (laminat)"], correct: 0 },
@@ -484,8 +513,8 @@
         let activeQuestions = [...database];
         let currentQuestionIndex = 0;
         let hasAnswered = false;
+        let currentCombo = 0; // Licznik serii poprawnych odpowiedzi
 
-        // --- ZMIENNE PONGA I STEROWANIE ---
         let playerControlled = false;
         let keysPressed = {};
 
@@ -493,16 +522,12 @@
             playerControlled = isPlayer;
             document.getElementById('pong-join-btn').classList.toggle('active', isPlayer);
             document.getElementById('pong-auto-btn').classList.toggle('active', !isPlayer);
-            
-            // Usunięcie fokusu z przycisku, żeby spacja/enter nie klikały go ponownie podczas quizu
             document.getElementById('pong-join-btn').blur();
             document.getElementById('pong-auto-btn').blur();
         }
 
-        // Listener klawiatury dla Ponga
         window.addEventListener('keydown', function(e) {
             keysPressed[e.key] = true;
-            // Zapobiegaj przewijaniu strony strzałkami, jeśli gracz kontroluje paletkę
             if(playerControlled && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
                 e.preventDefault();
             }
@@ -511,8 +536,6 @@
             keysPressed[e.key] = false;
         });
 
-
-        // --- SEKCJA AUDIO (Web Audio API) ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
 
         function playSuccessSound() {
@@ -569,7 +592,6 @@
             } catch (e) { console.log(e); }
         }
 
-        // --- SEKCJA QUIZU ---
         function initQuiz() {
             updateReviewCountDisplay();
             setupQuestions();
@@ -621,7 +643,6 @@
         }
 
         document.addEventListener('keypress', function(e) {
-            // Reaguj tylko, gdy użytkownik nie gra aktywnie w Ponga (np. za pomocą A/D)
             if (e.key === 'Enter' || (e.key === ' ' && !playerControlled)) {
                 const nextBtn = document.getElementById('next-btn');
                 if (nextBtn && !nextBtn.disabled) {
@@ -650,36 +671,60 @@
             document.getElementById('review-count').innerText = wrongAnswersList.length;
         }
 
+        // Aktualizacja widoku combo na bazie wymagań progowych
+        function updateComboDisplay() {
+            const comboEl = document.getElementById('combo-display');
+            if (currentCombo === 0) {
+                comboEl.style.display = 'none';
+                return;
+            }
+
+            let comboText = '';
+            if (currentCombo >= 1 && currentCombo <= 3) {
+                comboText = `🔥 Combo x${currentCombo}`;
+                comboEl.style.color = '#ff9800';
+            } else if (currentCombo >= 4 && currentCombo <= 7) {
+                comboText = `💥🔥 Combo x${currentCombo}`;
+                comboEl.style.color = '#ff5722';
+            } else if (currentCombo >= 8 && currentCombo <= 15) {
+                comboText = `🔴🔥💥 Super Combo x${currentCombo}!`;
+                comboEl.style.color = '#f44336';
+            } else if (currentCombo >= 16) {
+                comboText = `🔷🔥⚡ BOSKIE COMBO x${currentCombo}!!!`;
+                comboEl.style.color = '#00bcd4';
+            }
+
+            comboEl.innerText = comboText;
+            comboEl.style.display = 'block';
+        }
+
         function showQuestion() {
             hasAnswered = false;
             document.getElementById('next-btn').disabled = true;
             
-            const quizArea = document.getElementById('quiz-area');
             const totalCountSpan = document.getElementById('total-count');
             const currentIndexSpan = document.getElementById('current-index');
             
             document.getElementById('jump-select').value = (activeQuestions.length > 0 && currentQuestionIndex < activeQuestions.length) ? currentQuestionIndex : "";
+
+            // Blokowanie strzałek nawigacyjnych na skrajnych pozycjach
+            document.getElementById('prev-arrow-btn').disabled = (currentQuestionIndex === 0 || activeQuestions.length === 0);
+            document.getElementById('next-arrow-btn').disabled = (currentQuestionIndex >= activeQuestions.length - 1 || activeQuestions.length === 0);
 
             if (activeQuestions.length === 0) {
                 const isSearching = document.getElementById('search-input').value.trim() !== '';
                 let msg = currentMode === 'learn' ? 'Brak pytań do powtórki!' : 'Brak pytań.';
                 if (isSearching) msg = 'Nie znaleziono pytań pasujących do frazy.';
                 
-                quizArea.innerHTML = `<div class="empty-state"><h3>${msg}</h3></div>`;
+                document.getElementById('quiz-area').innerHTML = `
+                    <div class="question-navigation">
+                        <button id="prev-arrow-btn" class="nav-arrow-btn" disabled>&◀ Poprzednie</button>
+                        <button id="next-arrow-btn" class="nav-arrow-btn" disabled>Następne ▶</button>
+                    </div>
+                    <div class="empty-state"><h3>${msg}</h3></div>`;
                 currentIndexSpan.innerText = "0";
                 totalCountSpan.innerText = "0";
                 return;
-            }
-
-            if (!document.getElementById('question-id')) {
-                quizArea.innerHTML = `
-                    <div class="question-box">
-                        <div class="q-number" id="question-id"></div>
-                        <div class="q-text" id="question-text"></div>
-                    </div>
-                    <div class="options-list" id="options-container"></div>
-                    <div class="actions"><button id="next-btn" onclick="nextQuestion()" disabled>Następne pytanie &rarr;</button></div>
-                `;
             }
 
             const qData = activeQuestions[currentQuestionIndex];
@@ -720,6 +765,8 @@
             if (selectedIndex === qData.correct) {
                 optElement.classList.add('correct');
                 playSuccessSound();
+                currentCombo++; // Zwiększ serię
+                updateComboDisplay();
                 
                 if (currentMode === 'learn') {
                     wrongAnswersList = wrongAnswersList.filter(id => id !== qData.id);
@@ -730,6 +777,8 @@
                 optElement.classList.add('wrong');
                 options[qData.correct].classList.add('correct');
                 playSadTrombone();
+                currentCombo = 0; // Przerwanie serii
+                updateComboDisplay();
                 
                 if (!wrongAnswersList.includes(qData.id)) {
                     wrongAnswersList.push(qData.id);
@@ -745,8 +794,8 @@
         }
 
         function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < activeQuestions.length) {
+            if (currentQuestionIndex < activeQuestions.length - 1) {
+                currentQuestionIndex++;
                 showQuestion();
             } else {
                 alert("Koniec pytań w tym zestawie!");
@@ -755,7 +804,13 @@
             }
         }
 
-        // --- PIONOWY ENGINE PONGA (GÓRA VS DÓŁ – ASYMETRYCZNE BOTY / MANUAL) ---
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
         function initPong() {
             const canvas = document.getElementById("pongCanvas");
             const ctx = canvas.getContext("2d");
@@ -773,14 +828,12 @@
 
             const topBotSpeed = 1.8;   
             const bottomBotSpeed = 2.3; 
-            const playerSpeed = 3.0; // Szybkość reakcji gracza przy sterowaniu manualnym
+            const playerSpeed = 3.0;
 
             function updatePong() {
-                // Ruch piłki
                 ballX += ballSpeedX;
                 ballY += ballSpeedY;
 
-                // Odbicia od ścian bocznych (lewo/prawo)
                 if (ballX - ballRadius < 0) {
                     ballX = ballRadius;
                     ballSpeedX = -ballSpeedX;
@@ -789,7 +842,6 @@
                     ballSpeedX = -ballSpeedX;
                 }
 
-                // GÓRNY BOT: Śledzi środek piłki z lekkim opóźnieniem
                 const topPaddleCenter = topPaddleX + paddleWidth / 2;
                 if (topPaddleCenter < ballX - 4) {
                     topPaddleX += topBotSpeed;
@@ -797,7 +849,6 @@
                     topPaddleX -= topBotSpeed;
                 }
 
-                // DOLNA PALETKA: Manualna lub AI
                 if (playerControlled) {
                     if (keysPressed["ArrowLeft"] || keysPressed["a"] || keysPressed["A"]) {
                         bottomPaddleX -= playerSpeed;
@@ -806,7 +857,6 @@
                         bottomPaddleX += playerSpeed;
                     }
                 } else {
-                    // Dolny bot (tryb Auto)
                     const bottomPaddleCenter = bottomPaddleX + paddleWidth / 2;
                     if (bottomPaddleCenter < ballX - 8) {
                         bottomPaddleX += bottomBotSpeed;
@@ -815,16 +865,13 @@
                     }
                 }
 
-                // Blokada paletek na krawędziach
                 topPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, topPaddleX));
                 bottomPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, bottomPaddleX));
 
-                // KOLIZJA GÓRA (Paletka górna)
                 if (ballY - ballRadius <= paddleHeight + 4) {
                     if (ballX >= topPaddleX && ballX <= topPaddleX + paddleWidth) {
                         ballY = paddleHeight + 4 + ballRadius; 
                         ballSpeedY = -ballSpeedY;
-                        
                         let impact = (ballX - (topPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
                         ballSpeedX += impact * 0.8 + (Math.random() * 0.4 - 0.2);
                     } else if (ballY < 0) {
@@ -832,12 +879,10 @@
                     }
                 }
 
-                // KOLIZJA DÓŁ (Paletka dolna)
                 if (ballY + ballRadius >= canvas.height - paddleHeight - 4) {
                     if (ballX >= bottomPaddleX && ballX <= bottomPaddleX + paddleWidth) {
                         ballY = canvas.height - paddleHeight - 4 - ballRadius; 
                         ballSpeedY = -ballSpeedY;
-                        
                         let impact = (ballX - (bottomPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
                         ballSpeedX += impact * 0.9 + (Math.random() * 0.4 - 0.2);
                     } else if (ballY > canvas.height) {
@@ -845,7 +890,6 @@
                     }
                 }
 
-                // Ograniczenie prędkości horyzontalnej
                 if (Math.abs(ballSpeedX) > 3.5) ballSpeedX = Math.sign(ballSpeedX) * 3.5;
             }
 
@@ -860,7 +904,6 @@
                 ctx.fillStyle = "#000000";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Linia środkowa
                 ctx.strokeStyle = "#222222";
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
@@ -869,15 +912,12 @@
                 ctx.stroke();
                 ctx.setLineDash([]);
 
-                // Górna paletka
                 ctx.fillStyle = "#bb86fc";
                 ctx.fillRect(topPaddleX, 4, paddleWidth, paddleHeight);
 
-                // Dolna paletka
-                ctx.fillStyle = playerControlled ? "#4caf50" : "#bb86fc"; // Zielona, gdy steruje gracz
+                ctx.fillStyle = playerControlled ? "#4caf50" : "#bb86fc"; 
                 ctx.fillRect(bottomPaddleX, canvas.height - paddleHeight - 4, paddleWidth, paddleHeight);
 
-                // Piłeczka
                 ctx.fillStyle = "#e0e0e0";
                 ctx.beginPath();
                 ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
