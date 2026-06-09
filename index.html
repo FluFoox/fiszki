@@ -182,7 +182,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Styl licznika Combo */
         .combo-box {
             font-size: 0.95rem;
             font-weight: bold;
@@ -190,7 +189,7 @@
             border-radius: 20px;
             background: #1a1a1a;
             border: 1px dashed #444;
-            display: none; /* Pokazywane dynamicznie */
+            display: none;
         }
 
         .search-jump-container {
@@ -200,7 +199,6 @@
             flex-wrap: wrap;
         }
 
-        /* Nowa sekcja nawigacji nad pytaniem */
         .question-navigation {
             display: flex;
             justify-content: space-between;
@@ -393,7 +391,7 @@
         </div>
     </div>
 
-    <div class="footer-credits">Kontakt FB: Kacper Sobczyk</div>
+    <div class="footer-credits">by FluFox</div>
 
     <script>
         const database = [
@@ -404,8 +402,8 @@
             { id: 5, q: "Wzrost zawartości perlitu w stali spowoduje:", type: "normal", answers: ["Zwiększenie udarności", "Zwiększenie wytrzymałości, spadek sprężystości", "Obniżenie temperatury przejścia w stan kruchy"], correct: 1 },
             { id: 6, q: "Najkrótsza definicja martenzytu to:", type: "normal", answers: ["Jest to roztwór stały węgla w żelazie γ (gamma)", "Jest to przesycony roztwór stały węgla w żelazie α (alfa)", "Jest to odmiana alotropowa żelaza"], correct: 1 },
             { id: 7, q: "Stale stosowane na duże konstrukcje wymagające spawania (mosty, budynki, rurociągi itp.) powinny zawierać:", type: "normal", answers: ["Mało węgla", "Możliwie dużo węgla", "Dowolną ilość węgla (ilość węgla nie ma znaczenia)"], correct: 0 },
-            { id: 8, q: "Normalizowanie to obróbka cieplna stali prowadząca do:", type: "normal", answers: ["Otrzymania małego równoosiowego ziarna", "Rekrystalizacji materiału odkształconego", "Usunięcia naprężeń hartowniczych"], correct: 2 },
-            { id: 9, q: "Temperatura przejścia w stan kruchy stopów aluminium zależy od:", type: "normal", answers: ["Zawartości w stopie pierwiastków stopowych", "Wielkości ziarna", "Stopy Al nie są kruche w niskiej temperaturze"], correct: 0 },
+            { id: 8, q: "Normalizowanie to obróbka cieplna stali prowadząca do:", type: "normal", answers: ["Otrzymania małego równoosiowego ziarna", "Rekrystalizacji materiału odkształconego", "Usunięcia naprężeń hartowniczych"], correct: 0 },
+            { id: 9, q: "Temperatura przejścia w stan kruchy stopów aluminium zależy od:", type: "normal", answers: ["Zawartości w stopie pierwiastków stopowych", "Wielkości ziarna", "Stopy Al nie są kruche w niskiej temperaturze"], correct: 2 },
             { id: 10, q: "Którego pierwiastka należy dodać do stali, aby otrzymać austenit w temperaturze pokojowej?", type: "normal", answers: ["miedzi", "niklu", "chromu"], correct: 1 },
             { id: 11, q: "Zjawisko tzw. twardości wtórnej wykorzystuje się:", type: "normal", answers: ["W stopach aluminium utwardzanych wydzieleniowo", "W blachach na karoserie samochodowe", "W stalach narzędziowych"], correct: 2 },
             { id: 12, q: "Który z mechanizmów umocnienia stali jednocześnie zwiększa granicę plastyczności i obniża temperaturę przejścia w stan kruchy?", type: "normal", answers: ["Umocnienie cząstkami dyspersyjnymi", "Umocnienie odkształceniowe", "Umocnienie przez rozdrobnienie ziarna"], correct: 2 },
@@ -413,8 +411,8 @@
             { id: 14, q: "Który z poniższych wzorów opisuje regułę faz Gibbsa przy stałym ciśnieniu?", type: "normal", answers: ["s = n - f + 1", "s = n - f + 2", "s = n - f"], correct: 0 },
             { id: 15, q: "Na czym polega przemiana eutektyczna przy chłodzeniu?", type: "normal", answers: ["w stałej temperaturze z ciała stałego tworzą się dwie nowe fazy stałe", "w stałej temperaturze tworzy się nowa faza stała i ciecz o innym składzie", "w stałej temperaturze z cieczy tworzą się dwie fazy stałe"], correct: 2 },
             { id: 16, q: "Ledeburyt to:", type: "normal", answers: ["mieszanina eutektyczna austenitu i ferrytu", "mieszanina eutektyczna austenitu i cementytu", "mieszanina eutektoidalna austenitu i cementytu"], correct: 1 },
-            { id: 17, q: "Stopów aluminium nie można hartować ponieważ:", type: "normal", answers: ["Aluminium nie ma odmian alotropowych", "Stopy Al nie zawierają węgla", "Aluminium ma niską temperaturę topnienia"], correct: 1 },
-            { id: 18, q: "Wybierz temperaturę, z której hartuje się stal niestopową o zawartości węgla 1,1%", type: "normal", answers: ["850°C", "757°C", "727°C"], correct: 2 },
+            { id: 17, q: "Stopów aluminium nie można hartować ponieważ:", type: "normal", answers: ["Aluminium nie ma odmian alotropowych", "Stopy Al nie zawierają węgla", "Aluminium ma niską temperaturę topnienia"], correct: 0 },
+            { id: 18, q: "Wybierz temperaturę, z której hartuje się stal niestopową o zawartości węgla 1,1%", type: "normal", answers: ["850°C", "757°C", "727°C"], correct: 1 },
             { id: 19, q: "Wytrzymałość na rozciąganie Rm to naprężenie rozciągające:", type: "normal", answers: ["odpowiadające największej sile obciążającej uzyskanej podczas przeprowadzenia próby", "rzeczywiste, występujące w przekroju poprzecznym próbki w miejscu przewężenia w chwili rozerwania", "przy osiągnięciu którego następuje trwałe odkształcenie plastyczne materiału"], correct: 0 },
             { id: 20, q: "Które wiązanie między atomami (cząsteczkami) jest najsłabsze?", type: "normal", answers: ["Van der Waalsa (wtórne)", "Kowalencyjne", "Metaliczne"], correct: 0 },
             { id: 21, q: "Nadstopy (superstopy) są to materiały stosowane:", type: "normal", answers: ["W temperaturze kriogenicznej", "Na wytrzymałe narzędzia", "W wysokiej temperaturze"], correct: 2 },
@@ -428,13 +426,13 @@
             { id: 29, q: "Współczynnik umocnienia stali stosowanych do tłoczenia, np. karoserii samochodowych, powinien być:", type: "normal", answers: ["Jak najmniejszy", "Możliwie duży", "Jego wartość nie ma znaczenia"], correct: 1 },
             { id: 30, q: "Stale dwufazowe (dual phase – DP) stosowane na elementy karoserii samochodowych charakteryzują się:", type: "normal", answers: ["Niską granicą plastyczności i wysoką wytrzymałością", "Niską granicą plastyczności i niską wytrzymałością", "Wysoką granicą plastyczności i wysoką wytrzymałością"], correct: 0 },
             { id: 31, q: "Podstawowymi pierwiastkami stopowymi stali szybkotnących są:", type: "normal", answers: ["Chrom lub nikiel", "Tytan lub niob", "Wolfram lub molibden"], correct: 2 },
-            { id: 32, q: "Duże ziarno w materiałach metalicznych jest korzystne, gdy materiał jest stosowany w:", type: "normal", answers: ["Podwyższonej temperaturze", "Temperaturze kriogenicznej", "Warunkach zmiennych naprężeń"], correct: 2 },
+            { id: 32, q: "Duże ziarno w materiałach metalicznych jest korzystne, gdy materiał jest stosowany w:", type: "normal", answers: ["Podwyższonej temperaturze", "Temperaturze kriogenicznej", "Warunkach zmiennych naprężeń"], correct: 0 },
             { id: 33, q: "Główną cechą stali o dobrej spawalności jest:", type: "normal", answers: ["Wysoka zawartość pierwiastków stopowych", "Niska zawartość węgla", "Struktura drobnoziarnista"], correct: 1 },
             { id: 34, q: "Modyfikację siluminów prowadzi się celem:", type: "normal", answers: ["poprawy odporności korozyjnej stopu", "poprawy własności mechanicznych", "zwiększenia oporności właściwej stopu"], correct: 1 },
             { id: 35, q: "Ktøre materiały nazywane są piezoelektrykami?", type: "normal", answers: ["takie, w których pod wpływem naprężeń mechanicznych powstaje pole elektryczne i na odwrót", "takie, w których pod wpływem zmiany temperatury powstają na powierzchniach przeciwne ładunki elektryczne", "takie, w których pod wpływem zewnętrznego pola elektrycznego zmienia się stała dielektryczna"], correct: 0 },
             { id: 36, q: "Gdzie głównie stosuje się materiały magnetyczne twarde?", type: "normal", answers: ["do wytwarzania stałych magnesów", "do wytwarzania nośników pamięci", "do wytwarzania blach transformatorowych"], correct: 0 },
             { id: 37, q: "Co to jest temperatura Curie w odniesieniu do materiałów magnetycznych?", type: "normal", answers: ["temperatura, powyżej której ferromagnetyk staje się paramagnetykiem", "temperatura, powyżej której paramagnetyk staje się diamagnetykiem", "temperatura, poniżej której diamagnetyk staje się ferromagnetykiem"], correct: 0 },
-            { id: 38, q: "Które materiały charakteryzują się dużymi współczynnikami rozszerzalności cieplnej?", type: "normal", answers: ["materiały o wysokiej temperaturze topnienia", "materiały o niskiej temperaturze topnienia", "materiały o dużej wartości przewodności cieplnej"], correct: 0 },
+            { id: 38, q: "Które materiały charakteryzują się dużymi współczynnikami rozszerzalności cieplnej?", type: "normal", answers: ["materiały o wysokiej temperaturze topnienia", "materiały o niskiej temperaturze topnienia", "materiały o dużej wartości przewodności cieplnej"], correct: 1 },
             { id: 39, q: "W wielkim piecu produkujemy docelowo:", type: "normal", answers: ["stal niskostopową", "surówkę przeróbczą", "jednocześnie surówkę przeróbczą i stal niskostopową"], correct: 1 },
             { id: 40, q: "Wsadem do konwertora tlenowego jest:", type: "normal", answers: ["tylko surówka żelaza", "surówka żelaza i złom stalowy", "tylko złom stalowy"], correct: 1 },
             { id: 41, q: "Wyrobami walcowanymi na zimno są głównie:", type: "normal", answers: ["blachy cienkie i taśmy", "szyny kolejowe", "pręty do zbrojenia betonu"], correct: 0 },
@@ -442,29 +440,29 @@
             { id: 43, q: "Które z wymienionych parametrów służyć mogą do oceny plastyczności materiałów?", type: "normal", answers: ["granica plastyczności materiału", "wytrzymałość materiału na rozciąganie", "wydłużenie otrzymane z próby jednoosiowego rozciągania"], correct: 2 },
             { id: 44, q: "Zabieg patentowania stosuje się w technologii wytwarzania:", type: "normal", answers: ["prętów zbrojeniowych", "rur", "drutów"], correct: 2 },
             { id: 45, q: "Słabą zależność od mikrostruktury stali wykazuje:", type: "normal", answers: ["granica plastyczności", "moduł Younga", "twardość"], correct: 1 },
-            { id: 46, q: "Ogólnie dużą odpornością na pękanie (KIc) charakteryzują się:", type: "normal", answers: ["stopy metali", "ceramiki", "polimery"], correct: 1 },
+            { id: 46, q: "Ogólnie dużą odpornością na pękanie (KIc) charakteryzują się:", type: "normal", answers: ["stopy metali", "ceramiki", "polimery"], correct: 0 },
             { id: 47, q: "Równowagowe stężenie defektów punktowych:", type: "normal", answers: ["zmniejsza się ze wzrostem temperatury", "jest niezależne od temperatury", "zwiększa się ze wzrostem temperatury"], correct: 2 },
             { id: 48, q: "Odkształcaniu przez bliźniakowanie sprzyja:", type: "normal", answers: ["wysoka temperatura odkształcenia", "niska temperatura odkształcenia", "małe ziarno odkształcanego materiału"], correct: 1 },
             { id: 49, q: "Ogólnie twardość metali:", type: "normal", answers: ["zwiększa się ze wzrostem wytrzymałości", "maleje ze wzrostem wytrzymałości", "jest niezależna od wytrzymałości"], correct: 0 },
             { id: 50, q: "Siłą pędną rekrystalizacji pierwotnej odkształconych plastycznie metali jest:", type: "normal", answers: ["energia defektów punktowych utworzonych podczas odkształcania", "energia dyslokacji zmagazynowanych podczas odkształcenia", "energia granic ziarn"], correct: 1 },
             { id: 51, q: "Anizotropia normalna w blachach głębokotłocznych:", type: "normal", answers: ["pozwala na nadawanie złożonych kształtów wyrobom z tych blach", "nie ma związku z teksturą tłoczonej blachy", "jest zjawiskiem negatywnym i wpływa na wielkość wad powstałych w trakcie tłoczenia"], correct: 0 },
-            { id: 52, q: "Osnowa w stopie umacnianym dyspersyjnie:", type: "normal", answers: ["powinna być znacznie twardsza niż występujące w niej cząstki", "jest odpowiedzialna za jego umocnienie", "jest fazą ciągłą stanowiącą znaczną jego objętość"], correct: 1 },
-            { id: 53, q: "W trakcie jednoosiowego rozciągania mosiężnej próbki wytrzymałościowej:", type: "normal", answers: ["obserwuje się zarówno wzrost wytrzymałości jak i plastyczności stopu", "stop odkształca się jedynie sprężyście", "po przekroczeniu Rm naprężenie rzeczywiste gwałtownie maleje"], correct: 0 },
+            { id: 52, q: "Osnowa w stopie umacnianym dyspersyjnie:", type: "normal", answers: ["powinna być znacznie twardsza niż występujące w niej cząstki", "jest odpowiedzialna za jego umocnienie", "jest fazą ciągłą stanowiącą znaczną jego objętość"], correct: 2 },
+            { id: 53, q: "W trakcie jednoosiowego rozciągania mosiężnej próbki wytrzymałościowej:", type: "normal", answers: ["obserwuje się zarówno wzrost wytrzymałości jak i plastyczności stopu", "stop odkształca się jedynie sprężyście", "po przekroczeniu Rm naprężenie umowne gwałtownie maleje"], correct: 2 },
             { id: 54, q: "Na podstawie współczynnika rozszerzalności liniowej można wnioskować o:", type: "normal", answers: ["przewodnictwie cieplnym", "sile wiązań międzyatomowych", "rezystywności"], correct: 1 },
             { id: 55, q: "Po azotowaniu stali:", type: "normal", answers: ["stosuje się ulepszanie cieplne", "stosuje się przesycanie i starzenie", "nie stosuje się obróbki cieplnej"], correct: 2 },
-            { id: 56, q: "Po hartowaniu stali:", type: "normal", answers: ["objętość próbki zwiększa się", "objętość próbki zmniejsza się", "objętość próbki nie zmienia się"], correct: 0 },
+            { id: 56, q: "Po hartowaniu stali:", type: "normal", answers: ["objętość próbki zwiększa się", "objętość próbkiBone zmniejsza się", "objętość próbki nie zmienia się"], correct: 0 },
             { id: 57, q: "W celu zapewnienia stali wysokiej twardości i odporności na ścieranie:", type: "normal", answers: ["stal nawęgla się po uprzednim jej zahartowaniu", "stal po nawęglaniu poddaje się ulepszaniu cieplnemu", "stal po nawęglaniu hartuje się i nisko odpuszcza"], correct: 2 },
             { id: 58, q: "Czy materiały funkcjonalne zmieniają swoje własności pod wpływem przyłożonego do takich materiałów zewnętrznego pola mechanicznego, elektrycznego lub magnetycznego?", type: "normal", answers: ["Tak. Takie zachowanie materiału identyfikuje materiały funkcjonalne.", "Tak, ale tylko dla materiałów poddanych działaniu pola elektrycznego.", "Tak, ale tylko dla materiałów poddanych działaniu pola mechanicznego."], correct: 0 },
             { id: 59, q: "Stan naprężenia można rozłożyć na dwa stany podstawowe:", type: "normal", answers: ["stan hydrostatyczny oraz czyste ścinanie", "stan naprężeń głównych oraz stan naprężeń stycznych", "stan naprężeń średnich oraz stan naprężeń oktaedrycznych"], correct: 0 },
             { id: 60, q: "Zanieczyszczenia w stali takie jak siarka i fosfor:", type: "normal", answers: ["nie wpływają na skrawalność", "pogarszają skrawalność", "polepszają skrawalność"], correct: 2 },
-            { id: 61, q: "Podaj, który z procesów obróbki powierzchniowej wymaga koniecznie stosowania próżni:", type: "normal", answers: ["hartowanie laserowe", "hartowanie plazmowe", "hartowanie elektronowe"], correct: 1 },
-            { id: 62, q: "Która z wymienionych powłok na wyrobie stalowym ma charakter powłoki anodowej?", type: "normal", answers: ["Zn", "Sn", "Cu"], correct: 0 },
-            { id: 63, q: "Który z wymienionych materiałów jest najwłaściwszym materiałem na pojemniki do przechowywania ciekłych gazów?", type: "normal", answers: ["Stop aluminium", "Stal niskostopowa o podwyższonej wytrzymałości", "Chromowa stal ferrytyczna"], correct: 1 },
-            { id: 64, q: "Powstawanie stopów eutektycznych zachodzi, gdy:", type: "normal", answers: ["nieograniczona rozpuszczalność, podobna temp topnienia", "nieograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, podobna temp topnienia"], correct: 3 },
-            { id: 65, q: "Stal niskonapięciowa (niskonapięciowa/niskowęglowa) jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
+            { id: 61, q: "Podaj, który z procesów obróbki powierzchniowej wymaga koniecznie stosowania próżni:", type: "normal", answers: ["hartowanie laserowe", "hartowanie plazmowe", "hartowanie elektronowe"], correct: 2 },
+            { id: 62, q: "Klasyfikacja powłok: która z wymienionych powłok na wyrobie stalowym ma charakter powłoki anodowej?", type: "normal", answers: ["Zn", "Sn", "Cu"], correct: 0 },
+            { id: 63, q: "Który z wymienionych materiałów jest najwłaściwszym materiałem na pojemniki do przechowywania ciekłych gazów?", type: "normal", answers: ["Stop aluminium", "Stal niskostopowa o podwyższonej wytrzymałości", "Chromowa stal ferrytyczna"], correct: 0 },
+            { id: 64, q: "Powstawanie stopów eutektycznych zachodzi, gdy występuje:", type: "normal", answers: ["nieograniczona rozpuszczalność, podobna temp topnienia", "nieograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, podobna temp topnienia"], correct: 2 },
+            { id: 65, q: "Stal niskowęglowa jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
             { id: 66, q: "Na czym polega obróbka cieplna stali?", type: "ai", answers: ["Chodzi o to żeby rozpuścić niepożądane fazy", "Na mechanicznym usuwaniu zgorzeliny", "Na powierzchniowym utwardzaniu przez zgniot"], correct: 0 },
             { id: 67, q: "Spiekanie to:", type: "ai", answers: ["proces samorzutny i nieodwracalny", "proces wymuszony i w pełni odwracalny", "topnienie osnowy w łuku elektrycznym"], correct: 0 },
-            { id: 68, q: "Dia kompozytów o osnowie ceramicznej najbardziej typowy napełniacz to:", type: "ai", answers: ["Ziarnisty", "Włóknisty ciągły", "Warstwowy (laminat)"], correct: 0 },
+            { id: 68, q: "Dla kompozytów o osnowie ceramicznej najbardziej typowy napełniacz to:", type: "ai", answers: ["Ziarnisty", "Włóknisty ciągły", "Warstwowy (laminat)"], correct: 0 },
             { id: 69, q: "Materiały ogniotrwałe magnezjanowe należą do grupy:", type: "normal", answers: ["kwaśne", "zasadowe", "obojętne", "specjalne"], correct: 1 },
             { id: 70, q: "Jaki jest przeciętny współczynnik KIc dla ceramik?", type: "normal", answers: ["0,1-1 MPa·m^(1/2)", "1-10", "20-40", "40-100"], correct: 1 },
             { id: 71, q: "W jakiej próbie ceramika wykazuje największą wytrzymałość?", type: "ai", answers: ["Na ściskanie *(rozciąganie < zginanie << ściskanie)", "Na rozciąganie", "Na skręcanie"], correct: 0 },
@@ -513,7 +511,7 @@
         let activeQuestions = [...database];
         let currentQuestionIndex = 0;
         let hasAnswered = false;
-        let currentCombo = 0; // Licznik serii poprawnych odpowiedzi
+        let currentCombo = 0;
 
         let playerControlled = false;
         let keysPressed = {};
@@ -671,7 +669,6 @@
             document.getElementById('review-count').innerText = wrongAnswersList.length;
         }
 
-        // Aktualizacja widoku combo na bazie wymagań progowych
         function updateComboDisplay() {
             const comboEl = document.getElementById('combo-display');
             if (currentCombo === 0) {
@@ -690,7 +687,7 @@
                 comboText = `🔴🔥💥 Super Combo x${currentCombo}!`;
                 comboEl.style.color = '#f44336';
             } else if (currentCombo >= 16) {
-                comboText = `🔷🔥🔷🔥🔷 Damn ale ześ combo zrobił D: x${currentCombo}!!!`;
+                comboText = `🔷🔥⚡ BOSKIE COMBO x${currentCombo}!!!`;
                 comboEl.style.color = '#00bcd4';
             }
 
@@ -707,7 +704,6 @@
             
             document.getElementById('jump-select').value = (activeQuestions.length > 0 && currentQuestionIndex < activeQuestions.length) ? currentQuestionIndex : "";
 
-            // Blokowanie strzałek nawigacyjnych na skrajnych pozycjach
             document.getElementById('prev-arrow-btn').disabled = (currentQuestionIndex === 0 || activeQuestions.length === 0);
             document.getElementById('next-arrow-btn').disabled = (currentQuestionIndex >= activeQuestions.length - 1 || activeQuestions.length === 0);
 
@@ -718,7 +714,7 @@
                 
                 document.getElementById('quiz-area').innerHTML = `
                     <div class="question-navigation">
-                        <button id="prev-arrow-btn" class="nav-arrow-btn" disabled>◀ Poprzednie</button>
+                        <button id="prev-arrow-btn" class="nav-arrow-btn" disabled>&◀ Poprzednie</button>
                         <button id="next-arrow-btn" class="nav-arrow-btn" disabled>Następne ▶</button>
                     </div>
                     <div class="empty-state"><h3>${msg}</h3></div>`;
@@ -765,7 +761,7 @@
             if (selectedIndex === qData.correct) {
                 optElement.classList.add('correct');
                 playSuccessSound();
-                currentCombo++; // Zwiększ serię
+                currentCombo++;
                 updateComboDisplay();
                 
                 if (currentMode === 'learn') {
@@ -777,7 +773,7 @@
                 optElement.classList.add('wrong');
                 options[qData.correct].classList.add('correct');
                 playSadTrombone();
-                currentCombo = 0; // Przerwanie serii
+                currentCombo = 0;
                 updateComboDisplay();
                 
                 if (!wrongAnswersList.includes(qData.id)) {
