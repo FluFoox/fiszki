@@ -181,6 +181,7 @@
             display: flex;
             align-items: center;
             font-size: 1.05rem;
+            font-weight: normal; /* Normalna waga czcionki na start */
         }
 
         .option:hover:not(.disabled) {
@@ -193,7 +194,7 @@
             background-color: rgba(76, 175, 80, 0.15) !important;
             border-color: var(--success) !important;
             color: #81c784;
-            font-weight: bold;
+            font-weight: bold; /* Pogrubia się dopiero po kliknięciu jako wyróżnienie dobrej odpowiedzi */
         }
 
         .option.wrong {
@@ -344,10 +345,10 @@
             { id: 56, q: "Po hartowaniu stali:", type: "normal", answers: ["objętość próbki zwiększa się", "objętość próbki zmniejsza się", "objętość próbki nie zmienia się"], correct: 0 },
             { id: 57, q: "W celu zapewnienia stali wysokiej twardości i odporności na ścieranie:", type: "normal", answers: ["stal nawęgla się po uprzednim jej zahartowaniu", "stal po nawęglaniu poddaje się ulepszaniu cieplnemu", "stal po nawęglaniu hartuje się i nisko odpuszcza"], correct: 2 },
             { id: 58, q: "Czy materiały funkcjonalne zmieniają swoje własności pod wpływem przyłożonego do takich materiałów zewnętrznego pola mechanicznego, elektrycznego lub magnetycznego?", type: "normal", answers: ["Tak. Takie zachowanie materiału identyfikuje materiały funkcjonalne.", "Tak, ale tylko dla materiałów poddanych działaniu pola elektrycznego.", "Tak, ale tylko dla materiałów poddanych działaniu pola mechanicznego."], correct: 0 },
-            { id: 59, q: "Stan naprężenia można rozłożyć na dwa stany podstawowe:", type: "normal", answers: ["stan hydrostatyczny oraz czстые ścinanie", "stan naprężeń głównych oraz stan naprężeń stycznych", "stan naprężeń średnich oraz stan naprężeń oktaedrycznych"], correct: 0 },
+            { id: 59, q: "Stan naprężenia można rozłożyć na dwa stany podstawowe:", type: "normal", answers: ["stan hydrostatyczny oraz czyste ścinanie", "stan naprężeń głównych oraz stan naprężeń stycznych", "stan naprężeń średnich oraz stan naprężeń oktaedrycznych"], correct: 0 },
             { id: 60, q: "Zanieczyszczenia w stali takie jak siarka i fosfor:", type: "normal", answers: ["nie wpływają na skrawalność", "pogarszają skrawalność", "polepszają skrawalność"], correct: 2 },
             { id: 61, q: "Podaj, który z procesów obróbki powierzchniowej wymaga koniecznie stosowania próżni:", type: "normal", answers: ["hartowanie laserowe", "hartowanie plazmowe", "hartowanie elektronowe"], correct: 1 },
-            { id: 62, q: "Któria z wymienionych powłok na wyrobie stalowym ma charakter powłoki anodowej?", type: "normal", answers: ["Zn", "Sn", "Cu"], correct: 0 },
+            { id: 62, q: "Która z wymienionych powłok na wyrobie stalowym ma charakter powłoki anodowej?", type: "normal", answers: ["Zn", "Sn", "Cu"], correct: 0 },
             { id: 63, q: "Który z wymienionych materiałów jest najwłaściwszym materiałem na pojemniki do przechowywania ciekłych gazów?", type: "normal", answers: ["Stop aluminium", "Stal niskostopowa o podwyższonej wytrzymałości", "Chromowa stal ferrytyczna"], correct: 1 },
             { id: 64, q: "Powstawanie stopów eutektycznych zachodzi, gdy:", type: "normal", answers: ["nieograniczona rozpuszczalność, podobna temp topnienia", "nieograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, różne temp topnienia", "ograniczona rozpuszczalność, podobna temp topnienia"], correct: 3 },
             { id: 65, q: "Stal niskonapięciowa (niskowęglowa) jest miększa, bo: - ma więcej ferrytu, - ma mniej węgla", type: "normal", answers: ["tak tak", "nie tak", "nie nie", "tak nie"], correct: 0 },
@@ -395,7 +396,7 @@
             { id: 107, q: "Do defektów struktury krystalicznej należą:", type: "ai", answers: ["dyslokacje, błędy ułożenia, granice ziarn", "wtrącenia niemetaliczne, pęcherze gazowe", "pęknięcia zmęczeniowe, zgorzelina"], correct: 0 }
         ];
 
-        let currentMode = 'normal'; // 'normal' lub 'learn'
+        let currentMode = 'normal';
         let isShuffle = false;
         let wrongAnswersList = JSON.parse(localStorage.getItem('wrongAnswersList')) || [];
         
@@ -409,23 +410,19 @@
             showQuestion();
         }
 
-        // Przygotowanie puli pytań
         function setupQuestions() {
             const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
 
-            // 1. Filtrowanie po trybie (zwykły vs nauki)
             if (currentMode === 'learn') {
                 activeQuestions = database.filter(q => wrongAnswersList.includes(q.id));
             } else {
                 activeQuestions = [...database];
             }
 
-            // 2. Filtrowanie po wyszukiwarce tekstowej
             if (searchQuery !== '') {
                 activeQuestions = activeQuestions.filter(q => q.q.toLowerCase().includes(searchQuery));
             }
 
-            // 3. Losowanie / Sortowanie sekwencyjne
             if (isShuffle) {
                 activeQuestions.sort(() => Math.random() - 0.5);
             } else {
@@ -436,7 +433,6 @@
             populateJumpSelect();
         }
 
-        // Dynamiczne uzupełnianie listy rozwijanej (Select)
         function populateJumpSelect() {
             const select = document.getElementById('jump-select');
             select.innerHTML = '<option value="">Skocz do pytania...</option>';
@@ -449,7 +445,6 @@
             });
         }
 
-        // Obsługa wyboru konkretnego pytania z listy
         function handleJumpToQuestion() {
             const select = document.getElementById('jump-select');
             if (select.value !== "") {
@@ -458,7 +453,6 @@
             }
         }
 
-        // Obsługa wpisywania haseł do wyszukiwarki
         function handleSearch() {
             setupQuestions();
             showQuestion();
@@ -492,7 +486,6 @@
             const totalCountSpan = document.getElementById('total-count');
             const currentIndexSpan = document.getElementById('current-index');
             
-            // Aktualizacja aktualnie wybranej opcji w select
             document.getElementById('jump-select').value = (activeQuestions.length > 0 && currentQuestionIndex < activeQuestions.length) ? currentQuestionIndex : "";
 
             if (activeQuestions.length === 0) {
@@ -506,7 +499,6 @@
                 return;
             }
 
-            // Odtworzenie struktury html quizu, jeśli została wcześniej zastąpiona przez empty-state
             if (!document.getElementById('question-id')) {
                 quizArea.innerHTML = `
                     <div class="question-box">
@@ -543,10 +535,7 @@
                 optDiv.className = 'option';
                 optDiv.innerText = ans;
                 
-                // Pogrubienie poprawnej odpowiedzi przed kliknięciem
-                if (index === qData.correct) {
-                    optDiv.style.fontWeight = 'bold';
-                }
+                // USUNIĘTE: Brak modyfikacji stylu fontWeight na tym etapie
 
                 optDiv.onclick = () => selectOption(index, optDiv);
                 container.appendChild(optDiv);
