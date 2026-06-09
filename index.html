@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fajne fiszki z PNOMU?!?!?!</title>
+    <title>Fiszki</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -25,21 +25,60 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-start;
             min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Główny układ dwukolumnowy */
+        .main-wrapper {
+            display: flex;
+            gap: 25px;
+            max-width: 1150px;
+            width: 100%;
+            flex-wrap: wrap;
         }
 
         .container {
-            max-width: 750px;
-            width: 100%;
+            flex: 1;
+            min-width: 300px;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 30px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
             border: 1px solid var(--border);
-            margin-top: 20px;
             box-sizing: border-box;
+        }
+
+        /* Panel boczny z PIONOWYM Pongiem */
+        .pong-sidebar {
+            width: 180px; /* Węższy panel */
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pong-title {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        #pongCanvas {
+            background-color: #000;
+            border: 2px solid var(--border);
+            border-radius: 6px;
         }
 
         h1 {
@@ -181,7 +220,7 @@
             display: flex;
             align-items: center;
             font-size: 1.05rem;
-            font-weight: normal; /* Normalna waga czcionki na start */
+            font-weight: normal;
         }
 
         .option:hover:not(.disabled) {
@@ -194,7 +233,7 @@
             background-color: rgba(76, 175, 80, 0.15) !important;
             border-color: var(--success) !important;
             color: #81c784;
-            font-weight: bold; /* Pogrubia się dopiero po kliknięciu jako wyróżnienie dobrej odpowiedzi */
+            font-weight: bold;
         }
 
         .option.wrong {
@@ -243,49 +282,55 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Fiszki Egzaminacyjne</h1>
-        <div class="subtitle">APIR PNOM ;)</div>
+    <div class="main-wrapper">
+        <div class="container">
+            <h1>Fiszki Egzaminacyjne</h1>
+            <div class="subtitle">Fiszki z dopaminką</div>
 
-        <div class="controls">
-            <div class="controls-row">
-                <div class="modes">
-                    <button id="mode-normal" class="active" onclick="setMode('normal')">Tryb zwykły</button>
-                    <button id="mode-learn" onclick="setMode('learn')">Tryb nauki (<span id="review-count">0</span>)</button>
+            <div class="controls">
+                <div class="controls-row">
+                    <div class="modes">
+                        <button id="mode-normal" class="active" onclick="setMode('normal')">Tryb zwykły</button>
+                        <button id="mode-learn" onclick="setMode('learn')">Tryb nauki (<span id="review-count">0</span>)</button>
+                    </div>
+                    <div>
+                        <button id="shuffle-btn" onclick="toggleShuffle()">Losowe pytania: WYŁ</button>
+                    </div>
+                    <div class="stats">
+                        Pytanie: <span id="current-index">0</span>/<span id="total-count">0</span>
+                    </div>
                 </div>
-                <div>
-                    <button id="shuffle-btn" onclick="toggleShuffle()">Losowe pytania: WYŁ</button>
-                </div>
-                <div class="stats">
-                    Pytanie: <span id="current-index">0</span>/<span id="total-count">0</span>
+
+                <div class="search-jump-container">
+                    <input type="text" id="search-input" placeholder="Szukaj pytania po słowach..." oninput="handleSearch()">
+                    <select id="jump-select" onchange="handleJumpToQuestion()">
+                        <option value="">Skocz do pytania...</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="search-jump-container">
-                <input type="text" id="search-input" placeholder="Szukaj pytania po słowach..." oninput="handleSearch()">
-                <select id="jump-select" onchange="handleJumpToQuestion()">
-                    <option value="">Skocz do pytania...</option>
-                </select>
+            <div id="quiz-area">
+                <div class="question-box">
+                    <div class="q-number" id="question-id">Pytanie 1</div>
+                    <div class="q-text" id="question-text">Treść pytania pojawi się tutaj...</div>
+                </div>
+
+                <div class="options-list" id="options-container"></div>
+
+                <div class="actions">
+                    <button id="next-btn" onclick="nextQuestion()" disabled>Następne pytanie &rarr;</button>
+                </div>
             </div>
         </div>
 
-        <div id="quiz-area">
-            <div class="question-box">
-                <div class="q-number" id="question-id">Pytanie 1</div>
-                <div class="q-text" id="question-text">Treść pytania pojawi się tutaj...</div>
-            </div>
-
-            <div class="options-list" id="options-container">
-                </div>
-
-            <div class="actions">
-                <button id="next-btn" onclick="nextQuestion()" disabled>Następne pytanie &rarr;</button>
-            </div>
+        <div class="pong-sidebar">
+            <div class="pong-title">🤖 Vertical Pong</div>
+            <canvas id="pongCanvas" width="140" height="420"></canvas>
         </div>
     </div>
 
     <script>
-        // Baza wszystkich 107 pytań na podstawie obrazów
+        // Baza wszystkich 107 pytań
         const database = [
             { id: 1, q: "Odpuszczanie stali polega na:", type: "normal", answers: ["Wyżarzaniu stali odkształconej plastycznie", "Wyżarzaniu stali zahartowanej", "Wyżarzaniu stali w celu uzyskania drobnego ziarna"], correct: 1 },
             { id: 2, q: "Podstawowym mechanizmem umocnienia duraluminium jest:", type: "normal", answers: ["Umocnienie wydzieleniowe", "Umocnienie roztworowe", "Umocnienie odkształceniowe"], correct: 0 },
@@ -321,7 +366,7 @@
             { id: 32, q: "Duże ziarno w materiałach metalicznych jest korzystne, gdy materiał jest stosowany w:", type: "normal", answers: ["Podwyższonej temperaturze", "Temperaturze kriogenicznej", "Warunkach zmiennych naprężeń"], correct: 2 },
             { id: 33, q: "Główną cechą stali o dobrej spawalności jest:", type: "normal", answers: ["Wysoka zawartość pierwiastków stopowych", "Niska zawartość węgla", "Struktura drobnoziarnista"], correct: 1 },
             { id: 34, q: "Modyfikację siluminów prowadzi się celem:", type: "normal", answers: ["poprawy odporności korozyjnej stopu", "poprawy własności mechanicznych", "zwiększenia oporności właściwej stopu"], correct: 1 },
-            { id: 35, q: "Które materiały nazywane są piezoelektrykami?", type: "normal", answers: ["takie, w których pod wpływem naprężeń mechanicznych powstaje pole elektryczne i na odwrót", "takie, w których pod wpływem zmiany temperatury powstają na powierzchniach przeciwne ładunki elektryczne", "takie, w których pod wpływem zewnętrznego pola elektrycznego zmienia się stała dielektryczna"], correct: 0 },
+            { id: 35, q: "Ktøre materiały nazywane są piezoelektrykami?", type: "normal", answers: ["takie, w których pod wpływem naprężeń mechanicznych powstaje pole elektryczne i na odwrót", "takie, w których pod wpływem zmiany temperatury powstają na powierzchniach przeciwne ładunki elektryczne", "takie, w których pod wpływem zewnętrznego pola elektrycznego zmienia się stała dielektryczna"], correct: 0 },
             { id: 36, q: "Gdzie głównie stosuje się materiały magnetyczne twarde?", type: "normal", answers: ["do wytwarzania stałych magnesów", "do wytwarzania nośników pamięci", "do wytwarzania blach transformatorowych"], correct: 0 },
             { id: 37, q: "Co to jest temperatura Curie w odniesieniu do materiałów magnetycznych?", type: "normal", answers: ["temperatura, powyżej której ferromagnetyk staje się paramagnetykiem", "temperatura, powyżej której paramagnetyk staje się diamagnetykiem", "temperatura, poniżej której diamagnetyk staje się ferromagnetykiem"], correct: 0 },
             { id: 38, q: "Które materiały charakteryzują się dużymi współczynnikami rozszerzalności cieplnej?", type: "normal", answers: ["materiały o wysokiej temperaturze topnienia", "materiały o niskiej temperaturze topnienia", "materiały o dużej wartości przewodności cieplnej"], correct: 0 },
@@ -404,31 +449,86 @@
         let currentQuestionIndex = 0;
         let hasAnswered = false;
 
+        // --- SEKCJA AUDIO (Web Audio API) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+        function playSuccessSound() {
+            try {
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                let startTime = ctx.currentTime;
+                const notes = [523.25, 783.99]; 
+                
+                notes.forEach((freq, index) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, startTime + (index * 0.08));
+                    gain.gain.setValueAtTime(0.12, startTime + (index * 0.08));
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + (index * 0.08) + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(startTime + (index * 0.08));
+                    osc.stop(startTime + (index * 0.08) + 0.25);
+                });
+            } catch (e) { console.log(e); }
+        }
+
+        function playSadTrombone() {
+            try {
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const notes = [
+                    { f: 220.00, d: 0.35 }, { f: 207.65, d: 0.35 }, { f: 196.00, d: 0.35 }, { f: 174.61, d: 0.65 }  
+                ];
+                let startTime = ctx.currentTime;
+
+                notes.forEach((note, index) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(600, startTime);
+                    osc.frequency.setValueAtTime(note.f, startTime);
+                    if (index === notes.length - 1) {
+                        osc.frequency.linearRampToValueAtTime(note.f * 0.88, startTime + note.d);
+                    }
+                    gain.gain.setValueAtTime(0.15, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + note.d);
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + note.d);
+                    startTime += note.d - 0.03;
+                });
+            } catch (e) { console.log(e); }
+        }
+
+        // --- SEKCJA QUIZU ---
         function initQuiz() {
             updateReviewCountDisplay();
             setupQuestions();
             showQuestion();
+            initPong();
         }
 
         function setupQuestions() {
             const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
-
             if (currentMode === 'learn') {
                 activeQuestions = database.filter(q => wrongAnswersList.includes(q.id));
             } else {
                 activeQuestions = [...database];
             }
-
             if (searchQuery !== '') {
                 activeQuestions = activeQuestions.filter(q => q.q.toLowerCase().includes(searchQuery));
             }
-
             if (isShuffle) {
                 activeQuestions.sort(() => Math.random() - 0.5);
             } else {
                 activeQuestions.sort((a, b) => a.id - b.id);
             }
-            
             currentQuestionIndex = 0;
             populateJumpSelect();
         }
@@ -436,7 +536,6 @@
         function populateJumpSelect() {
             const select = document.getElementById('jump-select');
             select.innerHTML = '<option value="">Skocz do pytania...</option>';
-            
             activeQuestions.forEach((q, index) => {
                 const opt = document.createElement('option');
                 opt.value = index;
@@ -457,6 +556,15 @@
             setupQuestions();
             showQuestion();
         }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const nextBtn = document.getElementById('next-btn');
+                if (nextBtn && !nextBtn.disabled) {
+                    nextQuestion();
+                }
+            }
+        });
 
         function setMode(mode) {
             currentMode = mode;
@@ -511,10 +619,8 @@
             }
 
             const qData = activeQuestions[currentQuestionIndex];
-            
             currentIndexSpan.innerText = currentQuestionIndex + 1;
             totalCountSpan.innerText = activeQuestions.length;
-
             document.getElementById('question-id').innerText = `Pytanie ${qData.id}`;
             
             let qTextElement = document.getElementById('question-text');
@@ -534,9 +640,6 @@
                 const optDiv = document.createElement('div');
                 optDiv.className = 'option';
                 optDiv.innerText = ans;
-                
-                // USUNIĘTE: Brak modyfikacji stylu fontWeight na tym etapie
-
                 optDiv.onclick = () => selectOption(index, optDiv);
                 container.appendChild(optDiv);
             });
@@ -552,6 +655,8 @@
 
             if (selectedIndex === qData.correct) {
                 optElement.classList.add('correct');
+                playSuccessSound();
+                
                 if (currentMode === 'learn') {
                     wrongAnswersList = wrongAnswersList.filter(id => id !== qData.id);
                     localStorage.setItem('wrongAnswersList', JSON.stringify(wrongAnswersList));
@@ -560,6 +665,7 @@
             } else {
                 optElement.classList.add('wrong');
                 options[qData.correct].classList.add('correct');
+                playSadTrombone();
                 
                 if (!wrongAnswersList.includes(qData.id)) {
                     wrongAnswersList.push(qData.id);
@@ -571,7 +677,6 @@
             for (let i = 0; i < options.length; i++) {
                 options[i].classList.add('disabled');
             }
-
             document.getElementById('next-btn').disabled = false;
         }
 
@@ -584,6 +689,136 @@
                 setupQuestions();
                 showQuestion();
             }
+        }
+
+        // --- PIONOWY ENGINE PONGA (GÓRA VS DÓŁ – ASYMETRYCZNE BOTY) ---
+        function initPong() {
+            const canvas = document.getElementById("pongCanvas");
+            const ctx = canvas.getContext("2d");
+
+            const paddleWidth = 45, paddleHeight = 6; // Szerokie, ale niskie paletki w poziomie
+            const ballRadius = 4;
+
+            let topPaddleX = (canvas.width - paddleWidth) / 2;
+            let bottomPaddleX = (canvas.width - paddleWidth) / 2;
+
+            let ballX = canvas.width / 2;
+            let ballY = canvas.height / 2;
+            let ballSpeedX = 1.6;
+            let ballSpeedY = 2.4;
+
+            // Różne prędkości i style gry botów
+            const topBotSpeed = 1.8;   // Wolniejszy, precyzyjny (celuje środkiem)
+            const bottomBotSpeed = 2.3; // Szybszy, agresywny (gra krawędziami)
+
+            function updatePong() {
+                // Ruch piłki
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+
+                // Odbicia od ścian bocznych (lewo/prawo)
+                if (ballX - ballRadius < 0) {
+                    ballX = ballRadius;
+                    ballSpeedX = -ballSpeedX;
+                } else if (ballX + ballRadius > canvas.width) {
+                    ballX = canvas.width - ballRadius;
+                    ballSpeedX = -ballSpeedX;
+                }
+
+                // GÓRNY BOT: Śledzi środek piłki z lekkim opóźnieniem
+                const topPaddleCenter = topPaddleX + paddleWidth / 2;
+                if (topPaddleCenter < ballX - 4) {
+                    topPaddleX += topBotSpeed;
+                } else if (topPaddleCenter > ballX + 4) {
+                    topPaddleX -= topBotSpeed;
+                }
+
+                // DOLNY BOT: Szybszy, dynamicznie przewiduje pozycję
+                const bottomPaddleCenter = bottomPaddleX + paddleWidth / 2;
+                if (bottomPaddleCenter < ballX - 8) {
+                    bottomPaddleX += bottomBotSpeed;
+                } else if (bottomPaddleCenter > ballX + 8) {
+                    bottomPaddleX -= bottomBotSpeed;
+                }
+
+                // Blokada paletek na krawędziach
+                topPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, topPaddleX));
+                bottomPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, bottomPaddleX));
+
+                // KOLIZJA GÓRA (Paletka górna)
+                if (ballY - ballRadius <= paddleHeight + 4) {
+                    if (ballX >= topPaddleX && ballX <= topPaddleX + paddleWidth) {
+                        ballY = paddleHeight + 4 + ballRadius; // Korekta pozycji (anty-utknięcie)
+                        ballSpeedY = -ballSpeedY;
+                        
+                        // Losowy wpływ odbicia zależny od miejsca uderzenia + drobny szum
+                        let impact = (ballX - (topPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
+                        ballSpeedX += impact * 0.8 + (Math.random() * 0.4 - 0.2);
+                    } else if (ballY < 0) {
+                        resetBall();
+                    }
+                }
+
+                // KOLIZJA DÓŁ (Paletka dolna)
+                if (ballY + ballRadius >= canvas.height - paddleHeight - 4) {
+                    if (ballX >= bottomPaddleX && ballX <= bottomPaddleX + paddleWidth) {
+                        ballY = canvas.height - paddleHeight - 4 - ballRadius; // Korekta pozycji (anty-utknięcie)
+                        ballSpeedY = -ballSpeedY;
+                        
+                        // Losowy wpływ odbicia dolnego bota
+                        let impact = (ballX - (bottomPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
+                        ballSpeedX += impact * 0.9 + (Math.random() * 0.4 - 0.2);
+                    } else if (ballY > canvas.height) {
+                        resetBall();
+                    }
+                }
+
+                // Ograniczenie maksymalnej prędkości horyzontalnej, żeby gra nie zrobiła się nudna
+                if (Math.abs(ballSpeedX) > 3.5) ballSpeedX = Math.sign(ballSpeedX) * 3.5;
+            }
+
+            function resetBall() {
+                ballX = canvas.width / 2;
+                ballY = canvas.height / 2;
+                ballSpeedX = (Math.random() * 2 - 1) * 1.5;
+                ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * 2.4;
+            }
+
+            function drawPong() {
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Linia środkowa (przerywana w poprzek)
+                ctx.strokeStyle = "#222222";
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height / 2);
+                ctx.lineTo(canvas.width, canvas.height / 2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Górna paletka
+                ctx.fillStyle = "#bb86fc";
+                ctx.fillRect(topPaddleX, 4, paddleWidth, paddleHeight);
+
+                // Dolna paletka
+                ctx.fillStyle = "#bb86fc";
+                ctx.fillRect(bottomPaddleX, canvas.height - paddleHeight - 4, paddleWidth, paddleHeight);
+
+                // Piłeczka
+                ctx.fillStyle = "#e0e0e0";
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            function gameLoop() {
+                updatePong();
+                drawPong();
+                requestAnimationFrame(gameLoop);
+            }
+
+            gameLoop();
         }
 
         window.onload = initQuiz;
