@@ -53,7 +53,7 @@
         }
 
         .pong-sidebar {
-            width: 180px; 
+            width: 174px; /* Dopasowane idealnie do szerokości canvasu z borderem i paddingiem */
             background: var(--card-bg);
             border-radius: 12px;
             padding: 20px 15px;
@@ -95,11 +95,23 @@
             text-align: center;
         }
 
+        .title-link {
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
         h1 {
             text-align: center;
             color: var(--primary);
             margin-bottom: 5px;
             font-size: 1.8rem;
+            display: inline-block;
+            transition: opacity 0.2s ease;
+        }
+
+        .title-link:hover h1 {
+            opacity: 0.8;
         }
 
         .subtitle {
@@ -334,7 +346,9 @@
 
     <div class="main-wrapper">
         <div class="container">
-            <h1>Fiszki Egzaminacyjne</h1>
+            <a href="https://www.youtube.com/watch?v=KSPxHniCtmw" target="_blank" class="title-link">
+                <h1>Fiszki Egzaminacyjne</h1>
+            </a>
             <div class="subtitle">Fiszki APIR ;)</div>
 
             <div class="controls">
@@ -384,7 +398,7 @@
         <div class="pong-sidebar">
             <div class="pong-title">Troche dopaminy</div>
             <canvas id="pongCanvas" width="140" height="420"></canvas>
-            <div class="pong-controls">
+            <div class="pong-controls" style="width: 140px;">
                 <button id="pong-join-btn" class="pong-btn" onclick="setPongControl(true)">Dołącz</button>
                 <button id="pong-auto-btn" class="pong-btn active" onclick="setPongControl(false)">Auto</button>
             </div>
@@ -414,7 +428,7 @@
             { id: 17, q: "Stopów aluminium nie można hartować ponieważ:", type: "normal", answers: ["Aluminium nie ma odmian alotropowych", "Stopy Al nie zawierają węgla", "Aluminium ma niską temperaturę topnienia"], correct: 0 },
             { id: 18, q: "Wybierz temperaturę, z której hartuje się stal niestopową o zawartości węgla 1,1%", type: "normal", answers: ["850°C", "757°C", "727°C"], correct: 1 },
             { id: 19, q: "Wytrzymałość na rozciąganie Rm to naprężenie rozciągające:", type: "normal", answers: ["odpowiadające największej sile obciążającej uzyskanej podczas przeprowadzenia próby", "rzeczywiste, występujące w przekroju poprzecznym próbki w miejscu przewężenia w chwili rozerwania", "przy osiągnięciu którego następuje trwałe odkształcenie plastyczne materiału"], correct: 0 },
-            { id: 20, q: "Które wiązanie między atomami (cząsteczkami) jest najsłabsze?", type: "normal", answers: ["Van der Waalsa (wtórne)", "Kowalencyjne", "Metaliczne"], correct: 0 },
+            { id: 20, q: "Ktøre wiązanie między atomami (cząsteczkami) jest najsłabsze?", type: "normal", answers: ["Van der Waalsa (wtórne)", "Kowalencyjne", "Metaliczne"], correct: 0 },
             { id: 21, q: "Nadstopy (superstopy) są to materiały stosowane:", type: "normal", answers: ["W temperaturze kriogenicznej", "Na wytrzymałe narzędzia", "W wysokiej temperaturze"], correct: 2 },
             { id: 22, q: "Podstawowym mechanizmem umocnienia duraluminium jest:", type: "normal", answers: ["Umocnienie odkształceniowe (dyslokacyjne)", "Umocnienie przez rozdrobnienie ziarna", "Umocnienie wydzieleniowe"], correct: 2 },
             { id: 23, q: "Ulepszanie cieplne stali jest to proces polegający na:", type: "normal", answers: ["Połączeniu procesów hartowania i odpuszczania", "Połączeniu procesów odkształcenia i rekrystalizacji", "Obróbce cieplnej stali bezpośrednio po odlewaniu"], correct: 0 },
@@ -486,7 +500,7 @@
             { id: 89, q: "W podeutektycznym stopie układu dwuskładnikowego z ograniczoną rozpuszczalnością B w A i brakiem rozpuszczalności A w B mikrostruktura składa się z:", type: "ai", answers: ["pierwotnych kryształów B i eutektyki alfa w B", "czystego cementytu i perlitu", "kryształów martenzytu i austenitu szczątkowego"], correct: 0 },
             { id: 90, q: "Podczas wyżarzania rekrystalizującego zgniot krytyczny powoduje:", type: "ai", answers: ["utworzenie struktury gruboziarnistej", "całkowite usunięcie dyslokacji bez zmiany ziarna", "pękanie miedzykonstrukcyjne materiału"], correct: 0 },
             { id: 91, q: "W których żeliwach nie występują wydzielenia grafitu:", type: "ai", answers: ["W białych", "W szarych", "W sferoidalnych"], correct: 0 },
-            { id: 92, q: "Zdecydowana większość metali krystalizuje w następujących układach krystalograficznych:", type: "ai", answers: ["Regularnym lub heksagonalnym", "Trójskośnym lub jednoskośnym", "Rombowym lub tetragonalnym"], correct: 0 },
+            { id: 92, q: "Zeczna większość metali krystalizuje w następujących układach krystalograficznych:", type: "ai", answers: ["Regularnym lub heksagonalnym", "Trójskośnym lub jednoskośnym", "Rombowym lub tetragonalnym"], correct: 0 },
             { id: 93, q: "Wskaż prawidłowo zapisany wskaźnik kierunku krystalograficznego:", type: "ai", answers: ["[101]", "(101)", "{101}"], correct: 0 },
             { id: 94, q: "Elementy przeznaczone do azotowania hartuje się:", type: "ai", answers: ["przed azotowaniem", "w trakcie procesu azotowania", "bezpośrednio po azotowaniu"], correct: 0 },
             { id: 95, q: "Korozji międzykrystalicznej w stali zapobiegamy przez:", type: "ai", answers: ["wprowadzenie niklu (i tytanu) albo zmniejszenie zawartości węgla", "zwiększenie zawartości fosforu w stopie", "hartowanie z niskim odpuszczaniem"], correct: 0 },
