@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiszki Inżynieria Materiałowa</title>
+    <title>Fiszki PNOM ;)</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -53,7 +53,7 @@
         }
 
         .pong-sidebar {
-            width: 174px; /* Dopasowane idealnie do szerokości canvasu z borderem i paddingiem */
+            width: 174px;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 20px 15px;
@@ -139,6 +139,11 @@
         }
 
         .modes {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toggle-buttons {
             display: flex;
             gap: 10px;
         }
@@ -357,8 +362,9 @@
                         <button id="mode-normal" class="active" onclick="setMode('normal')">Tryb zwykły</button>
                         <button id="mode-learn" onclick="setMode('learn')">Tryb nauki (<span id="review-count">0</span>)</button>
                     </div>
-                    <div>
+                    <div class="toggle-buttons">
                         <button id="shuffle-btn" onclick="toggleShuffle()">Losowe pytania: WYŁ</button>
+                        <button id="shuffle-ans-btn" onclick="toggleShuffleAnswers()">Mieszaj odpowiedzi: WYŁ</button>
                     </div>
                     <div class="stats-wrapper">
                         <div class="combo-box" id="combo-display"></div>
@@ -420,8 +426,8 @@
             { id: 9, q: "Temperatura przejścia w stan kruchy stopów aluminium zależy od:", type: "normal", answers: ["Zawartości w stopie pierwiastków stopowych", "Wielkości ziarna", "Stopy Al nie są kruche w niskiej temperaturze"], correct: 2 },
             { id: 10, q: "Którego pierwiastka należy dodać do stali, aby otrzymać austenit w temperaturze pokojowej?", type: "normal", answers: ["miedzi", "niklu", "chromu"], correct: 1 },
             { id: 11, q: "Zjawisko tzw. twardości wtórnej wykorzystuje się:", type: "normal", answers: ["W stopach aluminium utwardzanych wydzieleniowo", "W blachach na karoserie samochodowe", "W stalach narzędziowych"], correct: 2 },
-            { id: 12, q: "Który z mechanizmów umocnienia stali jednocześnie zwiększa granicę plastyczności i obniża temperaturę przejścia w stan kruchy?", type: "normal", answers: ["Umocnienie cząstkami dyspersyjnymi", "Umocnienie odkształceniowe", "Umocnienie przez rozdrobnienie ziarna"], correct: 2 },
-            { id: 13, q: "Która z faz jest najtwardsza?", type: "normal", answers: ["cementyt", "ferryt", "austenit"], correct: 0 },
+            { id: 12, q: "Którą z mechanizmów umocnienia stali jednocześnie zwiększa granicę plastyczności i obniża temperaturę przejścia w stan kruchy?", type: "normal", answers: ["Umocnienie cząstkami dyspersyjnymi", "Umocnienie odkształceniowe", "Umocnienie przez rozdrobnienie ziarna"], correct: 2 },
+            { id: 13, q: "Ktora z faz jest najtwardsza?", type: "normal", answers: ["cementyt", "ferryt", "austenit"], correct: 0 },
             { id: 14, q: "Który z poniższych wzorów opisuje regułę faz Gibbsa przy stałym ciśnieniu?", type: "normal", answers: ["s = n - f + 1", "s = n - f + 2", "s = n - f"], correct: 0 },
             { id: 15, q: "Na czym polega przemiana eutektyczna przy chłodzeniu?", type: "normal", answers: ["w stałej temperaturze z ciała stałego tworzą się dwie nowe fazy stałe", "w stałej temperaturze tworzy się nowa faza stała i ciecz o innym składzie", "w stałej temperaturze z cieczy tworzą się dwie fazy stałe"], correct: 2 },
             { id: 16, q: "Ledeburyt to:", type: "normal", answers: ["mieszanina eutektyczna austenitu i ferrytu", "mieszanina eutektyczna austenitu i cementytu", "mieszanina eutektoidalna austenitu i cementytu"], correct: 1 },
@@ -439,7 +445,7 @@
             { id: 28, q: "Mosiądze są to stopy miedzi z:", type: "normal", answers: ["Cyną", "Cynkiem", "Aluminium"], correct: 1 },
             { id: 29, q: "Współczynnik umocnienia stali stosowanych do tłoczenia, np. karoserii samochodowych, powinien być:", type: "normal", answers: ["Jak najmniejszy", "Możliwie duży", "Jego wartość nie ma znaczenia"], correct: 1 },
             { id: 30, q: "Stale dwufazowe (dual phase – DP) stosowane na elementy karoserii samochodowych charakteryzują się:", type: "normal", answers: ["Niską granicą plastyczności i wysoką wytrzymałością", "Niską granicą plastyczności i niską wytrzymałością", "Wysoką granicą plastyczności i wysoką wytrzymałością"], correct: 0 },
-            { id: 31, q: "Podstawowymi pierwiastkami stopowymi stali szybkotnących są:", type: "normal", answers: ["Chrom lub nikiel", "Tytan lub niob", "Wolfram lub molibden"], correct: 2 },
+            { id: 31, q: "Podstawowymi pierwiastkami stopowymi stali szybkotnących are:", type: "normal", answers: ["Chrom lub nikiel", "Tytan lub niob", "Wolfram lub molibden"], correct: 2 },
             { id: 32, q: "Duże ziarno w materiałach metalicznych jest korzystne, gdy materiał jest stosowany w:", type: "normal", answers: ["Podwyższonej temperaturze", "Temperaturze kriogenicznej", "Warunkach zmiennych naprężeń"], correct: 0 },
             { id: 33, q: "Główną cechą stali o dobrej spawalności jest:", type: "normal", answers: ["Wysoka zawartość pierwiastków stopowych", "Niska zawartość węgla", "Struktura drobnoziarnista"], correct: 1 },
             { id: 34, q: "Modyfikację siluminów prowadzi się celem:", type: "normal", answers: ["poprawy odporności korozyjnej stopu", "poprawy własności mechanicznych", "zwiększenia oporności właściwej stopu"], correct: 1 },
@@ -464,7 +470,7 @@
             { id: 53, q: "W trakcie jednoosiowego rozciągania mosiężnej próbki wytrzymałościowej:", type: "normal", answers: ["obserwuje się zarówno wzrost wytrzymałości jak i plastyczności stopu", "stop odkształca się jedynie sprężyście", "po przekroczeniu Rm naprężenie umowne gwałtownie maleje"], correct: 2 },
             { id: 54, q: "Na podstawie współczynnika rozszerzalności liniowej można wnioskować o:", type: "normal", answers: ["przewodnictwie cieplnym", "sile wiązań międzyatomowych", "rezystywności"], correct: 1 },
             { id: 55, q: "Po azotowaniu stali:", type: "normal", answers: ["stosuje się ulepszanie cieplne", "stosuje się przesycanie i starzenie", "nie stosuje się obróbki cieplnej"], correct: 2 },
-            { id: 56, q: "Po hartowaniu stali:", type: "normal", answers: ["objętość próbki zwiększa się", "objętość próbkiBone zmniejsza się", "objętość próbki nie zmienia się"], correct: 0 },
+            { id: 56, q: "Po hartowaniu stali:", type: "normal", answers: ["objętość próbki zwiększa się", "objętość próbki zmniejsza się", "objętość próbki nie zmienia się"], correct: 0 },
             { id: 57, q: "W celu zapewnienia stali wysokiej twardości i odporności na ścieranie:", type: "normal", answers: ["stal nawęgla się po uprzednim jej zahartowaniu", "stal po nawęglaniu poddaje się ulepszaniu cieplnemu", "stal po nawęglaniu hartuje się i nisko odpuszcza"], correct: 2 },
             { id: 58, q: "Czy materiały funkcjonalne zmieniają swoje własności pod wpływem przyłożonego do takich materiałów zewnętrznego pola mechanicznego, elektrycznego lub magnetycznego?", type: "normal", answers: ["Tak. Takie zachowanie materiału identyfikuje materiały funkcjonalne.", "Tak, ale tylko dla materiałów poddanych działaniu pola elektrycznego.", "Tak, ale tylko dla materiałów poddanych działaniu pola mechanicznego."], correct: 0 },
             { id: 59, q: "Stan naprężenia można rozłożyć na dwa stany podstawowe:", type: "normal", answers: ["stan hydrostatyczny oraz czyste ścinanie", "stan naprężeń głównych oraz stan naprężeń stycznych", "stan naprężeń średnich oraz stan naprężeń oktaedrycznych"], correct: 0 },
@@ -489,7 +495,7 @@
             { id: 78, q: "Dlaczego stal niskowęglowa ma większą ciągliwość niż średnio-węglowa?", type: "ai", answers: ["Bo jest mniejsza zawartość węgla. Wraz ze wzrostem węgla w stali ubywa miękkiego i plastycznego ferrytu a przybywa twardego cementytu.", "Ponieważ ferryt ulega przemianie martenzytycznej", "Ze względu na obecność grafitu sferoidalnego"], correct: 0 },
             { id: 79, q: "Wytrzymałość mechaniczna ceramiki wynosi:", type: "ai", answers: ["10^2 MPa – wytrzymałość rzeczywista, Teoretyczna – 10-102 GPa.", "10-20 MPa - wytrzymałość rzeczywista, Teoretyczna - 1 GPa", "Powyżej 5000 MPa w każdej próbie rozciągania"], correct: 0 },
             { id: 80, q: "Dopasuj poprawnie defekty mikrostruktury (Wakancje, Dyslokacje, Granice ziarn, Cząstki):", type: "ai", answers: ["Punktowe->Wakancje, Liniowe->Dyslokacje, Powierzchniowe->Granice ziarn, Objętościowe->Cząstki", "Punktowe->Dyslokacje, Liniowe->Wakancje, Powierzchniowe->Cząstki, Objętościowe->Granice ziarn", "Punktowe->Granice ziarn, Liniowe->Cząstki, Powierzchniowe->Wakancje, Objętościowe->Dyslokacje"], correct: 0 },
-            { id: 81, q: "Współczynnik załamania światła rdzenia światłowodu:", type: "ai", answers: ["Rdzeń musi mieć większy współczynnik załamania światła(n2) od materiału otaczającego(n1).", "Rdzeń musi mieć mniejszy współczynnik załamania światła od płaszcza", "Musi być równy współczynnikowi załamania światła powietrza"], correct: 0 },
+            { id: 81, q: "Wskaż, który kompozyt poliestrowy zbrojony włóknami posiada najwyższy moduł sprężystości:", type: "ai", answers: ["CFRP", "GFRP", "AFRP (Kevlar)"], correct: 0 },
             { id: 82, q: "Do obróbki jakich materiałów używane są ściernice twarde?", type: "ai", answers: ["Do szlifowania materiałów miękkich.", "Do szlifowania węglików spiekanych", "Do obróbki wykończeniowej diamentów"], correct: 0 },
             { id: 83, q: "Wskaż, który kompozyt poliestrowy zbrojony włóknami posiada najwyższy moduł sprężystości:", type: "ai", answers: ["CFRP", "GFRP", "AFRP (Kevlar)"], correct: 0 },
             { id: 84, q: "Który z wymienionych rodzajów kompozytów posiada szczególnie dużą zdolność pochłaniania energii uderzenia?", type: "ai", answers: ["Kevlar", "Kompozyt szklany", "Kompozyt borowy"], correct: 0 },
@@ -515,17 +521,21 @@
             { id: 104, q: "Cementyt trzeciorzędowy wydziela się w stalach podczas chłodzenia:", type: "ai", answers: ["z ferrytu na skutek malejącej rozpuszczalności węgla", "z austenitu podczas przemiany martenzytycznej", "bezpośrednio z cieczy przy temp. 1147°C"], correct: 0 },
             { id: 105, q: "Pierwiastki austenitotwórcze to:", type: "ai", answers: ["mangan i nikiel", "chrom i wolfram", "tytan i wanad"], correct: 0 },
             { id: 106, q: "Fazy Lavesa są to:", type: "ai", answers: ["fazy międzymetaliczne", "roztwory graniczne", "odmiany alotropowe ferrytu"], correct: 0 },
-            { id: 107, q: "Do defektów struktury krystalicznej należą:", type: "ai", answers: ["dyslokacje, błędy ułożenia, granice ziarn", "wtrącenia niemetaliczne, pęcherze gazowe", "pęknięcia zmęczeniowe, zgorzelina"], correct: 0 }
+            { id: 107, q: "Do defektów struktury krystalicznej należą:", type: "ai", answers: ["dyslokacje, błędy ułożenia, granice ziarn", "wtrącenia niemetaliczne, pęcherze gazowe", "pękania zmęczeniowe, zgorzelina"], correct: 0 }
         ];
 
         let currentMode = 'normal';
         let isShuffle = false;
+        let isShuffleAnswers = false;
         let wrongAnswersList = JSON.parse(localStorage.getItem('wrongAnswersList')) || [];
         
         let activeQuestions = [...database];
         let currentQuestionIndex = 0;
         let hasAnswered = false;
         let currentCombo = 0;
+
+        let currentDisplayedAnswers = [];
+        let currentDisplayedCorrectIndex = 0;
 
         let playerControlled = false;
         let keysPressed = {};
@@ -679,6 +689,13 @@
             showQuestion();
         }
 
+        function toggleShuffleAnswers() {
+            isShuffleAnswers = !isShuffleAnswers;
+            document.getElementById('shuffle-ans-btn').innerText = `Mieszaj odpowiedzi: ${isShuffleAnswers ? 'WŁ' : 'WYŁ'}`;
+            document.getElementById('shuffle-ans-btn').classList.toggle('active', isShuffleAnswers);
+            showQuestion();
+        }
+
         function updateReviewCountDisplay() {
             document.getElementById('review-count').innerText = wrongAnswersList.length;
         }
@@ -728,7 +745,7 @@
                 
                 document.getElementById('quiz-area').innerHTML = `
                     <div class="question-navigation">
-                        <button id="prev-arrow-btn" class="nav-arrow-btn" disabled>&◀ Poprzednie</button>
+                        <button id="prev-arrow-btn" class="nav-arrow-btn" disabled>◀ Poprzednie</button>
                         <button id="next-arrow-btn" class="nav-arrow-btn" disabled>Następne ▶</button>
                     </div>
                     <div class="empty-state"><h3>${msg}</h3></div>`;
@@ -752,10 +769,19 @@
                 qTextElement.appendChild(badge);
             }
 
+            let originalAnswers = qData.answers.map((ans, idx) => ({ text: ans, originalIndex: idx }));
+            
+            if (isShuffleAnswers) {
+                originalAnswers.sort(() => Math.random() - 0.5);
+            }
+
+            currentDisplayedAnswers = originalAnswers.map(item => item.text);
+            currentDisplayedCorrectIndex = originalAnswers.findIndex(item => item.originalIndex === qData.correct);
+
             const container = document.getElementById('options-container');
             container.innerHTML = '';
 
-            qData.answers.forEach((ans, index) => {
+            currentDisplayedAnswers.forEach((ans, index) => {
                 const optDiv = document.createElement('div');
                 optDiv.className = 'option';
                 optDiv.innerText = ans;
@@ -772,7 +798,7 @@
             const container = document.getElementById('options-container');
             const options = container.children;
 
-            if (selectedIndex === qData.correct) {
+            if (selectedIndex === currentDisplayedCorrectIndex) {
                 optElement.classList.add('correct');
                 playSuccessSound();
                 currentCombo++;
@@ -785,7 +811,7 @@
                 }
             } else {
                 optElement.classList.add('wrong');
-                options[qData.correct].classList.add('correct');
+                options[currentDisplayedCorrectIndex].classList.add('correct');
                 playSadTrombone();
                 currentCombo = 0;
                 updateComboDisplay();
