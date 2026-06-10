@@ -86,16 +86,122 @@
         .main-wrapper {
             display: flex;
             gap: 25px;
-            max-width: 1150px;
+            max-width: 1450px; /* Zwiększone, aby pomieścić 3 kolumny */
             width: 100%;
             flex-wrap: wrap;
+            justify-content: center;
             margin-bottom: 40px;
-            margin-top: 20px; /* Dodatkowy margines, żeby licznik nie zachodził przy małych ekranach */
+            margin-top: 20px;
         }
 
+        /* NOWE STYLE DLA SAPERA (LEWY SIDEBAR) */
+        .saper-sidebar {
+            width: 270px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .saper-title {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        #minesweeper-status {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            text-align: center;
+            min-height: 18px;
+        }
+
+        #minesweeper-board {
+            display: grid;
+            grid-template-columns: repeat(8, 28px);
+            grid-template-rows: repeat(16, 28px);
+            gap: 2px;
+            background-color: #000;
+            padding: 4px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .cell {
+            width: 28px;
+            height: 28px;
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 13px;
+            user-select: none;
+            color: var(--text-color);
+        }
+
+        .cell:hover:not(.revealed):not(.flagged) {
+            background: #3d3d3d;
+        }
+
+        .cell.revealed {
+            background: #1a1a1a;
+            border-color: #222;
+        }
+
+        .cell.mine {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: var(--error);
+        }
+
+        .cell.flagged {
+            background: rgba(255, 152, 0, 0.1);
+        }
+
+        /* Kolory cyfr w saperze */
+        .cell[data-count="1"] { color: #64b5f6; }
+        .cell[data-count="2"] { color: #81c784; }
+        .cell[data-count="3"] { color: #e57373; }
+        .cell[data-count="4"] { color: #ba68c8; }
+        .cell[data-count="5"] { color: #ffb74d; }
+
+        #ms-reset-btn {
+            width: 100%;
+            padding: 8px 4px;
+            font-size: 0.8rem;
+            text-align: center;
+            background-color: var(--primary-variant);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: none; /* Ukryty, dopóki gra trwa */
+            transition: background 0.2s;
+        }
+        #ms-reset-btn:hover {
+            background-color: #4b01e3;
+        }
+
+        /* KONTENER ŚRODKOWY (FISZKI) */
         .container {
             flex: 1;
             min-width: 300px;
+            max-width: 750px;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 30px;
@@ -104,6 +210,7 @@
             box-sizing: border-box;
         }
 
+        /* PRAWY SIDEBAR (PONG) */
         .pong-sidebar {
             width: 174px;
             background: var(--card-bg);
@@ -407,6 +514,14 @@
     </div>
 
     <div class="main-wrapper">
+        
+        <div class="saper-sidebar">
+            <div class="saper-title">Saper 8x16</div>
+            <div id="minesweeper-status">Odkrywaj uważnie!</div>
+            <div id="minesweeper-board"></div>
+            <button id="ms-reset-btn" onclick="initMinesweeper()">Play Again</button>
+        </div>
+
         <div class="container">
             <a href="https://www.youtube.com/watch?v=KSPxHniCtmw" target="_blank" class="title-link">
                 <h1>Fiszki Egzaminacyjne</h1>
@@ -512,7 +627,7 @@
             { id: 38, q: "Które materiały charakteryzują się dużymi współczynnikami rozszerzalności cieplnej?", type: "normal", answers: ["materiały o wysokiej temperaturze topnienia", "materiały o niskiej temperaturze topnienia", "materiały o dużej wartości przewodności cieplnej"], correct: 1 },
             { id: 39, q: "W wielkim piecu produkujemy docelowo:", type: "normal", answers: ["stal niskostopową", "surówkę przeróbczą", "jednocześnie surówkę przeróbczą i stal niskostopową"], correct: 1 },
             { id: 40, q: "Wsadem do konwertora tlenowego jest:", type: "normal", answers: ["tylko surówka żelaza", "surówka żelaza i złom stalowy", "tylko złom stalowy"], correct: 1 },
-            { id: 41, q: "Wyrobami walcowanymi na zimno są głównie:", type: "normal", answers: ["blachy cienkie i taśmy", "szyny kolejowe", "pręty do zbrojenia betonu"], correct: 0 },
+            { id: 41, q: "Wyrobami walcowanymi na zimno are głównie:", type: "normal", answers: ["blachy cienkie i taśmy", "szyny kolejowe", "pręty do zbrojenia betonu"], correct: 0 },
             { id: 42, q: "Jaka jest prawidłowa kolejność przebiegu procesów metalurgicznych:", type: "normal", answers: ["Spiekalnia, obróbka pozapiecowa stali, wielki piec, konwertor, COS, walcowanie", "Spiekalnia, wielki piec, konwertor, obróbka pozapiecowa stali, COS, walcowanie", "Wielki piec, konwertor, spiekalnia, obróbka pozapiecowa stali, COS, walcowanie"], correct: 1 },
             { id: 43, q: "Które z wymienionych parametrów służyć mogą do oceny plastyczności materiałów?", type: "normal", answers: ["granica plastyczności materiału", "wytrzymałość materiału na rozciąganie", "wydłużenie otrzymane z próby jednoosiowego rozciągania"], correct: 2 },
             { id: 44, q: "Zabieg patentowania stosuje się w technologii wytwarzania:", type: "normal", answers: ["prętów zbrojeniowych", "rur", "drutów"], correct: 2 },
@@ -597,6 +712,14 @@
         let playerControlled = false;
         let keysPressed = {};
 
+        // --- ZMIENNE GLOBALNE DLA SAPERA ---
+        const ROWS = 16;
+        const COLS = 8;
+        const MINES_COUNT = 15; 
+        let saperBoard = [];
+        let saperGameOver = false;
+        let saperRevealedCount = 0;
+
         // Funkcja generująca liczbę użytkowników na podstawie godziny
         function updateOnlineUsers() {
             const now = new Date();
@@ -615,7 +738,7 @@
             } else if (hours >= 21 && hours <= 23) {
                 min = 10; max = 18;
             } else {
-                min = 1; max = 4; // Dla przedziału 00:00 - 07:59
+                min = 1; max = 4;
             }
 
             const count = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -702,9 +825,9 @@
             showQuestion();
             initPong();
             
-            // Inicjalizacja licznika online
+            // Inicjalizacja nowych modułów
+            initMinesweeper();
             updateOnlineUsers();
-            // Aktualizacja co minutę, żeby dopasowywać wynik w tle
             setInterval(updateOnlineUsers, 60000);
         }
 
@@ -1054,6 +1177,157 @@
             }
 
             gameLoop();
+        }
+
+        // --- LOGIKA GRY SAPER (PIONOWY 8x16) ---
+        function initMinesweeper() {
+            const boardElement = document.getElementById("minesweeper-board");
+            const statusElement = document.getElementById("minesweeper-status");
+            const resetBtn = document.getElementById("ms-reset-btn");
+            
+            boardElement.innerHTML = "";
+            statusElement.innerText = "Odkrywaj uważnie!";
+            statusElement.style.color = "var(--text-muted)";
+            resetBtn.style.display = "none";
+            saperGameOver = false;
+            saperRevealedCount = 0;
+            saperBoard = [];
+
+            // Generowanie macierzy
+            for (let r = 0; r < ROWS; r++) {
+                saperBoard[r] = [];
+                for (let c = 0; c < COLS; c++) {
+                    saperBoard[r][c] = {
+                        row: r, col: c, isMine: false, isRevealed: false, isFlagged: false, neighborMines: 0, element: null
+                    };
+                }
+            }
+
+            // Losowe ustawianie min
+            let minesPlaced = 0;
+            while (minesPlaced < MINES_COUNT) {
+                let r = Math.floor(Math.random() * ROWS);
+                let c = Math.floor(Math.random() * COLS);
+                if (!saperBoard[r][c].isMine) {
+                    saperBoard[r][c].isMine = true;
+                    minesPlaced++;
+                }
+            }
+
+            // Obliczanie sąsiadów
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (!saperBoard[r][c].isMine) {
+                        saperBoard[r][c].neighborMines = countNeighborMines(r, c);
+                    }
+                }
+            }
+
+            // Budowanie widoku kafelków w drzewie DOM
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cellElement = document.createElement("div");
+                    cellElement.classList.add("cell");
+                    
+                    cellElement.addEventListener("click", () => revealCell(r, c));
+                    cellElement.addEventListener("contextmenu", (e) => {
+                        e.preventDefault();
+                        toggleFlag(r, c);
+                    });
+
+                    boardElement.appendChild(cellElement);
+                    saperBoard[r][c].element = cellElement;
+                }
+            }
+        }
+
+        function countNeighborMines(row, col) {
+            let count = 0;
+            for (let dr = -1; dr <= 1; dr++) {
+                for (let dc = -1; dc <= 1; dc++) {
+                    let nr = row + dr;
+                    let nc = col + dc;
+                    if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+                        if (saperBoard[nr][nc].isMine) count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        function revealCell(row, col) {
+            if (saperGameOver) return;
+            let cell = saperBoard[row][col];
+            if (cell.isRevealed || cell.isFlagged) return;
+
+            cell.isRevealed = true;
+            cell.element.classList.add("revealed");
+            saperRevealedCount++;
+
+            if (cell.isMine) {
+                endSaperGame(false);
+                return;
+            }
+
+            if (cell.neighborMines === 0) {
+                for (let dr = -1; dr <= 1; dr++) {
+                    for (let dc = -1; dc <= 1; dc++) {
+                        let nr = row + dr;
+                        let nc = col + dc;
+                        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+                            revealCell(nr, nc);
+                        }
+                    }
+                }
+            } else {
+                cell.element.innerText = cell.neighborMines;
+                cell.element.setAttribute("data-count", cell.neighborMines);
+            }
+
+            if (saperRevealedCount === (ROWS * COLS) - MINES_COUNT) {
+                endSaperGame(true);
+            }
+        }
+
+        function toggleFlag(row, col) {
+            if (saperGameOver) return;
+            let cell = saperBoard[row][col];
+            if (cell.isRevealed) return;
+
+            cell.isFlagged = !cell.isFlagged;
+            if (cell.isFlagged) {
+                cell.element.classList.add("flagged");
+                cell.element.innerText = "🚩";
+            } else {
+                cell.element.classList.remove("flagged");
+                cell.element.innerText = "";
+            }
+        }
+
+        function endSaperGame(isWin) {
+            saperGameOver = true;
+            const statusElement = document.getElementById("minesweeper-status");
+            const resetBtn = document.getElementById("ms-reset-btn");
+
+            resetBtn.style.display = "block"; // Pokazuje przycisk na samym dole widgetu
+
+            if (isWin) {
+                statusElement.innerText = "🎉 Wygrana!";
+                statusElement.style.color = "var(--success)";
+            } else {
+                statusElement.innerText = "💥 Trafiłeś na minę!";
+                statusElement.style.color = "var(--error)";
+                
+                // Odsłonięcie pozostałych bomb po przegranej
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        if (saperBoard[r][c].isMine) {
+                            saperBoard[r][c].element.classList.add("mine");
+                            saperBoard[r][c].element.innerText = "💣";
+                        }
+                    }
+                }
+            }
         }
 
         window.onload = initQuiz;
