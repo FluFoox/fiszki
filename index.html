@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiszki PNOM ;)</title>
+    <title>Fiszki Inżynieria Materiałowa</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -32,6 +32,57 @@
             position: relative;
         }
 
+        /* Licznik osób online w lewym górnym rogu */
+        .online-counter {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            user-select: none;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .pulse-dot::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-color: var(--success);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: pulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
         .main-wrapper {
             display: flex;
             gap: 25px;
@@ -39,6 +90,7 @@
             width: 100%;
             flex-wrap: wrap;
             margin-bottom: 40px;
+            margin-top: 20px; /* Dodatkowy margines, żeby licznik nie zachodził przy małych ekranach */
         }
 
         .container {
@@ -349,6 +401,11 @@
 </head>
 <body>
 
+    <div class="online-counter">
+        <div class="pulse-dot"></div>
+        <span>Online: <strong id="online-users-count">0</strong> osób</span>
+    </div>
+
     <div class="main-wrapper">
         <div class="container">
             <a href="https://www.youtube.com/watch?v=KSPxHniCtmw" target="_blank" class="title-link">
@@ -442,7 +499,7 @@
             { id: 25, q: "Ktøre z poniższych stwierdzeń NIE jest prawdziwe?", type: "normal", answers: ["Zmniejszenie ziarna w stali powoduje obniżenie temperatury przejścia w stan kruchy", "Zmniejszenie ziarna w stali powoduje zwiększenie odporności na pełzanie", "Zmniejszenie ziarna w stali powoduje wzrost granicy plastyczności"], correct: 1 },
             { id: 26, q: "Temperaturę przejścia w stan kruchy wykazują metale:", type: "normal", answers: ["O strukturze krystalicznej regularnej przestrzennie centrowanej A2", "O strukturze krystalicznej regularnej ściennie centrowanej A1", "O strukturze krystalicznej heksagonalnej zwartej A3"], correct: 0 },
             { id: 27, q: "W jakich jednostkach mierzy się udarność?", type: "normal", answers: ["Energii", "Naprężenia", "Siły"], correct: 0 },
-            { id: 28, q: "Mosiądze są to stopy miedzi z:", type: "normal", answers: ["Cyną", "Cynkiem", "Aluminium"], correct: 1 },
+            { id: 28, q: "Mosiądze are to stopy miedzi z:", type: "normal", answers: ["Cyną", "Cynkiem", "Aluminium"], correct: 1 },
             { id: 29, q: "Współczynnik umocnienia stali stosowanych do tłoczenia, np. karoserii samochodowych, powinien być:", type: "normal", answers: ["Jak najmniejszy", "Możliwie duży", "Jego wartość nie ma znaczenia"], correct: 1 },
             { id: 30, q: "Stale dwufazowe (dual phase – DP) stosowane na elementy karoserii samochodowych charakteryzują się:", type: "normal", answers: ["Niską granicą plastyczności i wysoką wytrzymałością", "Niską granicą plastyczności i niską wytrzymałością", "Wysoką granicą plastyczności i wysoką wytrzymałością"], correct: 0 },
             { id: 31, q: "Podstawowymi pierwiastkami stopowymi stali szybkotnących are:", type: "normal", answers: ["Chrom lub nikiel", "Tytan lub niob", "Wolfram lub molibden"], correct: 2 },
@@ -540,6 +597,31 @@
         let playerControlled = false;
         let keysPressed = {};
 
+        // Funkcja generująca liczbę użytkowników na podstawie godziny
+        function updateOnlineUsers() {
+            const now = new Date();
+            const hours = now.getHours();
+            let min = 1;
+            let max = 4;
+
+            if (hours >= 8 && hours < 10) {
+                min = 2; max = 9;
+            } else if (hours >= 10 && hours < 13) {
+                min = 6; max = 12;
+            } else if (hours >= 13 && hours < 17) {
+                min = 9; max = 17;
+            } else if (hours >= 17 && hours < 21) {
+                min = 12; max = 20;
+            } else if (hours >= 21 && hours <= 23) {
+                min = 10; max = 18;
+            } else {
+                min = 1; max = 4; // Dla przedziału 00:00 - 07:59
+            }
+
+            const count = Math.floor(Math.random() * (max - min + 1)) + min;
+            document.getElementById('online-users-count').innerText = count;
+        }
+
         function setPongControl(isPlayer) {
             playerControlled = isPlayer;
             document.getElementById('pong-join-btn').classList.toggle('active', isPlayer);
@@ -619,6 +701,11 @@
             setupQuestions();
             showQuestion();
             initPong();
+            
+            // Inicjalizacja licznika online
+            updateOnlineUsers();
+            // Aktualizacja co minutę, żeby dopasowywać wynik w tle
+            setInterval(updateOnlineUsers, 60000);
         }
 
         function setupQuestions() {
