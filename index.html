@@ -516,17 +516,17 @@
     <div class="main-wrapper">
         
         <div class="saper-sidebar">
-            <div class="saper-title">Saper 8x16</div>
-            <div id="minesweeper-status">Odkrywaj uważnie!</div>
+            <div class="saper-title">Saper trzeźwa sesja </div>
+            <div id="minesweeper-status">Nie traf na piwko</div>
             <div id="minesweeper-board"></div>
-            <button id="ms-reset-btn" onclick="initMinesweeper()">Play Again</button>
+            <button id="ms-reset-btn" onclick="initMinesweeper()">Jeszcze raz!</button>
         </div>
 
         <div class="container">
             <a href="https://www.youtube.com/watch?v=KSPxHniCtmw" target="_blank" class="title-link">
                 <h1>Fiszki Egzaminacyjne</h1>
             </a>
-            <div class="subtitle">Fiszki APIR ;)</div>
+            <div class="subtitle">Fiszki APIR</div>
 
             <div class="controls">
                 <div class="controls-row">
@@ -715,7 +715,7 @@
         // --- ZMIENNE GLOBALNE DLA SAPERA ---
         const ROWS = 16;
         const COLS = 8;
-        const MINES_COUNT = 15; 
+        const MINES_COUNT = 16; 
         let saperBoard = [];
         let saperGameOver = false;
         let saperRevealedCount = 0;
@@ -1312,10 +1312,10 @@
             resetBtn.style.display = "block"; // Pokazuje przycisk na samym dole widgetu
 
             if (isWin) {
-                statusElement.innerText = "🎉 Wygrana!";
+                statusElement.innerText = "🎉🎉 Zdajesz sesje! 🎉🎉";
                 statusElement.style.color = "var(--success)";
             } else {
-                statusElement.innerText = "💥 Trafiłeś na minę!";
+                statusElement.innerText = "🍺 Przyszedłeś wstawiony na egzamin 🍺";
                 statusElement.style.color = "var(--error)";
                 
                 // Odsłonięcie pozostałych bomb po przegranej
@@ -1323,7 +1323,7 @@
                     for (let c = 0; c < COLS; c++) {
                         if (saperBoard[r][c].isMine) {
                             saperBoard[r][c].element.classList.add("mine");
-                            saperBoard[r][c].element.innerText = "💣";
+                            saperBoard[r][c].element.innerText = "🍺";
                         }
                     }
                 }
