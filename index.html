@@ -927,9 +927,15 @@
             } else if (currentCombo >= 8 && currentCombo <= 15) {
                 comboText = `🔴🔥💥 Super Combo x${currentCombo}!`;
                 comboEl.style.color = '#f44336';
-            } else if (currentCombo >= 16) {
-                comboText = `🔷🔥⚡ BOSKIE COMBO x${currentCombo}!!!`;
-                comboEl.style.color = '#00bcd4';
+             } else if (currentCombo >= 16 && currentCombo <= 21) {
+                comboText = `🔷🔥⚡ BOSKIE COMBO x${currentCombo}!`;
+                comboEl.style.color = '#4169E1';
+            }    else if (currentCombo >= 21 && currentCombo <= 26) {
+                comboText = ` 🍻 Piwo combo 🍻  x${currentCombo}!`;
+                comboEl.style.color = '#4169E1';
+            }    else if (currentCombo >= 27) {
+                comboText = `🏎️ Okurwica 🏎️   x${currentCombo}!`;
+                comboEl.style.color = '#4169E1';
             }
 
             comboEl.innerText = comboText;
