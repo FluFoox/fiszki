@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiszki ;)</title>
+    <title>Fiszki Inżynieria Materiałowa</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -25,8 +25,9 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
             position: relative;
@@ -86,7 +87,7 @@
         .main-wrapper {
             display: flex;
             gap: 25px;
-            max-width: 1450px; /* Zwiększone, aby pomieścić 3 kolumny */
+            max-width: 1500px; 
             width: 100%;
             flex-wrap: wrap;
             justify-content: center;
@@ -94,7 +95,7 @@
             margin-top: 20px;
         }
 
-        /* NOWE STYLE DLA SAPERA (LEWY SIDEBAR) */
+        /* SAPER (LEWY SIDEBAR) */
         .saper-sidebar {
             width: 270px;
             background: var(--card-bg);
@@ -190,7 +191,7 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            display: none; /* Ukryty, dopóki gra trwa */
+            display: none;
             transition: background 0.2s;
         }
         #ms-reset-btn:hover {
@@ -210,9 +211,9 @@
             box-sizing: border-box;
         }
 
-        /* PRAWY SIDEBAR (PONG) */
+        /* PRAWY SIDEBAR (PONG) - Poszerzony pod 3 przyciski */
         .pong-sidebar {
-            width: 174px;
+            width: 210px;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 20px 15px;
@@ -228,10 +229,22 @@
             color: var(--primary);
             font-size: 0.9rem;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 1px;
             text-align: center;
+        }
+
+        .pong-score {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-family: monospace;
+            background: #121212;
+            padding: 2px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
         }
 
         #pongCanvas {
@@ -243,14 +256,14 @@
 
         .pong-controls {
             display: flex;
-            gap: 8px;
+            gap: 5px;
             width: 100%;
         }
 
         .pong-btn {
             flex: 1;
-            padding: 8px 4px;
-            font-size: 0.8rem;
+            padding: 8px 2px;
+            font-size: 0.75rem;
             text-align: center;
         }
 
@@ -366,6 +379,7 @@
             background: #1a1a1a;
             border: 1px dashed #444;
             display: none;
+            text-align: center;
         }
 
         .search-jump-container {
@@ -504,10 +518,70 @@
             user-select: none;
             letter-spacing: 0.5px;
         }
+
+        /* FLAPPY BIRD */
+        .flappy-section {
+            width: calc(100% + 40px);
+            margin: 0 -20px 60px -20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 20px 20px 24px 20px;
+            box-sizing: border-box;
+        }
+
+        .flappy-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .flappy-title {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flappy-score-display {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text-color);
+            font-family: monospace;
+            background: #121212;
+            padding: 4px 14px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        #flappyCanvas {
+            background-color: #000;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            display: block;
+            cursor: pointer;
+            width: 100%;
+            height: 260px;
+        }
+
+        .flappy-hint {
+            margin-top: 10px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Widget Online -->
     <div class="online-counter">
         <div class="pulse-dot"></div>
         <span>Online: <strong id="online-users-count">0</strong> osób</span>
@@ -515,18 +589,20 @@
 
     <div class="main-wrapper">
         
+        <!-- SAPER (PO LEWEJ) -->
         <div class="saper-sidebar">
-            <div class="saper-title">Saper trzeźwa sesja </div>
-            <div id="minesweeper-status">Nie traf na piwko</div>
+            <div class="saper-title">Saper 8x16</div>
+            <div id="minesweeper-status">Odkrywaj uważnie!</div>
             <div id="minesweeper-board"></div>
-            <button id="ms-reset-btn" onclick="initMinesweeper()">Jeszcze raz!</button>
+            <button id="ms-reset-btn" onclick="initMinesweeper()">Play Again</button>
         </div>
 
+        <!-- PANEL GŁÓWNY (FISZKI) -->
         <div class="container">
             <a href="https://www.youtube.com/watch?v=KSPxHniCtmw" target="_blank" class="title-link">
                 <h1>Fiszki Egzaminacyjne</h1>
             </a>
-            <div class="subtitle">Fiszki APIR</div>
+            <div class="subtitle">Fiszki APIR ;)</div>
 
             <div class="controls">
                 <div class="controls-row">
@@ -573,14 +649,27 @@
             </div>
         </div>
 
+        <!-- PONG (PO PRAWEJ) -->
         <div class="pong-sidebar">
             <div class="pong-title">Troche dopaminy</div>
-            <canvas id="pongCanvas" width="140" height="420"></canvas>
-            <div class="pong-controls" style="width: 140px;">
-                <button id="pong-join-btn" class="pong-btn" onclick="setPongControl(true)">Dołącz</button>
-                <button id="pong-auto-btn" class="pong-btn active" onclick="setPongControl(false)">Auto</button>
+            <div class="pong-score" id="pong-score-board">0 : 0</div>
+            <canvas id="pongCanvas" width="170" height="420"></canvas>
+            <div class="pong-controls">
+                <button id="pong-join-btn" class="pong-btn" onclick="setPongMode('join')">Dołącz</button>
+                <button id="pong-duel-btn" class="pong-btn" onclick="setPongMode('duel')">Duel</button>
+                <button id="pong-auto-btn" class="pong-btn active" onclick="setPongMode('auto')">Auto</button>
             </div>
         </div>
+    </div>
+
+    <!-- FLAPPY BIRD (NA DOLE) -->
+    <div class="flappy-section">
+        <div class="flappy-header">
+            <div class="flappy-title">🐦 Flappy Bird</div>
+            <div class="flappy-score-display">Wynik: <span id="flappy-score">0</span> &nbsp;|&nbsp; Rekord: <span id="flappy-best">0</span></div>
+        </div>
+        <canvas id="flappyCanvas"></canvas>
+        <div class="flappy-hint">Spacja / Kliknięcie / Dotknięcie → skok ptaka</div>
     </div>
 
     <div class="footer-credits">Kontakt FB: Kacper Sobczyk</div>
@@ -668,7 +757,7 @@
             { id: 79, q: "Wytrzymałość mechaniczna ceramiki wynosi:", type: "ai", answers: ["10^2 MPa – wytrzymałość rzeczywista, Teoretyczna – 10-102 GPa.", "10-20 MPa - wytrzymałość rzeczywista, Teoretyczna - 1 GPa", "Powyżej 5000 MPa w każdej próbie rozciągania"], correct: 0 },
             { id: 80, q: "Dopasuj poprawnie defekty mikrostruktury (Wakancje, Dyslokacje, Granice ziarn, Cząstki):", type: "ai", answers: ["Punktowe->Wakancje, Liniowe->Dyslokacje, Powierzchniowe->Granice ziarn, Objętościowe->Cząstki", "Punktowe->Dyslokacje, Liniowe->Wakancje, Powierzchniowe->Cząstki, Objętościowe->Granice ziarn", "Punktowe->Granice ziarn, Liniowe->Cząstki, Powierzchniowe->Wakancje, Objętościowe->Dyslokacje"], correct: 0 },
             { id: 81, q: "Wskaż, który kompozyt poliestrowy zbrojony włóknami posiada najwyższy moduł sprężystości:", type: "ai", answers: ["CFRP", "GFRP", "AFRP (Kevlar)"], correct: 0 },
-            { id: 82, q: "Do obróbki jakich materiałów używane są ściernice twarde?", type: "ai", answers: ["Do szlifowania materiałów miękkich.", "Do szlifowania węglików spiekanych", "Do obróbki wykończeniowej diamentów"], correct: 0 },
+            { id: 82, q: "Do obróbki jakich materiałów używane are ściernice twarde?", type: "ai", answers: ["Do szlifowania materiałów miękkich.", "Do szlifowania węglików spiekanych", "Do obróbki wykończeniowej diamentów"], correct: 0 },
             { id: 83, q: "Wskaż, który kompozyt poliestrowy zbrojony włóknami posiada najwyższy moduł sprężystości:", type: "ai", answers: ["CFRP", "GFRP", "AFRP (Kevlar)"], correct: 0 },
             { id: 84, q: "Który z wymienionych rodzajów kompozytów posiada szczególnie dużą zdolność pochłaniania energii uderzenia?", type: "ai", answers: ["Kevlar", "Kompozyt szklany", "Kompozyt borowy"], correct: 0 },
             { id: 85, q: "Czym zajmuje się bionika (biomimetyka)?", type: "ai", answers: ["nauka badająca budowę i zasady działania organizmów oraz ich adaptowanie w technice", "hodowlą sztucznych tkanek na osnowie polimerowej", "badaniem korozji mikrobiologicznej stali"], correct: 0 },
@@ -709,53 +798,52 @@
         let currentDisplayedAnswers = [];
         let currentDisplayedCorrectIndex = 0;
 
-        let playerControlled = false;
+        // TRYB PONG: 'auto' | 'join' | 'duel'
+        let pongControlMode = 'auto';
         let keysPressed = {};
+
+        // Punkty w Pongu
+        let scoreTop = 0;
+        let scoreBottom = 0;
 
         // --- ZMIENNE GLOBALNE DLA SAPERA ---
         const ROWS = 16;
         const COLS = 8;
-        const MINES_COUNT = 20; 
+        const MINES_COUNT = 15; 
         let saperBoard = [];
         let saperGameOver = false;
         let saperRevealedCount = 0;
 
-        // Funkcja generująca liczbę użytkowników na podstawie godziny
+        // Licznik online
         function updateOnlineUsers() {
             const now = new Date();
             const hours = now.getHours();
-            let min = 1;
-            let max = 4;
-
-            if (hours >= 8 && hours < 10) {
-                min = 2; max = 9;
-            } else if (hours >= 10 && hours < 13) {
-                min = 6; max = 12;
-            } else if (hours >= 13 && hours < 17) {
-                min = 9; max = 17;
-            } else if (hours >= 17 && hours < 21) {
-                min = 12; max = 20;
-            } else if (hours >= 21 && hours <= 23) {
-                min = 10; max = 18;
-            } else {
-                min = 1; max = 4;
-            }
-
+            let min = 1, max = 4;
+            if (hours >= 8 && hours < 10) { min = 2; max = 9; }
+            else if (hours >= 10 && hours < 13) { min = 6; max = 12; }
+            else if (hours >= 13 && hours < 17) { min = 9; max = 17; }
+            else if (hours >= 17 && hours < 21) { min = 12; max = 20; }
+            else if (hours >= 21 && hours <= 23) { min = 10; max = 18; }
             const count = Math.floor(Math.random() * (max - min + 1)) + min;
             document.getElementById('online-users-count').innerText = count;
         }
 
-        function setPongControl(isPlayer) {
-            playerControlled = isPlayer;
-            document.getElementById('pong-join-btn').classList.toggle('active', isPlayer);
-            document.getElementById('pong-auto-btn').classList.toggle('active', !isPlayer);
+        function setPongMode(mode) {
+            pongControlMode = mode;
+            document.getElementById('pong-join-btn').classList.toggle('active', mode === 'join');
+            document.getElementById('pong-duel-btn').classList.toggle('active', mode === 'duel');
+            document.getElementById('pong-auto-btn').classList.toggle('active', mode === 'auto');
+            
             document.getElementById('pong-join-btn').blur();
+            document.getElementById('pong-duel-btn').blur();
             document.getElementById('pong-auto-btn').blur();
         }
 
         window.addEventListener('keydown', function(e) {
             keysPressed[e.key] = true;
-            if(playerControlled && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+            // Blokada przewijania okna strzałkami w trybach sterowanych
+            if((pongControlMode === 'join' || pongControlMode === 'duel') && 
+               (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "ArrowUp" || e.key === "ArrowDown")) {
                 e.preventDefault();
             }
         });
@@ -771,7 +859,6 @@
                 const ctx = new AudioContext();
                 let startTime = ctx.currentTime;
                 const notes = [523.25, 783.99]; 
-                
                 notes.forEach((freq, index) => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -791,11 +878,8 @@
             try {
                 if (!AudioContext) return;
                 const ctx = new AudioContext();
-                const notes = [
-                    { f: 220.00, d: 0.35 }, { f: 207.65, d: 0.35 }, { f: 196.00, d: 0.35 }, { f: 174.61, d: 0.65 }  
-                ];
+                const notes = [{ f: 220.00, d: 0.35 }, { f: 207.65, d: 0.35 }, { f: 196.00, d: 0.35 }, { f: 174.61, d: 0.65 }];
                 let startTime = ctx.currentTime;
-
                 notes.forEach((note, index) => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -824,8 +908,6 @@
             setupQuestions();
             showQuestion();
             initPong();
-            
-            // Inicjalizacja nowych modułów
             initMinesweeper();
             updateOnlineUsers();
             setInterval(updateOnlineUsers, 60000);
@@ -875,7 +957,7 @@
         }
 
         document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || (e.key === ' ' && !playerControlled)) {
+            if (e.key === 'Enter' || (e.key === ' ' && pongControlMode === 'auto')) {
                 const nextBtn = document.getElementById('next-btn');
                 if (nextBtn && !nextBtn.disabled) {
                     nextQuestion();
@@ -927,13 +1009,13 @@
             } else if (currentCombo >= 8 && currentCombo <= 15) {
                 comboText = `🔴🔥💥 Super Combo x${currentCombo}!`;
                 comboEl.style.color = '#f44336';
-             } else if (currentCombo >= 16 && currentCombo <= 21) {
+            } else if (currentCombo >= 16 && currentCombo <= 21) {
                 comboText = `🔷🔥⚡ BOSKIE COMBO x${currentCombo}!`;
                 comboEl.style.color = '#4169E1';
-            }    else if (currentCombo >= 21 && currentCombo <= 26) {
+            } else if (currentCombo >= 21 && currentCombo <= 26) {
                 comboText = ` 🍻 Piwo combo 🍻  x${currentCombo}!`;
                 comboEl.style.color = '#4169E1';
-            }    else if (currentCombo >= 27) {
+            } else if (currentCombo >= 27) {
                 comboText = `🏎️ Okurwica 🏎️   x${currentCombo}!`;
                 comboEl.style.color = '#4169E1';
             }
@@ -986,10 +1068,7 @@
             }
 
             let originalAnswers = qData.answers.map((ans, idx) => ({ text: ans, originalIndex: idx }));
-            
-            if (isShuffleAnswers) {
-                originalAnswers.sort(() => Math.random() - 0.5);
-            }
+            if (isShuffleAnswers) originalAnswers.sort(() => Math.random() - 0.5);
 
             currentDisplayedAnswers = originalAnswers.map(item => item.text);
             currentDisplayedCorrectIndex = originalAnswers.findIndex(item => item.originalIndex === qData.correct);
@@ -1078,14 +1157,15 @@
             let ballSpeedX = 1.6;
             let ballSpeedY = 2.4;
 
-            const topBotSpeed = 1.8;   
-            const bottomBotSpeed = 2.3; 
+            const botSpeedTop = 1.8;   
+            const botSpeedBottom = 2.3; 
             const playerSpeed = 3.0;
 
             function updatePong() {
                 ballX += ballSpeedX;
                 ballY += ballSpeedY;
 
+                // Odbicia od ścian bocznych
                 if (ballX - ballRadius < 0) {
                     ballX = ballRadius;
                     ballSpeedX = -ballSpeedX;
@@ -1094,32 +1174,49 @@
                     ballSpeedX = -ballSpeedX;
                 }
 
-                const topPaddleCenter = topPaddleX + paddleWidth / 2;
-                if (topPaddleCenter < ballX - 4) {
-                    topPaddleX += topBotSpeed;
-                } else if (topPaddleCenter > ballX + 4) {
-                    topPaddleX -= topBotSpeed;
+                // --- STEROWANIE GÓRNĄ PALETKĄ ---
+                if (pongControlMode === 'duel') {
+                    // Tryb Duel: Górna paletka sterowana klawiszami A i D
+                    if (keysPressed["a"] || keysPressed["A"]) {
+                        topPaddleX -= playerSpeed;
+                    }
+                    if (keysPressed["d"] || keysPressed["D"]) {
+                        topPaddleX += playerSpeed;
+                    }
+                } else {
+                    // Tryby Auto / Join: Górną paletką steruje bot
+                    const topPaddleCenter = topPaddleX + paddleWidth / 2;
+                    if (topPaddleCenter < ballX - 4) {
+                        topPaddleX += botSpeedTop;
+                    } else if (topPaddleCenter > ballX + 4) {
+                        topPaddleX -= botSpeedTop;
+                    }
                 }
 
-                if (playerControlled) {
-                    if (keysPressed["ArrowLeft"] || keysPressed["a"] || keysPressed["A"]) {
+                // --- STEROWANIE DOLNĄ PALETKĄ ---
+                if (pongControlMode === 'join' || pongControlMode === 'duel') {
+                    // Dolna paletka sterowana Strzałkami
+                    if (keysPressed["ArrowLeft"]) {
                         bottomPaddleX -= playerSpeed;
                     }
-                    if (keysPressed["ArrowRight"] || keysPressed["d"] || keysPressed["D"]) {
+                    if (keysPressed["ArrowRight"]) {
                         bottomPaddleX += playerSpeed;
                     }
                 } else {
+                    // Tryb Auto: Dolną paletką steruje bot
                     const bottomPaddleCenter = bottomPaddleX + paddleWidth / 2;
                     if (bottomPaddleCenter < ballX - 8) {
-                        bottomPaddleX += bottomBotSpeed;
+                        bottomPaddleX += botSpeedBottom;
                     } else if (bottomPaddleCenter > ballX + 8) {
-                        bottomPaddleX -= bottomBotSpeed;
+                        bottomPaddleX -= botSpeedBottom;
                     }
                 }
 
+                // Granice stołu dla paletek
                 topPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, topPaddleX));
                 bottomPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, bottomPaddleX));
 
+                // Kolizja z górną paletką
                 if (ballY - ballRadius <= paddleHeight + 4) {
                     if (ballX >= topPaddleX && ballX <= topPaddleX + paddleWidth) {
                         ballY = paddleHeight + 4 + ballRadius; 
@@ -1127,10 +1224,13 @@
                         let impact = (ballX - (topPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
                         ballSpeedX += impact * 0.8 + (Math.random() * 0.4 - 0.2);
                     } else if (ballY < 0) {
+                        scoreBottom++; // Punkt dla dolnego gracza
+                        updateScoreBoard();
                         resetBall();
                     }
                 }
 
+                // Kolizja z dolną paletką
                 if (ballY + ballRadius >= canvas.height - paddleHeight - 4) {
                     if (ballX >= bottomPaddleX && ballX <= bottomPaddleX + paddleWidth) {
                         ballY = canvas.height - paddleHeight - 4 - ballRadius; 
@@ -1138,6 +1238,8 @@
                         let impact = (ballX - (bottomPaddleX + paddleWidth / 2)) / (paddleWidth / 2);
                         ballSpeedX += impact * 0.9 + (Math.random() * 0.4 - 0.2);
                     } else if (ballY > canvas.height) {
+                        scoreTop++; // Punkt dla górnego gracza
+                        updateScoreBoard();
                         resetBall();
                     }
                 }
@@ -1152,6 +1254,10 @@
                 ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * 2.4;
             }
 
+            function updateScoreBoard() {
+                document.getElementById('pong-score-board').innerText = `${scoreTop} : ${scoreBottom}`;
+            }
+
             function drawPong() {
                 ctx.fillStyle = "#000000";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1164,12 +1270,15 @@
                 ctx.stroke();
                 ctx.setLineDash([]);
 
-                ctx.fillStyle = "#bb86fc";
+                // Górna paletka (Fioletowa w Auto/Join, Zielona w Duel jeśli sterowana przez klawisze)
+                ctx.fillStyle = (pongControlMode === 'duel') ? "#4caf50" : "#bb86fc";
                 ctx.fillRect(topPaddleX, 4, paddleWidth, paddleHeight);
 
-                ctx.fillStyle = playerControlled ? "#4caf50" : "#bb86fc"; 
+                // Dolna paletka (Zielona w Join/Duel, Fioletowa w Auto)
+                ctx.fillStyle = (pongControlMode === 'join' || pongControlMode === 'duel') ? "#4caf50" : "#bb86fc"; 
                 ctx.fillRect(bottomPaddleX, canvas.height - paddleHeight - 4, paddleWidth, paddleHeight);
 
+                // Piłka
                 ctx.fillStyle = "#e0e0e0";
                 ctx.beginPath();
                 ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
@@ -1185,7 +1294,7 @@
             gameLoop();
         }
 
-        // --- LOGIKA GRY SAPER (PIONOWY 8x16) ---
+        // --- LOGIKA GRY SAPER ---
         function initMinesweeper() {
             const boardElement = document.getElementById("minesweeper-board");
             const statusElement = document.getElementById("minesweeper-status");
@@ -1199,7 +1308,6 @@
             saperRevealedCount = 0;
             saperBoard = [];
 
-            // Generowanie macierzy
             for (let r = 0; r < ROWS; r++) {
                 saperBoard[r] = [];
                 for (let c = 0; c < COLS; c++) {
@@ -1209,7 +1317,6 @@
                 }
             }
 
-            // Losowe ustawianie min
             let minesPlaced = 0;
             while (minesPlaced < MINES_COUNT) {
                 let r = Math.floor(Math.random() * ROWS);
@@ -1220,7 +1327,6 @@
                 }
             }
 
-            // Obliczanie sąsiadów
             for (let r = 0; r < ROWS; r++) {
                 for (let c = 0; c < COLS; c++) {
                     if (!saperBoard[r][c].isMine) {
@@ -1229,7 +1335,6 @@
                 }
             }
 
-            // Budowanie widoku kafelków w drzewie DOM
             for (let r = 0; r < ROWS; r++) {
                 for (let c = 0; c < COLS; c++) {
                     const cellElement = document.createElement("div");
@@ -1315,26 +1420,243 @@
             const statusElement = document.getElementById("minesweeper-status");
             const resetBtn = document.getElementById("ms-reset-btn");
 
-            resetBtn.style.display = "block"; // Pokazuje przycisk na samym dole widgetu
+            resetBtn.style.display = "block";
 
             if (isWin) {
-                statusElement.innerText = "🎉🎉 Zdajesz sesje! 🎉🎉";
+                statusElement.innerText = "🎉 Wygrana!";
                 statusElement.style.color = "var(--success)";
             } else {
-                statusElement.innerText = "🍺 Przyszedłeś wstawiony na egzamin 🍺";
+                statusElement.innerText = "💥 Trafiłeś na minę!";
                 statusElement.style.color = "var(--error)";
                 
-                // Odsłonięcie pozostałych bomb po przegranej
                 for (let r = 0; r < ROWS; r++) {
                     for (let c = 0; c < COLS; c++) {
                         if (saperBoard[r][c].isMine) {
                             saperBoard[r][c].element.classList.add("mine");
-                            saperBoard[r][c].element.innerText = "🍺";
+                            saperBoard[r][c].element.innerText = "💣";
                         }
                     }
                 }
             }
         }
+
+        // --- LOGIKA GRY FLAPPY BIRD ---
+        (function() {
+            const canvas = document.getElementById('flappyCanvas');
+            const ctx = canvas.getContext('2d');
+            const scoreEl = document.getElementById('flappy-score');
+            const bestEl = document.getElementById('flappy-best');
+
+            const H = 260;
+            canvas.height = H;
+
+            function getW() { return canvas.clientWidth || 800; }
+
+            function resizeCanvas() {
+                canvas.width = canvas.clientWidth;
+                if (state === 'idle' || state === 'dead') draw();
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+
+            const GRAVITY = 0.16;
+            const JUMP = -4.6;
+            const PIPE_WIDTH = 52;
+            const PIPE_GAP = 110;
+            const PIPE_SPEED = 2.4;
+            const PIPE_INTERVAL = 140; // frames
+
+            let bird, pipes, score, bestScore, frameCount, state;
+
+            function init() {
+                bird = { x: 90, y: H / 2, vy: 0, r: 13 };
+                pipes = [];
+                score = 0;
+                frameCount = 0;
+                state = 'idle';
+                scoreEl.textContent = 0;
+                setTimeout(() => { resizeCanvas(); draw(); }, 50);
+            }
+
+            function jump() {
+                const W = getW();
+                if (state === 'idle' || state === 'dead') {
+                    bird = { x: W * 0.15, y: H / 2, vy: 0, r: 13 };
+                    pipes = [];
+                    score = 0;
+                    frameCount = 0;
+                    state = 'playing';
+                    scoreEl.textContent = 0;
+                    bird.vy = JUMP;
+                    loop();
+                } else if (state === 'playing') {
+                    bird.vy = JUMP;
+                }
+            }
+
+            function spawnPipe() {
+                const W = getW();
+                const minY = 40;
+                const maxY = H - PIPE_GAP - 40;
+                const topH = Math.random() * (maxY - minY) + minY;
+                pipes.push({ x: W, topH, passed: false });
+            }
+
+            let animId = null;
+            function loop() {
+                if (animId) cancelAnimationFrame(animId);
+                function frame() {
+                    if (state !== 'playing') return;
+                    update();
+                    draw();
+                    animId = requestAnimationFrame(frame);
+                }
+                animId = requestAnimationFrame(frame);
+            }
+
+            function update() {
+                const W = getW();
+                frameCount++;
+                bird.vy += GRAVITY;
+                bird.y += bird.vy;
+
+                if (frameCount % PIPE_INTERVAL === 0) spawnPipe();
+
+                for (let p of pipes) {
+                    p.x -= PIPE_SPEED;
+
+                    if (!p.passed && p.x + PIPE_WIDTH < bird.x) {
+                        p.passed = true;
+                        score++;
+                        scoreEl.textContent = score;
+                        if (!bestScore || score > bestScore) {
+                            bestScore = score;
+                            bestEl.textContent = bestScore;
+                        }
+                    }
+
+                    if (
+                        bird.x + bird.r > p.x &&
+                        bird.x - bird.r < p.x + PIPE_WIDTH &&
+                        (bird.y - bird.r < p.topH || bird.y + bird.r > p.topH + PIPE_GAP)
+                    ) {
+                        die(); return;
+                    }
+                }
+
+                pipes = pipes.filter(p => p.x + PIPE_WIDTH > 0);
+
+                if (bird.y + bird.r >= H || bird.y - bird.r <= 0) die();
+            }
+
+            function die() {
+                state = 'dead';
+                draw();
+            }
+
+            function draw() {
+                const W = canvas.width || getW();
+
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, W, H);
+
+                ctx.strokeStyle = '#111111';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < W; x += 40) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+                }
+                for (let y = 0; y < H; y += 40) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+                }
+
+                for (let p of pipes) {
+                    ctx.fillStyle = '#3700b3';
+                    ctx.fillRect(p.x, 0, PIPE_WIDTH, p.topH);
+                    ctx.fillStyle = '#bb86fc';
+                    ctx.fillRect(p.x - 4, p.topH - 14, PIPE_WIDTH + 8, 14);
+
+                    const botY = p.topH + PIPE_GAP;
+                    ctx.fillStyle = '#3700b3';
+                    ctx.fillRect(p.x, botY, PIPE_WIDTH, H - botY);
+                    ctx.fillStyle = '#bb86fc';
+                    ctx.fillRect(p.x - 4, botY, PIPE_WIDTH + 8, 14);
+                }
+
+                const bx = bird.x, by = bird.y, br = bird.r;
+                ctx.save();
+                ctx.translate(bx, by);
+                const tilt = Math.max(-0.5, Math.min(0.5, bird.vy * 0.06));
+                ctx.rotate(tilt);
+
+                ctx.fillStyle = '#bb86fc';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, br, br * 0.85, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#9966cc';
+                ctx.beginPath();
+                ctx.ellipse(-2, 3, br * 0.55, br * 0.35, -0.4, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(5, -3, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(6, -3, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffb74d';
+                ctx.beginPath();
+                ctx.moveTo(br - 1, 0);
+                ctx.lineTo(br + 6, -2);
+                ctx.lineTo(br + 6, 3);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.restore();
+
+                if (state === 'idle') {
+                    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+                    ctx.fillRect(0, 0, W, H);
+                    ctx.fillStyle = '#bb86fc';
+                    ctx.font = 'bold 22px "Segoe UI", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('FLAPPY BIRD', W / 2, H / 2 - 20);
+                    ctx.fillStyle = '#a0a0a0';
+                    ctx.font = '14px "Segoe UI", sans-serif';
+                    ctx.fillText('Kliknij lub naciśnij Spację, aby zacząć', W / 2, H / 2 + 12);
+                } else if (state === 'dead') {
+                    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                    ctx.fillRect(0, 0, W, H);
+                    ctx.fillStyle = '#f44336';
+                    ctx.font = 'bold 22px "Segoe UI", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('KONIEC GRY', W / 2, H / 2 - 28);
+                    ctx.fillStyle = '#e0e0e0';
+                    ctx.font = '16px "Segoe UI", sans-serif';
+                    ctx.fillText(`Wynik: ${score}`, W / 2, H / 2 + 2);
+                    ctx.fillStyle = '#a0a0a0';
+                    ctx.font = '13px "Segoe UI", sans-serif';
+                    ctx.fillText('Kliknij lub naciśnij Spację, aby spróbować ponownie', W / 2, H / 2 + 28);
+                }
+            }
+
+            canvas.addEventListener('click', jump);
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, { passive: false });
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    const rect = canvas.getBoundingClientRect();
+                    if (rect.top < window.innerHeight + 300) {
+                        e.preventDefault();
+                        jump();
+                    }
+                }
+            });
+
+            init();
+        })();
 
         window.onload = initQuiz;
     </script>
