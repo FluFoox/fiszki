@@ -97,7 +97,7 @@
 
         /* SAPER (LEWY SIDEBAR) */
         .saper-sidebar {
-            width: 270px;
+            width: 340px;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 20px 15px;
@@ -129,8 +129,8 @@
 
         #minesweeper-board {
             display: grid;
-            grid-template-columns: repeat(8, 28px);
-            grid-template-rows: repeat(16, 28px);
+            grid-template-columns: repeat(10, 28px);
+            grid-template-rows: repeat(18, 28px);
             gap: 2px;
             background-color: #000;
             padding: 4px;
@@ -465,16 +465,100 @@
             border-color: var(--success) !important;
             color: #81c784;
             font-weight: bold;
+            animation: correctPulse 0.5s ease;
         }
 
         .option.wrong {
             background-color: rgba(244, 67, 54, 0.15) !important;
             border-color: var(--error) !important;
             color: #e57373;
+            animation: wrongShake 0.45s ease;
         }
 
         .option.disabled {
             cursor: not-allowed;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.5); }
+            40% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(7px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(3px); }
+        }
+
+        /* Konfetti dla dobrej odpowiedzi */
+        .confetti-piece {
+            position: fixed;
+            top: -10px;
+            width: 8px;
+            height: 14px;
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 2000;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Flash obramowania kontenera */
+        @keyframes containerFlashWrong {
+            0%, 100% { box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+            30% { box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 4px rgba(244, 67, 54, 0.35); }
+        }
+        .container.flash-wrong {
+            animation: containerFlashWrong 0.5s ease;
+        }
+
+        @keyframes containerFlashCorrect {
+            0%, 100% { box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+            30% { box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 4px rgba(76, 175, 80, 0.35); }
+        }
+        .container.flash-correct {
+            animation: containerFlashCorrect 0.5s ease;
+        }
+
+        /* Animacja przejscia pytania */
+        .question-box, .options-list {
+            animation: questionEnter 0.35s ease;
+        }
+
+        @keyframes questionEnter {
+            0% { opacity: 0; transform: translateX(24px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .question-box.enter-from-left, .options-list.enter-from-left {
+            animation: questionEnterFromLeft 0.35s ease;
+        }
+        @keyframes questionEnterFromLeft {
+            0% { opacity: 0; transform: translateX(-24px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .question-box.exit-left, .options-list.exit-left {
+            animation: questionExitLeft 0.22s ease forwards;
+        }
+        .question-box.exit-right, .options-list.exit-right {
+            animation: questionExitRight 0.22s ease forwards;
+        }
+
+        @keyframes questionExitLeft {
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(-24px); }
+        }
+        @keyframes questionExitRight {
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(24px); }
         }
 
         .actions {
@@ -578,6 +662,216 @@
             text-align: center;
         }
     </style>
+
+    <style>
+        /* ===== DISCO MODE ===== */
+        .disco-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(30, 30, 30, 0.85);
+            border: 1px solid var(--border);
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease, background 0.2s ease;
+            padding: 0;
+        }
+        .disco-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            background-color: #3d3d3d;
+        }
+        .disco-btn.active {
+            background: var(--primary);
+            color: #000;
+            animation: discoBtnSpin 2s linear infinite;
+        }
+        @keyframes discoBtnSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #disco-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 2500;
+            display: none;
+            overflow: hidden;
+        }
+        body.disco-on #disco-overlay {
+            display: block;
+        }
+
+        body.disco-on {
+            animation: discoBg 1.2s linear infinite;
+        }
+        @keyframes discoBg {
+            0%   { background-color: #1a0033; }
+            16%  { background-color: #330018; }
+            33%  { background-color: #002a33; }
+            50%  { background-color: #1a3300; }
+            66%  { background-color: #330029; }
+            83%  { background-color: #00132e; }
+            100% { background-color: #1a0033; }
+        }
+
+        /* Kula disco */
+        .disco-ball-wrapper {
+            position: fixed;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2600;
+            transition: top 0.9s cubic-bezier(.34,1.56,.64,1);
+            pointer-events: none;
+        }
+        body.disco-on .disco-ball-wrapper {
+            top: 8%;
+        }
+
+        .disco-ball {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: 
+                repeating-conic-gradient(
+                    from 0deg,
+                    #ddd 0deg 10deg,
+                    #999 10deg 20deg
+                );
+            background-size: 8px 8px, 100% 100%;
+            box-shadow:
+                inset -15px -15px 40px rgba(0,0,0,0.6),
+                inset 15px 15px 30px rgba(255,255,255,0.5),
+                0 0 50px rgba(255,255,255,0.6);
+            position: relative;
+            animation: discoSpin 3s linear infinite;
+        }
+        .disco-ball::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background-image:
+                radial-gradient(circle 6px at 20% 30%, rgba(255,255,255,0.9), transparent 60%),
+                radial-gradient(circle 5px at 70% 20%, rgba(255,255,255,0.85), transparent 60%),
+                radial-gradient(circle 7px at 40% 70%, rgba(255,255,255,0.8), transparent 60%),
+                radial-gradient(circle 5px at 80% 60%, rgba(255,255,255,0.85), transparent 60%),
+                radial-gradient(circle 6px at 55% 45%, rgba(255,255,255,0.9), transparent 60%),
+                radial-gradient(circle 4px at 15% 80%, rgba(255,255,255,0.8), transparent 60%);
+            mix-blend-mode: screen;
+            animation: discoSparkle 1.4s ease-in-out infinite alternate;
+        }
+        @keyframes discoSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes discoSparkle {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Promienie świetlne z kuli - wychodzą ze środka kuli we wszystkich kierunkach */
+        .disco-ray {
+            position: fixed;
+            top: calc(8% + 55px);
+            left: 50%;
+            width: 5px;
+            height: 48vh;
+            transform-origin: top center;
+            mix-blend-mode: screen;
+            opacity: 0.55;
+            border-radius: 0 0 50% 50%;
+            animation: discoRaySpin linear infinite, discoRayFade 1.8s ease-in-out infinite alternate;
+        }
+        @keyframes discoRaySpin {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+        @keyframes discoRayFade {
+            0% { opacity: 0.25; }
+            100% { opacity: 0.65; }
+        }
+
+        /* Migające światła w tle */
+        .disco-light {
+            position: fixed;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            mix-blend-mode: screen;
+            animation: discoFloat ease-in-out infinite alternate, discoFlicker 0.6s ease-in-out infinite alternate;
+        }
+        @keyframes discoFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -30px) scale(1.3); }
+        }
+        @keyframes discoFlicker {
+            0% { opacity: 0.25; }
+            100% { opacity: 0.65; }
+        }
+
+        /* Confetti / iskry stale lecace w trybie disco */
+        .disco-confetti {
+            position: fixed;
+            top: -20px;
+            pointer-events: none;
+            z-index: 2700;
+            animation: discoFall linear infinite;
+        }
+        @keyframes discoFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(900deg); opacity: 0.2; }
+        }
+
+        /* Wibrowanie calej strony w trybie disco */
+        body.disco-on .main-wrapper {
+            animation: discoWobble 0.5s ease-in-out infinite;
+        }
+        @keyframes discoWobble {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(0.3deg) scale(1.002); }
+            75% { transform: rotate(-0.3deg) scale(0.998); }
+        }
+
+        body.disco-on h1, body.disco-on .saper-title, body.disco-on .pong-title, body.disco-on .flappy-title {
+            animation: discoTextColor 1.5s linear infinite;
+        }
+        @keyframes discoTextColor {
+            0%   { color: #ff5e5e; }
+            20%  { color: #ffd93d; }
+            40%  { color: #6bff6b; }
+            60%  { color: #5ec8ff; }
+            80%  { color: #ff6bf0; }
+            100% { color: #ff5e5e; }
+        }
+
+        /* Latające piwo w trybie disco */
+        .disco-beer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            font-size: 42px;
+            z-index: 2800;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px currentColor);
+            will-change: transform;
+        }
+    </style>
 </head>
 <body>
 
@@ -587,11 +881,18 @@
         <span>Online: <strong id="online-users-count">0</strong> osób</span>
     </div>
 
+    <!-- DISCO MODE -->
+    <button class="disco-btn" id="disco-btn" onclick="toggleDisco()" title="Disco mode">?</button>
+    <div class="disco-ball-wrapper" id="disco-ball-wrapper">
+        <div class="disco-ball"></div>
+    </div>
+    <div id="disco-overlay"></div>
+
     <div class="main-wrapper">
         
         <!-- SAPER (PO LEWEJ) -->
         <div class="saper-sidebar">
-            <div class="saper-title">Saper 8x16</div>
+            <div class="saper-title">Piwny Saper 10x18</div>
             <div id="minesweeper-status">Odkrywaj uważnie!</div>
             <div id="minesweeper-board"></div>
             <button id="ms-reset-btn" onclick="initMinesweeper()">Play Again</button>
@@ -807,9 +1108,9 @@
         let scoreBottom = 0;
 
         // --- ZMIENNE GLOBALNE DLA SAPERA ---
-        const ROWS = 16;
-        const COLS = 8;
-        const MINES_COUNT = 15; 
+        const ROWS = 18;
+        const COLS = 10;
+        const MINES_COUNT = 18; 
         let saperBoard = [];
         let saperGameOver = false;
         let saperRevealedCount = 0;
@@ -1098,6 +1399,9 @@
                 playSuccessSound();
                 currentCombo++;
                 updateComboDisplay();
+                flashContainer('correct');
+                spawnConfetti();
+                if (discoActive) addBouncingBeer();
                 
                 if (currentMode === 'learn') {
                     wrongAnswersList = wrongAnswersList.filter(id => id !== qData.id);
@@ -1110,6 +1414,7 @@
                 playSadTrombone();
                 currentCombo = 0;
                 updateComboDisplay();
+                flashContainer('wrong');
                 
                 if (!wrongAnswersList.includes(qData.id)) {
                     wrongAnswersList.push(qData.id);
@@ -1124,21 +1429,79 @@
             document.getElementById('next-btn').disabled = false;
         }
 
-        function nextQuestion() {
-            if (currentQuestionIndex < activeQuestions.length - 1) {
-                currentQuestionIndex++;
-                showQuestion();
-            } else {
-                alert("Koniec pytań w tym zestawie!");
-                setupQuestions();
-                showQuestion();
+        function flashContainer(type) {
+            const container = document.querySelector('.container');
+            const cls = type === 'correct' ? 'flash-correct' : 'flash-wrong';
+            container.classList.remove('flash-correct', 'flash-wrong');
+            // restart animation
+            void container.offsetWidth;
+            container.classList.add(cls);
+            setTimeout(() => container.classList.remove(cls), 550);
+        }
+
+        function spawnConfetti() {
+            const colors = ['#bb86fc', '#4caf50', '#ffb74d', '#64b5f6', '#e57373', '#81c784'];
+            const count = 24;
+            for (let i = 0; i < count; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = (0.9 + Math.random() * 0.8) + 's';
+                piece.style.animationDelay = (Math.random() * 0.15) + 's';
+                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 2200);
             }
+        }
+
+        function animateQuestionTransition(direction, callback) {
+            const qBox = document.querySelector('.question-box');
+            const optsList = document.querySelector('.options-list');
+            const exitCls = direction === 'next' ? 'exit-left' : 'exit-right';
+            const enterCls = direction === 'next' ? '' : 'enter-from-left';
+
+            const els = [qBox, optsList].filter(Boolean);
+            if (els.length === 0) { callback(); return; }
+
+            els.forEach(el => {
+                el.classList.remove('exit-left', 'exit-right', 'enter-from-left');
+                el.classList.add(exitCls);
+            });
+
+            setTimeout(() => {
+                callback();
+                const newQBox = document.querySelector('.question-box');
+                const newOptsList = document.querySelector('.options-list');
+                [newQBox, newOptsList].filter(Boolean).forEach(el => {
+                    el.classList.remove('exit-left', 'exit-right');
+                    if (enterCls) {
+                        el.classList.add(enterCls);
+                        setTimeout(() => el.classList.remove(enterCls), 360);
+                    }
+                });
+            }, 220);
+        }
+
+        function nextQuestion() {
+            animateQuestionTransition('next', () => {
+                if (currentQuestionIndex < activeQuestions.length - 1) {
+                    currentQuestionIndex++;
+                    showQuestion();
+                } else {
+                    alert("Koniec pytań w tym zestawie!");
+                    setupQuestions();
+                    showQuestion();
+                }
+            });
         }
 
         function prevQuestion() {
             if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showQuestion();
+                animateQuestionTransition('prev', () => {
+                    currentQuestionIndex--;
+                    showQuestion();
+                });
             }
         }
 
@@ -1423,17 +1786,17 @@
             resetBtn.style.display = "block";
 
             if (isWin) {
-                statusElement.innerText = "🎉 Wygrana!";
+                statusElement.innerText = "🥤 Trzeźwy!";
                 statusElement.style.color = "var(--success)";
             } else {
-                statusElement.innerText = "💥 Trafiłeś na minę!";
+                statusElement.innerText = "🍺 Przyszedłeś wstawiony na egzamin";
                 statusElement.style.color = "var(--error)";
                 
                 for (let r = 0; r < ROWS; r++) {
                     for (let c = 0; c < COLS; c++) {
                         if (saperBoard[r][c].isMine) {
                             saperBoard[r][c].element.classList.add("mine");
-                            saperBoard[r][c].element.innerText = "💣";
+                            saperBoard[r][c].element.innerText = "🍺";
                         }
                     }
                 }
@@ -1658,7 +2021,175 @@
             init();
         })();
 
+        // ===== DISCO MODE =====
+        let discoActive = false;
+        let discoIntervals = [];
+        let discoTimeouts = [];
+
+        function toggleDisco() {
+            discoActive = !discoActive;
+            const btn = document.getElementById('disco-btn');
+            const overlay = document.getElementById('disco-overlay');
+
+            if (discoActive) {
+                document.body.classList.add('disco-on');
+                btn.classList.add('active');
+                btn.innerText = '✕';
+                startDiscoEffects(overlay);
+            } else {
+                document.body.classList.remove('disco-on');
+                btn.classList.remove('active');
+                btn.innerText = '?';
+                stopDiscoEffects(overlay);
+            }
+        }
+
+        function startDiscoEffects(overlay) {
+            overlay.innerHTML = '';
+
+            // Promienie świetlne wirujące z kuli disco
+            const rayColors = ['#ff5e5e', '#ffd93d', '#6bff6b', '#5ec8ff', '#ff6bf0', '#bb86fc', '#ff9f43', '#48dbfb'];
+            const rayCount = 24;
+            for (let i = 0; i < rayCount; i++) {
+                const ray = document.createElement('div');
+                ray.className = 'disco-ray';
+                ray.style.background = `linear-gradient(to bottom, ${rayColors[i % rayColors.length]}, transparent)`;
+                ray.style.transform = `translateX(-50%) rotate(${(360 / rayCount) * i}deg)`;
+                ray.style.animationDuration = (3 + Math.random() * 2) + 's, ' + (1 + Math.random()) + 's';
+                ray.style.animationDelay = (Math.random() * -3) + 's';
+                overlay.appendChild(ray);
+            }
+            // Wielkie migajace swiatla w tle
+            const lightColors = ['#ff5e5e', '#ffd93d', '#6bff6b', '#5ec8ff', '#ff6bf0', '#bb86fc'];
+            for (let i = 0; i < 6; i++) {
+                const light = document.createElement('div');
+                light.className = 'disco-light';
+                light.style.background = lightColors[i % lightColors.length];
+                light.style.left = (Math.random() * 90) + 'vw';
+                light.style.top = (Math.random() * 90) + 'vh';
+                light.style.animationDuration = (3 + Math.random() * 3) + 's, ' + (0.3 + Math.random() * 0.6) + 's';
+                light.style.animationDelay = (Math.random() * -3) + 's';
+                overlay.appendChild(light);
+            }
+
+            // Lecące konfetti / iskry generowane co chwile
+            const confettiColors = ['#ff5e5e', '#ffd93d', '#6bff6b', '#5ec8ff', '#ff6bf0', '#bb86fc', '#48dbfb', '#ff9f43'];
+            const confettiInterval = setInterval(() => {
+                if (!discoActive) return;
+                for (let i = 0; i < 4; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'disco-confetti';
+                    const size = 6 + Math.random() * 8;
+                    piece.style.width = size + 'px';
+                    piece.style.height = (size * 1.6) + 'px';
+                    piece.style.left = (Math.random() * 100) + 'vw';
+                    piece.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    piece.style.animationDuration = (1.6 + Math.random() * 1.4) + 's';
+                    overlay.appendChild(piece);
+                    const t = setTimeout(() => piece.remove(), 3200);
+                    discoTimeouts.push(t);
+                }
+            }, 180);
+            discoIntervals.push(confettiInterval);
+
+            // Mruganie ekranowego "strobe" - lekki flash całej strony
+            let strobeOn = false;
+            const strobeInterval = setInterval(() => {
+                if (!discoActive) return;
+                strobeOn = !strobeOn;
+                document.body.style.filter = strobeOn ? 'brightness(1.15) saturate(1.4)' : 'brightness(1) saturate(1)';
+            }, 220);
+            discoIntervals.push(strobeInterval);
+
+            // Latające piwo odbijające się od krawędzi ekranu
+            startBeerBounce();
+        }
+
+        let beerAnimId = null;
+        let discoBeers = [];
+        const BEER_COLORS = ['#ff5e5e', '#ffd93d', '#6bff6b', '#5ec8ff', '#ff6bf0', '#bb86fc', '#ff9f43', '#48dbfb'];
+        const BEER_SIZE = 42;
+
+        function createBeer() {
+            const el = document.createElement('div');
+            el.className = 'disco-beer';
+            el.textContent = '🍺';
+            document.body.appendChild(el);
+
+            const beer = {
+                el,
+                bx: Math.random() * (window.innerWidth - BEER_SIZE),
+                by: Math.random() * (window.innerHeight - BEER_SIZE),
+                vx: (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 3),
+                vy: (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 3)
+            };
+            el.style.color = BEER_COLORS[Math.floor(Math.random() * BEER_COLORS.length)];
+            el.style.display = 'block';
+            discoBeers.push(beer);
+            return beer;
+        }
+
+        function addBouncingBeer() {
+            if (!discoActive) return;
+            createBeer();
+        }
+
+        function startBeerBounce() {
+            discoBeers.forEach(b => b.el.remove());
+            discoBeers = [];
+            createBeer();
+
+            function step() {
+                if (!discoActive) return;
+                const maxX = window.innerWidth - BEER_SIZE;
+                const maxY = window.innerHeight - BEER_SIZE;
+
+                discoBeers.forEach(beer => {
+                    beer.bx += beer.vx;
+                    beer.by += beer.vy;
+                    let bounced = false;
+
+                    if (beer.bx <= 0) { beer.bx = 0; beer.vx = -beer.vx; bounced = true; }
+                    if (beer.bx >= maxX) { beer.bx = maxX; beer.vx = -beer.vx; bounced = true; }
+                    if (beer.by <= 0) { beer.by = 0; beer.vy = -beer.vy; bounced = true; }
+                    if (beer.by >= maxY) { beer.by = maxY; beer.vy = -beer.vy; bounced = true; }
+
+                    if (bounced) {
+                        let newColor;
+                        do {
+                            newColor = BEER_COLORS[Math.floor(Math.random() * BEER_COLORS.length)];
+                        } while (newColor === beer.el.style.color);
+                        beer.el.style.color = newColor;
+                    }
+
+                    beer.el.style.transform = `translate(${beer.bx}px, ${beer.by}px) rotate(${(beer.bx + beer.by)}deg)`;
+                });
+
+                beerAnimId = requestAnimationFrame(step);
+            }
+            beerAnimId = requestAnimationFrame(step);
+        }
+
+        function stopBeerBounce() {
+            if (beerAnimId) cancelAnimationFrame(beerAnimId);
+            beerAnimId = null;
+            discoBeers.forEach(b => b.el.remove());
+            discoBeers = [];
+        }
+
+        function stopDiscoEffects(overlay) {
+            discoIntervals.forEach(id => clearInterval(id));
+            discoIntervals = [];
+            discoTimeouts.forEach(id => clearTimeout(id));
+            discoTimeouts = [];
+            overlay.innerHTML = '';
+            document.body.style.filter = '';
+            stopBeerBounce();
+        }
+
         window.onload = initQuiz;
+
     </script>
 </body>
 </html>
