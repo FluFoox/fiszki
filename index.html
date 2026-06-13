@@ -661,6 +661,210 @@
             font-size: 0.8rem;
             text-align: center;
         }
+
+        /* WORDLE */
+        .wordle-section {
+            width: calc(100% + 40px);
+            margin: 0 -20px 40px -20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 20px 20px 24px 20px;
+            box-sizing: border-box;
+        }
+
+        .wordle-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .wordle-title {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .wordle-info {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-color);
+            font-family: monospace;
+            background: #121212;
+            padding: 4px 14px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .wordle-board {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .wordle-row {
+            display: grid;
+            grid-template-columns: repeat(5, 46px);
+            gap: 6px;
+        }
+
+        .wordle-tile {
+            width: 46px;
+            height: 46px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--text-color);
+            background: var(--input-bg);
+            transition: transform 0.15s ease;
+        }
+
+        .wordle-tile.filled {
+            border-color: #565758;
+            animation: wordlePop 0.1s ease;
+        }
+
+        .wordle-tile.correct {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: #fff;
+        }
+        .wordle-tile.present {
+            background-color: #ffb74d;
+            border-color: #ffb74d;
+            color: #000;
+        }
+        .wordle-tile.absent {
+            background-color: #3a3a3c;
+            border-color: #3a3a3c;
+            color: #aaa;
+        }
+
+        .wordle-tile.flip {
+            animation: wordleFlip 0.5s ease;
+        }
+
+        @keyframes wordlePop {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wordleFlip {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0deg); }
+        }
+
+        .wordle-row.shake {
+            animation: wordleShake 0.5s ease;
+        }
+        @keyframes wordleShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        .wordle-row.win .wordle-tile {
+            animation: wordleBounce 0.5s ease;
+        }
+        .wordle-row.win .wordle-tile:nth-child(1) { animation-delay: 0s; }
+        .wordle-row.win .wordle-tile:nth-child(2) { animation-delay: 0.07s; }
+        .wordle-row.win .wordle-tile:nth-child(3) { animation-delay: 0.14s; }
+        .wordle-row.win .wordle-tile:nth-child(4) { animation-delay: 0.21s; }
+        .wordle-row.win .wordle-tile:nth-child(5) { animation-delay: 0.28s; }
+        @keyframes wordleBounce {
+            0%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-12px); }
+            50% { transform: translateY(0); }
+        }
+
+        .wordle-keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .wordle-kb-row {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .wordle-key {
+            min-width: 32px;
+            height: 44px;
+            padding: 0 8px;
+            border-radius: 4px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s ease;
+            flex: 1;
+            max-width: 42px;
+        }
+
+        .wordle-key.wide {
+            flex: 1.6;
+            max-width: 68px;
+            font-size: 0.7rem;
+        }
+
+        .wordle-key:hover {
+            background: #3d3d3d;
+        }
+
+        .wordle-key.correct {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: #fff;
+        }
+        .wordle-key.present {
+            background-color: #ffb74d;
+            border-color: #ffb74d;
+            color: #000;
+        }
+        .wordle-key.absent {
+            background-color: #3a3a3c;
+            border-color: #3a3a3c;
+            color: #777;
+        }
+
+        .wordle-message {
+            margin-top: 14px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            text-align: center;
+            min-height: 24px;
+            color: var(--text-color);
+        }
     </style>
 
     <style>
@@ -971,6 +1175,17 @@
         </div>
         <canvas id="flappyCanvas"></canvas>
         <div class="flappy-hint">Spacja / Kliknięcie / Dotknięcie → skok ptaka</div>
+    </div>
+
+    <!-- WORDLE (CODZIENNY) -->
+    <div class="wordle-section">
+        <div class="wordle-header">
+            <div class="wordle-title">🟩 Wordle dnia</div>
+            <div class="wordle-info" id="wordle-date"></div>
+        </div>
+        <div class="wordle-board" id="wordle-board"></div>
+        <div class="wordle-keyboard" id="wordle-keyboard"></div>
+        <div class="wordle-message" id="wordle-message"></div>
     </div>
 
     <div class="footer-credits">Kontakt FB: Kacper Sobczyk</div>
@@ -2188,7 +2403,334 @@
             stopBeerBounce();
         }
 
+        // --- LOGIKA GRY WORDLE (CODZIENNA, LOSOWANA Z DATY) ---
+        (function() {
+            // Lista 5-literowych polskich słów (bez polskich znaków diakrytycznych dla uproszczenia klawiatury)
+            const WORDS = [
+                "AKTOR","ALARM","ANTEK","ARENA","ATLAS","AUTOR","BABKA","BALON","BANAN","BARAN",
+                "BASEN","BATON","BEKON","BIALY","BILET","BIWAK","BLASK","BLUZA","BOISK","BOMBA",
+                "BORDO","BRAMA","BRODA","BUDYN","BURZA","CEBUL","CECHA","CEGLA","CHATA","CHLEB",
+                "CIASO","CISZA","CYTAT","CZAJK","CZAPA","CZARY","DACHU","DANIE","DEMON","DIETA",
+                "DIODA","DOBRO","DOLAR","DOMEK","DROGA","DRZWI","DUMNY","DYNIA","DZBAN","DZIAD",
+                "EKRAN","ELITA","EPOKA","FABUL","FACET","FAJKA","FARBA","FAUNA","FILAR","FILTR",
+                "FIRMA","FLAGA","FLAKI","FOLIA","FORMA","FOTEL","FRAZA","GALOP","GARAZ","GAZON",
+                "GLEBA","GLINY","GLOWA","GMINA","GORAL","GORYL","GRACZ","GRUPA","GRZYB","HALAS",
+                "HOTEL","IDEAL","IMPER","INDEX","JABLO","JADRO","JAGOD","JAJKO","JAZDA","JEZYK",
+                "KABEL","KACZK","KADRA","KAFEL","KAJAK","KAMER","KANAL","KAPEL","KAPUS","KARTA",
+                "KASZA","KATAR","KAWAL","KLASA","KLIMA","KLUCZ","KOALA","KOBRA","KOLEJ","KOMAR",
+                "KOPIA","KORAL","KOTEK","KRACH","KREDA","KROPL","KSIAZ","KUCHA","KURTK","KWIAT",
+                "LAMPA","LASER","LEGAL","LINIA","LISTA","LITER","LODOW","LUSTR","MACZK","MAGIA",
+                "MALPA","MASKA","MEBLE","MEDAL","METAL","MIESO","MLEKO","MODUL","MORZE","MOTOR",
+                "MUCHA","MUZYK","NABOJ","NAGLE","NAUKA","NAZWA","NIEBO","NORMA","NUDNY","OBRAZ",
+                "OCEAN","OGIEN","OKRES","OPERA","OPONA","ORZEL","OSOBA","PACZK","PALMA","PANEL",
+                "PARTA","PASJA","PATYK","PEDAL","PIANO","PLAGA","PLOTK","PODIU","POETA","POKOJ",
+                "POMOC","POSEL","POTOK","POWOD","PRACA","PRASA","PROBA","PTASI","PUDLO","PUSTY",
+                "RADIO","RAKIE","RAMKA","REGAL","ROBOT","RODZI","ROLKA","RONDO","ROWER","ROZUM",
+                "RUBIN","RUNDA","RYNEK","SAMBA","SARNA","SEDNO","SERIA","SESJA","SIANO","SILOS",
+                "SKALA","SKARB","SLOIK","SMAKU","SOSNA","STACJ","STADO","STOLI","SUKNI","SWIAT",
+                "SZAFA","SZKLO","TABLI","TALIA","TANGO","TARGI","TATAR","TEMAT","TENIS","TEREN",
+                "TKANI","TONER","TOREB","TRASA","TREND","TUNEL","UKLAD","ULICA","UMOWA","USTKA",
+                "UWAGA","WALKA","WANNA","WARTA","WAZON","WIATR","WIDOK","WIZJA","WLOSY","WODKA",
+                "WOJNA","WOZEK","WSTEP","WYBOR","WYSPA","ZAJAC","ZAKON","ZAMEK","ZAPAL","ZAWOD",
+                "ZEBRA","ZIARN","ZIELE","ZIMNO","ZLOTA"
+            ];
+
+            const ROWS_W = 6;
+            const WORD_LEN = 5;
+            const STORAGE_KEY = 'wordleDailyState';
+
+            // Deterministyczny wybor slowa na podstawie daty (rok-miesiac-dzien)
+            function getDailySeed() {
+                const now = new Date();
+                return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+            }
+
+            function getTodayWord() {
+                const seed = getDailySeed();
+                const idx = seed % WORDS.length;
+                return WORDS[idx];
+            }
+
+            const TODAY_WORD = getTodayWord();
+            const todayKey = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`;
+
+            let board = [];
+            let currentRow = 0;
+            let currentCol = 0;
+            let gameOver = false;
+            let keyStates = {};
+
+            function loadState() {
+                try {
+                    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+                    if (saved && saved.date === todayKey) {
+                        return saved;
+                    }
+                } catch(e) {}
+                return null;
+            }
+
+            function saveState() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    date: todayKey,
+                    board: board,
+                    currentRow: currentRow,
+                    gameOver: gameOver,
+                    keyStates: keyStates
+                }));
+            }
+
+            const KEYBOARD_ROWS = [
+                ['Q','W','E','R','T','Y','U','I','O','P'],
+                ['A','S','D','F','G','H','J','K','L'],
+                ['ENTER','Z','X','C','V','B','N','M','⌫']
+            ];
+
+            function buildBoard() {
+                const boardEl = document.getElementById('wordle-board');
+                boardEl.innerHTML = '';
+                for (let r = 0; r < ROWS_W; r++) {
+                    const rowEl = document.createElement('div');
+                    rowEl.className = 'wordle-row';
+                    rowEl.id = 'wordle-row-' + r;
+                    for (let c = 0; c < WORD_LEN; c++) {
+                        const tile = document.createElement('div');
+                        tile.className = 'wordle-tile';
+                        tile.id = `wordle-tile-${r}-${c}`;
+                        rowEl.appendChild(tile);
+                    }
+                    boardEl.appendChild(rowEl);
+                }
+            }
+
+            function buildKeyboard() {
+                const kbEl = document.getElementById('wordle-keyboard');
+                kbEl.innerHTML = '';
+                KEYBOARD_ROWS.forEach(row => {
+                    const rowEl = document.createElement('div');
+                    rowEl.className = 'wordle-kb-row';
+                    row.forEach(key => {
+                        const keyEl = document.createElement('div');
+                        keyEl.className = 'wordle-key';
+                        if (key === 'ENTER' || key === '⌫') keyEl.classList.add('wide');
+                        keyEl.textContent = key === 'ENTER' ? 'ENTER' : key;
+                        keyEl.dataset.key = key;
+                        keyEl.onclick = () => handleKey(key === 'ENTER' ? 'Enter' : (key === '⌫' ? 'Backspace' : key));
+                        rowEl.appendChild(keyEl);
+                    });
+                    kbEl.appendChild(rowEl);
+                });
+            }
+
+            function setMessage(text, isError) {
+                const msgEl = document.getElementById('wordle-message');
+                msgEl.textContent = text;
+                msgEl.style.color = isError ? 'var(--error)' : 'var(--text-color)';
+            }
+
+            function evaluateGuess(guess, answer) {
+                const result = new Array(WORD_LEN).fill('absent');
+                const answerArr = answer.split('');
+                const guessArr = guess.split('');
+
+                // Najpierw zielone
+                for (let i = 0; i < WORD_LEN; i++) {
+                    if (guessArr[i] === answerArr[i]) {
+                        result[i] = 'correct';
+                        answerArr[i] = null;
+                    }
+                }
+                // Potem zolte
+                for (let i = 0; i < WORD_LEN; i++) {
+                    if (result[i] === 'correct') continue;
+                    const idx = answerArr.indexOf(guessArr[i]);
+                    if (idx !== -1) {
+                        result[i] = 'present';
+                        answerArr[idx] = null;
+                    }
+                }
+                return result;
+            }
+
+            function updateKeyStates(guess, result) {
+                for (let i = 0; i < WORD_LEN; i++) {
+                    const letter = guess[i];
+                    const status = result[i];
+                    const current = keyStates[letter];
+                    if (current === 'correct') continue;
+                    if (status === 'correct') keyStates[letter] = 'correct';
+                    else if (status === 'present' && current !== 'present') keyStates[letter] = 'present';
+                    else if (!current) keyStates[letter] = status;
+                }
+                applyKeyStates();
+            }
+
+            function applyKeyStates() {
+                document.querySelectorAll('.wordle-key').forEach(keyEl => {
+                    const k = keyEl.dataset.key;
+                    const letter = k === 'ENTER' ? null : (k === '⌫' ? null : k);
+                    if (!letter) return;
+                    keyEl.classList.remove('correct','present','absent');
+                    if (keyStates[letter]) keyEl.classList.add(keyStates[letter]);
+                });
+            }
+
+            function renderRow(r, flip) {
+                for (let c = 0; c < WORD_LEN; c++) {
+                    const tile = document.getElementById(`wordle-tile-${r}-${c}`);
+                    const cell = board[r][c];
+                    tile.textContent = cell.letter || '';
+                    tile.classList.remove('correct','present','absent','filled','flip');
+                    if (cell.letter) tile.classList.add('filled');
+                    if (cell.status) {
+                        if (flip) {
+                            setTimeout(() => {
+                                tile.classList.add(cell.status, 'flip');
+                            }, c * 90);
+                        } else {
+                            tile.classList.add(cell.status);
+                        }
+                    }
+                }
+            }
+
+            function renderAll() {
+                for (let r = 0; r < ROWS_W; r++) {
+                    renderRow(r, false);
+                }
+                applyKeyStates();
+            }
+
+            function shakeRow(r) {
+                const rowEl = document.getElementById('wordle-row-' + r);
+                rowEl.classList.remove('shake');
+                void rowEl.offsetWidth;
+                rowEl.classList.add('shake');
+                setTimeout(() => rowEl.classList.remove('shake'), 500);
+            }
+
+            function winRow(r) {
+                const rowEl = document.getElementById('wordle-row-' + r);
+                rowEl.classList.add('win');
+            }
+
+            function handleKey(key) {
+                if (gameOver) return;
+
+                if (key === 'Enter') {
+                    if (currentCol < WORD_LEN) {
+                        setMessage('Za mało liter!', true);
+                        shakeRow(currentRow);
+                        return;
+                    }
+                    const guess = board[currentRow].map(c => c.letter).join('');
+                    const result = evaluateGuess(guess, TODAY_WORD);
+                    for (let c = 0; c < WORD_LEN; c++) {
+                        board[currentRow][c].status = result[c];
+                    }
+                    renderRow(currentRow, true);
+                    setTimeout(() => updateKeyStates(guess, result), WORD_LEN * 90 + 100);
+
+                    if (guess === TODAY_WORD) {
+                        gameOver = true;
+                        setTimeout(() => {
+                            winRow(currentRow);
+                            setMessage('🎉 Brawo! Odgadnięte!', false);
+                        }, WORD_LEN * 90 + 200);
+                        saveState();
+                        return;
+                    }
+
+                    currentRow++;
+                    currentCol = 0;
+                    setMessage('', false);
+
+                    if (currentRow >= ROWS_W) {
+                        gameOver = true;
+                        setTimeout(() => {
+                            setMessage(`Koniec! Słowo: ${TODAY_WORD}`, true);
+                        }, WORD_LEN * 90 + 200);
+                    }
+                    saveState();
+                } else if (key === 'Backspace') {
+                    if (currentCol > 0) {
+                        currentCol--;
+                        board[currentRow][currentCol].letter = '';
+                        renderRow(currentRow, false);
+                        setMessage('', false);
+                        saveState();
+                    }
+                } else if (/^[A-ZĄĆĘŁŃÓŚŻŹa-ząćęłńóśżź]$/.test(key)) {
+                    if (currentCol < WORD_LEN) {
+                        board[currentRow][currentCol].letter = key.toUpperCase();
+                        currentCol++;
+                        renderRow(currentRow, false);
+                        setMessage('', false);
+                        saveState();
+                    }
+                }
+            }
+
+            function initEmptyBoard() {
+                board = [];
+                for (let r = 0; r < ROWS_W; r++) {
+                    const row = [];
+                    for (let c = 0; c < WORD_LEN; c++) row.push({ letter: '', status: null });
+                    board.push(row);
+                }
+            }
+
+            function initWordle() {
+                buildBoard();
+                buildKeyboard();
+
+                const dateDisplay = new Date().toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                document.getElementById('wordle-date').textContent = dateDisplay;
+
+                const saved = loadState();
+                if (saved) {
+                    board = saved.board;
+                    currentRow = saved.currentRow;
+                    gameOver = saved.gameOver;
+                    keyStates = saved.keyStates || {};
+                    currentCol = board[currentRow] ? board[currentRow].findIndex(c => !c.letter) : 0;
+                    if (currentCol === -1) currentCol = WORD_LEN;
+                    renderAll();
+                    if (gameOver) {
+                        const wonRow = board.findIndex(row => row.every(c => c.status === 'correct'));
+                        if (wonRow !== -1) {
+                            winRow(wonRow);
+                            setMessage('🎉 Brawo! Odgadnięte!', false);
+                        } else {
+                            setMessage(`Koniec! Słowo: ${TODAY_WORD}`, true);
+                        }
+                    }
+                } else {
+                    initEmptyBoard();
+                    currentRow = 0;
+                    currentCol = 0;
+                    gameOver = false;
+                    keyStates = {};
+                    renderAll();
+                }
+            }
+
+            document.addEventListener('keydown', (e) => {
+                const wordleSection = document.querySelector('.wordle-section');
+                if (!wordleSection) return;
+                const tag = document.activeElement.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+                if (e.key === 'Enter') { handleKey('Enter'); e.preventDefault(); }
+                else if (e.key === 'Backspace') { handleKey('Backspace'); e.preventDefault(); }
+                else if (/^[a-zA-Z]$/.test(e.key)) { handleKey(e.key); }
+            });
+
+            window.addEventListener('load', initWordle);
+        })();
+
         window.onload = initQuiz;
+
 
     </script>
 </body>
