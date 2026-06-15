@@ -382,11 +382,51 @@
             text-align: center;
         }
 
+        /* Licznik punktów w lewym górnym rogu okienka z fiszkami */
+        .score-box {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-color);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-box .score-value {
+            color: var(--primary);
+        }
+
+        .score-box .mult-value {
+            color: #ffb74d;
+        }
+
+        .container {
+            position: relative;
+        }
+
         .search-jump-container {
             display: flex;
             gap: 12px;
             width: 100%;
             flex-wrap: wrap;
+        }
+
+        #jump-number-input {
+            width: 110px;
+            flex-grow: 0;
+            min-width: 0;
+            text-align: center;
         }
 
         .question-navigation {
@@ -1104,6 +1144,10 @@
 
         <!-- PANEL GŁÓWNY (FISZKI) -->
         <div class="container">
+            <div class="score-box" id="score-box">
+                <span>Punkty: <span class="score-value" id="score-value">0</span></span>
+                <span class="mult-value" id="mult-value" style="display:none;"></span>
+            </div>
             <a href="https://www.youtube.com/watch?v=KSPxHniCtmw" target="_blank" class="title-link">
                 <h1>Fiszki Egzaminacyjne</h1>
             </a>
@@ -1132,6 +1176,8 @@
                     <select id="jump-select" onchange="handleJumpToQuestion()">
                         <option value="">Skocz do pytania...</option>
                     </select>
+                    <input type="number" id="jump-number-input" placeholder="Nr pytania" min="1" onkeydown="if(event.key==='Enter') handleJumpToQuestionNumber()">
+                    <button id="jump-number-btn" onclick="handleJumpToQuestionNumber()">Idź</button>
                 </div>
             </div>
 
@@ -1511,6 +1557,37 @@
         let currentDisplayedAnswers = [];
         let currentDisplayedCorrectIndex = 0;
 
+        // --- LICZNIK PUNKTÓW I MNOŻNIKA ---
+        let totalScore = parseInt(localStorage.getItem('quizScore'), 10) || 0;
+
+        // Progi comba, przy których zwiększa się mnożnik (mnożnik startuje od combo = 2)
+        const COMBO_THRESHOLDS = [2, 4, 8, 16, 21, 27, 36, 42, 52, 67, 80];
+
+        function getMultiplierForCombo(combo) {
+            let level = 0;
+            for (const threshold of COMBO_THRESHOLDS) {
+                if (combo >= threshold) level++;
+                else break;
+            }
+            return Math.pow(1.2, level);
+        }
+
+        function saveScoreState() {
+            localStorage.setItem('quizScore', totalScore.toString());
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('score-value').innerText = totalScore;
+            const multEl = document.getElementById('mult-value');
+            const mult = getMultiplierForCombo(currentCombo);
+            if (mult > 1) {
+                multEl.innerText = `Mnożnik: x${mult.toFixed(2)}`;
+                multEl.style.display = 'inline';
+            } else {
+                multEl.style.display = 'none';
+            }
+        }
+
         // TRYB PONG: 'auto' | 'join' | 'duel'
         let pongControlMode = 'auto';
         let keysPressed = {};
@@ -1618,6 +1695,7 @@
 
         function initQuiz() {
             updateReviewCountDisplay();
+            updateScoreDisplay();
             setupQuestions();
             showQuestion();
             initPong();
@@ -1661,6 +1739,21 @@
             if (select.value !== "") {
                 currentQuestionIndex = parseInt(select.value, 10);
                 showQuestion();
+            }
+        }
+
+        function handleJumpToQuestionNumber() {
+            const input = document.getElementById('jump-number-input');
+            const num = parseInt(input.value, 10);
+            if (isNaN(num)) return;
+
+            const index = activeQuestions.findIndex(q => q.id === num);
+            if (index !== -1) {
+                currentQuestionIndex = index;
+                showQuestion();
+                input.value = '';
+            } else {
+                alert(`Pytanie nr ${num} nie znajduje się w aktualnym zestawie.`);
             }
         }
 
@@ -1828,6 +1921,11 @@
                 flashContainer('correct');
                 spawnConfetti();
                 if (discoActive) addBouncingBeer();
+
+                // Punkty: 5 pkt razy mnożnik wynikający z aktualnego comba
+                totalScore += Math.round(5 * getMultiplierForCombo(currentCombo));
+                updateScoreDisplay();
+                saveScoreState();
                 
                 if (currentMode === 'learn') {
                     wrongAnswersList = wrongAnswersList.filter(id => id !== qData.id);
@@ -1841,6 +1939,10 @@
                 currentCombo = 0;
                 updateComboDisplay();
                 flashContainer('wrong');
+
+                // Mnożnik resetuje się automatycznie wraz z combo (currentCombo = 0)
+                updateScoreDisplay();
+                saveScoreState();
                 
                 if (!wrongAnswersList.includes(qData.id)) {
                     wrongAnswersList.push(qData.id);
@@ -2622,14 +2724,14 @@
                 "BASEN","BATON","BEKON","BIALY","BILET","BIWAK","BLASK","BLUZA","BOISK","BOMBA",
                 "BORDO","BRAMA","BRODA","BUDYN","BURZA","CEBUL","CECHA","CEGLA","CHATA","CHLEB",
                 "CIASO","CISZA","CYTAT","CZAJK","CZAPA","CZARY","DACHU","DANIE","DEMON","DIETA",
-                "DIODA","DOBRO","DOLAR","DOMEK","DROGA","DRZWI","DUMNY","DYNIA","DZBAN","DZIAD",
+                "DIODA","DOBRO","DOLAR","DOMEK","SESJA","DRZWI","DUMNY","DYNIA","DZBAN","DZIAD",
                 "EKRAN","ELITA","EPOKA","FABUL","FACET","FAJKA","FARBA","FAUNA","FILAR","FILTR",
                 "FIRMA","FLAGA","FLAKI","FOLIA","FORMA","FOTEL","FRAZA","GALOP","GARAZ","GAZON",
                 "GLEBA","GLINY","GLOWA","GMINA","GORAL","GORYL","GRACZ","GRUPA","GRZYB","HALAS",
-                "HOTEL","IDEAL","IMPER","INDEX","JABLO","JADRO","JAGOD","JAJKO","JAZDA","JEZYK",
-                "KABEL","KACZK","KADRA","KAFEL","KAJAK","KAMER","KANAL","KAPEL","KAPUS","KARTA",
+                "HOTEL","IDEAL","IMPER","KUTAS","JABLO","JADRO","JAGOD","JAJKO","JAZDA","JEZYK",
+                "KABEL","SESJA","KADRA","KAFEL","KAJAK","KAMER","KANAL","KAPEL","KAPUS","KARTA",
                 "KASZA","KATAR","KAWAL","KLASA","KLIMA","KLUCZ","KOALA","KOBRA","KOLEJ","KOMAR",
-                "KOPIA","KORAL","KOTEK","KRACH","KREDA","KROPL","KSIAZ","KUCHA","KURTK","KWIAT",
+                "KOPIA","KORAL","KOTEK","AAAAA","KREDA","KROPL","KSIAZ","KUCHA","KURTK","KWIAT",
                 "LAMPA","LASER","LEGAL","LINIA","LISTA","LITER","LODOW","LUSTR","MACZK","MAGIA",
                 "MALPA","MASKA","MEBLE","MEDAL","METAL","MIESO","MLEKO","MODUL","MORZE","MOTOR",
                 "MUCHA","MUZYK","NABOJ","NAGLE","NAUKA","NAZWA","NIEBO","NORMA","NUDNY","OBRAZ",
