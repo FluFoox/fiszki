@@ -213,7 +213,7 @@
 
         /* PRAWY SIDEBAR (PONG) - Poszerzony pod 3 przyciski */
         .pong-sidebar {
-            width: 210px;
+            width: 306px;
             background: var(--card-bg);
             border-radius: 12px;
             padding: 20px 15px;
@@ -1326,7 +1326,7 @@
         <div class="pong-sidebar">
             <div class="pong-title">Troche dopaminy</div>
             <div class="pong-score" id="pong-score-board">0 : 0</div>
-            <canvas id="pongCanvas" width="170" height="420"></canvas>
+            <canvas id="pongCanvas" width="261" height="558"></canvas>
             <div class="pong-controls">
                 <button id="pong-join-btn" class="pong-btn" onclick="setPongMode('join')">Dołącz</button>
                 <button id="pong-duel-btn" class="pong-btn" onclick="setPongMode('duel')">Duel</button>
@@ -2230,9 +2230,9 @@
             let ballSpeedX = 1.6;
             let ballSpeedY = 2.4;
 
-            const botSpeedTop = 1.8;   
-            const botSpeedBottom = 2.3; 
-            const playerSpeed = 3.0;
+            const botSpeedTop = 3.2;   
+            const botSpeedBottom = 3.8; 
+            const playerSpeed = 5.5;
 
             function updatePong() {
                 ballX += ballSpeedX;
