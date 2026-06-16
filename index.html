@@ -690,9 +690,15 @@
             bottom: 12px;
             right: 15px;
             font-size: 0.75rem;
-            color: #555555;
+            color: #aaaaaa;
             user-select: none;
             letter-spacing: 0.5px;
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid #444444;
+            border-radius: 8px;
+            padding: 5px 12px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
 
         /* FLAPPY BIRD */
@@ -2227,12 +2233,12 @@
 
             let ballX = canvas.width / 2;
             let ballY = canvas.height / 2;
-            let ballSpeedX = 1.6;
-            let ballSpeedY = 2.4;
+            let ballSpeedX = 2.02;
+            let ballSpeedY = 3.02;
 
-            const botSpeedTop = 3.2;   
-            const botSpeedBottom = 3.8; 
-            const playerSpeed = 5.5;
+            const botSpeedTop = 2.32;   
+            const botSpeedBottom = 2.76; 
+            const playerSpeed = 4.0;
 
             function updatePong() {
                 ballX += ballSpeedX;
