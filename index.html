@@ -429,6 +429,31 @@
             text-align: center;
         }
 
+        .phone-friend-btn {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: #fff;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 0 16px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: filter 0.15s, transform 0.1s;
+        }
+
+        .phone-friend-btn:hover:not(:disabled) {
+            filter: brightness(1.15);
+            transform: translateY(-1px);
+        }
+
+        .phone-friend-btn:disabled {
+            background: #333;
+            border-color: #444;
+            color: #888;
+            cursor: not-allowed;
+        }
+
         .question-navigation {
             display: flex;
             justify-content: space-between;
@@ -1178,6 +1203,7 @@
                     </select>
                     <input type="number" id="jump-number-input" placeholder="Nr pytania" min="1" onkeydown="if(event.key==='Enter') handleJumpToQuestionNumber()">
                     <button id="jump-number-btn" onclick="handleJumpToQuestionNumber()">➤</button>
+                    <button id="phone-friend-btn" class="phone-friend-btn" onclick="usePhoneAFriend()" title="Usuń jedną błędną odpowiedź za 400 pkt">📞 Telefon do przyjaciela (400 pkt)</button>
                 </div>
             </div>
 
@@ -1903,6 +1929,46 @@
                 optDiv.onclick = () => selectOption(index, optDiv);
                 container.appendChild(optDiv);
             });
+
+            updatePhoneFriendButton();
+        }
+
+        // --- TELEFON DO PRZYJACIELA ---
+        const PHONE_FRIEND_COST = 400;
+
+        function updatePhoneFriendButton() {
+            const btn = document.getElementById('phone-friend-btn');
+            if (!btn) return;
+            btn.disabled = (totalScore < PHONE_FRIEND_COST) || hasAnswered || activeQuestions.length === 0;
+        }
+
+        function usePhoneAFriend() {
+            if (hasAnswered) return;
+            if (totalScore < PHONE_FRIEND_COST) {
+                alert(`Potrzebujesz ${PHONE_FRIEND_COST} pkt, aby zadzwonić do przyjaciela!`);
+                return;
+            }
+
+            const container = document.getElementById('options-container');
+            const options = Array.from(container.children);
+
+            const wrongOptions = options
+                .map((opt, idx) => ({ opt, idx }))
+                .filter(o => o.idx !== currentDisplayedCorrectIndex && !o.opt.classList.contains('removed-option'));
+
+            if (wrongOptions.length === 0) return;
+
+            const chosen = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+            chosen.opt.classList.add('removed-option');
+            chosen.opt.onclick = null;
+            chosen.opt.style.opacity = '0.3';
+            chosen.opt.style.textDecoration = 'line-through';
+            chosen.opt.style.pointerEvents = 'none';
+
+            totalScore -= PHONE_FRIEND_COST;
+            updateScoreDisplay();
+            saveScoreState();
+            updatePhoneFriendButton();
         }
 
         function selectOption(selectedIndex, optElement) {
@@ -1955,6 +2021,7 @@
                 options[i].classList.add('disabled');
             }
             document.getElementById('next-btn').disabled = false;
+            updatePhoneFriendButton();
         }
 
         function flashContainer(type) {
@@ -2366,6 +2433,8 @@
                 frameCount = 0;
                 state = 'idle';
                 scoreEl.textContent = 0;
+                bestScore = parseInt(localStorage.getItem('flappyBestScore'), 10) || 0;
+                bestEl.textContent = bestScore;
                 setTimeout(() => { resizeCanvas(); draw(); }, 50);
             }
 
@@ -2423,6 +2492,7 @@
                         if (!bestScore || score > bestScore) {
                             bestScore = score;
                             bestEl.textContent = bestScore;
+                            localStorage.setItem('flappyBestScore', bestScore.toString());
                         }
                     }
 
