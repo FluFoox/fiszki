@@ -1156,6 +1156,67 @@
             100% { color: #ff5e5e; }
         }
 
+        /* ===== HAMBURGER BUTTON ===== */
+        .hamburger-btn {
+            position: fixed;
+            top: 62px; /* pod przyciskiem ? */
+            right: 15px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(30, 30, 30, 0.85);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 3000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease, background 0.2s ease;
+            padding: 0;
+        }
+        .hamburger-btn:hover {
+            transform: scale(1.1);
+            background-color: #3d3d3d;
+        }
+        .hamburger-btn .bar {
+            width: 16px;
+            height: 2px;
+            background: var(--text-muted);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .hamburger-btn.active .bar:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .hamburger-btn.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-btn.active .bar:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Animacja zsuwania sidebarów */
+        .saper-sidebar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+        }
+        .pong-sidebar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+        }
+        .saper-sidebar.hidden-sidebar {
+            transform: translateX(-120%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .pong-sidebar.hidden-sidebar {
+            transform: translateX(120%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
         /* Latające piwo w trybie disco */
         .disco-beer {
             position: fixed;
@@ -1179,6 +1240,11 @@
 
     <!-- DISCO MODE -->
     <button class="disco-btn" id="disco-btn" onclick="toggleDisco()" title="Disco mode">?</button>
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebars()" title="Pokaż/ukryj panele boczne">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
     <div class="disco-ball-wrapper" id="disco-ball-wrapper">
         <div class="disco-ball"></div>
     </div>
@@ -3140,6 +3206,25 @@
 
             window.addEventListener('load', initWordle);
         })();
+
+        // ===== HAMBURGER - chowanie/pokazywanie sidebarów =====
+        function toggleSidebars() {
+            const saperSidebar = document.querySelector('.saper-sidebar');
+            const pongSidebar = document.querySelector('.pong-sidebar');
+            const btn = document.getElementById('hamburger-btn');
+
+            const isHidden = saperSidebar.classList.contains('hidden-sidebar');
+
+            if (isHidden) {
+                saperSidebar.classList.remove('hidden-sidebar');
+                pongSidebar.classList.remove('hidden-sidebar');
+                btn.classList.remove('active');
+            } else {
+                saperSidebar.classList.add('hidden-sidebar');
+                pongSidebar.classList.add('hidden-sidebar');
+                btn.classList.add('active');
+            }
+        }
 
         window.onload = initQuiz;
 
