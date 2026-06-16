@@ -1617,7 +1617,7 @@
         let totalScore = parseInt(localStorage.getItem('quizScore'), 10) || 0;
 
         // Progi comba, przy których zwiększa się mnożnik (mnożnik startuje od combo = 2)
-        const COMBO_THRESHOLDS = [2, 4, 8, 16, 21, 27, 36, 42, 52, 67, 80];
+        const COMBO_THRESHOLDS = [2, 4, 8, 16, 21, 27, 36, 42, 52, 67, 80, 81, 100, 126, 151];
 
         function getMultiplierForCombo(combo) {
             let level = 0;
@@ -1854,6 +1854,13 @@
             document.getElementById('review-count').innerText = wrongAnswersList.length;
         }
 
+        // Losowe kolory dla nowych comb (81+)
+        const RANDOM_COMBO_COLORS = ['#ff1744', '#00e676', '#2979ff', '#ffea00', '#d500f9', '#ff6d00', '#1de9b6', '#f50057', '#76ff03', '#00b8d4'];
+
+        function getRandomComboColor() {
+            return RANDOM_COMBO_COLORS[Math.floor(Math.random() * RANDOM_COMBO_COLORS.length)];
+        }
+
         function updateComboDisplay() {
             const comboEl = document.getElementById('combo-display');
             if (currentCombo === 0) {
@@ -1892,9 +1899,21 @@
             } else if (currentCombo >= 67 && currentCombo <= 79) {
                 comboText = ` Dobre combo, po takim to juz fajrant 👍🏻👍🏼👍🏽👍🏾👍🏿 x${currentCombo}!`;
                 comboEl.style.color = '#008080';
-            } else if (currentCombo >= 80) {
+            } else if (currentCombo >= 80 && currentCombo <= 80) {
                 comboText = `🚬🚬 Siwydym 🚬🚬 x${currentCombo}!`;
                 comboEl.style.color = '#FFD700';
+            } else if (currentCombo >= 81 && currentCombo <= 99) {
+                comboText = `⚽ Robert Lewandowski byłby dumny ⚽ x${currentCombo}!`;
+                comboEl.style.color = getRandomComboColor();
+            } else if (currentCombo >= 100 && currentCombo <= 125) {
+                comboText = `🦘 102 metry!!! 🦘 x${currentCombo}!`;
+                comboEl.style.color = getRandomComboColor();
+            } else if (currentCombo >= 126 && currentCombo <= 150) {
+                comboText = `😳 Okurwa... 😳 x${currentCombo}!`;
+                comboEl.style.color = getRandomComboColor();
+            } else if (currentCombo >= 151) {
+                comboText = `🎉 WOWOWOWOWOWWOWW 🎉 x${currentCombo}!`;
+                comboEl.style.color = getRandomComboColor();
             }
             comboEl.innerText = comboText;
             comboEl.style.display = 'block';
