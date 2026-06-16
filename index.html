@@ -415,6 +415,33 @@
             position: relative;
         }
 
+        /* Przycisk "Kup mi kawe" w prawym górnym rogu okienka z fiszkami */
+        .coffee-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #6f4e37, #4b3220);
+            color: #fff;
+            border: 1px solid #8d6748;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: none;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .coffee-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
         .search-jump-container {
             display: flex;
             gap: 12px;
@@ -1173,6 +1200,9 @@
                 <span>Punkty: <span class="score-value" id="score-value">0</span></span>
                 <span class="mult-value" id="mult-value" style="display:none;"></span>
             </div>
+            <a href="https://suppi.pl/flufox" target="_blank" rel="noopener noreferrer" class="coffee-btn">
+                <span>☕</span><span>Kup mi kawe :p</span>
+            </a>
             <a href="https://www.youtube.com/watch?v=KSPxHniCtmw" target="_blank" class="title-link">
                 <h1>Fiszki Egzaminacyjne</h1>
             </a>
