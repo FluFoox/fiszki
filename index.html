@@ -93,6 +93,7 @@
             justify-content: center;
             margin-bottom: 40px;
             margin-top: 20px;
+            overflow: hidden;
         }
 
         /* SAPER (LEWY SIDEBAR) */
@@ -3220,6 +3221,13 @@
             const btn = document.getElementById('hamburger-btn');
 
             const isHidden = saperSidebar.classList.contains('hidden-sidebar');
+
+            // Zablokuj scrollbar na czas animacji
+            document.body.style.overflowX = 'hidden';
+            clearTimeout(window._sidebarOverflowTimer);
+            window._sidebarOverflowTimer = setTimeout(() => {
+                document.body.style.overflowX = '';
+            }, 450);
 
             if (isHidden) {
                 saperSidebar.classList.remove('hidden-sidebar');
