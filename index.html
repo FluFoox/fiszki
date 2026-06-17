@@ -1082,6 +1082,14 @@
             border-color: #ff6b35;
         }
 
+        .plinko-bet-btn.plinko-allin {
+            background: linear-gradient(135deg, #1a1a1a, #3d0000);
+            border-color: #ff1744;
+            color: #ff1744;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
         .plinko-bet-btn:hover:not(:disabled) {
             filter: brightness(1.2);
             transform: translateY(-1px);
@@ -1549,6 +1557,7 @@
                 <button class="plinko-bet-btn" onclick="dropPlinko(5)">🎱 5 pkt</button>
                 <button class="plinko-bet-btn plinko-mid" onclick="dropPlinko(15)">🎱 15 pkt</button>
                 <button class="plinko-bet-btn plinko-big" onclick="dropPlinko(30)">🎱 30 pkt</button>
+                <button class="plinko-bet-btn plinko-allin" onclick="dropPlinkoAllIn()">💀 All in</button>
             </div>
             <div class="plinko-custom-bet">
                 <input type="number" id="plinko-custom-input" min="1" placeholder="Wpisz kwotę..." />
@@ -3623,6 +3632,16 @@
 
                 requestAnimationFrame(frame);
             }
+
+            window.dropPlinkoAllIn = function() {
+                const balance = getBalance();
+                if (balance < 1) {
+                    const resultEl = document.getElementById('plinko-result');
+                    if (resultEl) { resultEl.textContent = '❌ Brak punktów!'; resultEl.style.color = '#f44336'; }
+                    return;
+                }
+                dropPlinko(balance);
+            };
 
             window.dropPlinkoCustom = function() {
                 const input = document.getElementById('plinko-custom-input');
