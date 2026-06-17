@@ -1144,6 +1144,91 @@
             color: var(--primary);
             font-family: monospace;
         }
+
+        /* LICHWIARZ */
+        .lichwiarz-section {
+            flex: 1 1 220px;
+            min-width: 220px;
+            max-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            border-left: 1px solid var(--border);
+            padding: 20px 18px 24px 18px;
+            box-sizing: border-box;
+        }
+
+        .lichwiarz-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .lichwiarz-title {
+            color: #ffb300;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .lichwiarz-icon {
+            font-size: 2.6rem;
+            margin: 6px 0 4px 0;
+            filter: drop-shadow(0 0 8px rgba(255, 179, 0, 0.4));
+        }
+
+        .lichwiarz-amount {
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        .lichwiarz-btn {
+            padding: 12px 18px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #7a4a00, #c47f00);
+            color: #fff;
+            border: 1px solid #ffb300;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: filter 0.15s, transform 0.1s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .lichwiarz-btn:hover:not(:disabled) {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
+        }
+
+        .lichwiarz-btn:disabled {
+            background: #2a2a2a;
+            border-color: #444;
+            color: #999;
+            cursor: not-allowed;
+            transform: none;
+            filter: none;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .lichwiarz-result {
+            margin-top: 14px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-align: center;
+            color: #ff8c00;
+            font-style: italic;
+            min-height: 20px;
+        }
     </style>
 
     <style>
@@ -1564,6 +1649,17 @@
                 <button class="plinko-bet-btn plinko-custom-go" id="plinko-custom-btn" onclick="dropPlinkoCustom()">🎱 Rzuć</button>
             </div>
             <div class="plinko-result" id="plinko-result"></div>
+        </div>
+
+        <!-- LICHWIARZ -->
+        <div class="lichwiarz-section">
+            <div class="lichwiarz-header">
+                <div class="lichwiarz-title">💰 Lichwiarz</div>
+                <div class="lichwiarz-icon">🤝</div>
+                <div class="lichwiarz-amount">Pożyczka: 2500 pkt<br>Dostępna co 24h</div>
+            </div>
+            <button class="lichwiarz-btn" id="lichwiarz-btn" onclick="wezPozyczke()">💸 Weź pożyczkę</button>
+            <div class="lichwiarz-result" id="lichwiarz-result"></div>
         </div>
     </div>
 
@@ -3711,6 +3807,73 @@
                 });
             };
 
+            // ===== LICHWIARZ =====
+            const LICHWIARZ_KEY = 'lichwiarzLastLoan';
+            const LICHWIARZ_AMOUNT = 2500;
+            const LICHWIARZ_COOLDOWN = 24 * 60 * 60 * 1000; // 24h w ms
+            const LICHWIARZ_MESSAGES = [
+                'Za jaką cenę...',
+                'Lichwiarz nigdy nie zapomina.',
+                'Wszystko ma swoją cenę.',
+                'Dług to dług.',
+                'Lichwiarz się uśmiecha...',
+                'Coś za coś, przyjacielu.',
+                'Zapamiętam tę przysługę.'
+            ];
+
+            function lichwiarzFormatTime(ms) {
+                const totalSec = Math.max(0, Math.floor(ms / 1000));
+                const h = Math.floor(totalSec / 3600);
+                const m = Math.floor((totalSec % 3600) / 60);
+                const s = totalSec % 60;
+                return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+            }
+
+            let lichwiarzInterval = null;
+
+            function lichwiarzUpdateButton() {
+                const btn = document.getElementById('lichwiarz-btn');
+                if (!btn) return;
+                const last = parseInt(localStorage.getItem(LICHWIARZ_KEY) || '0');
+                const elapsed = Date.now() - last;
+                const remaining = LICHWIARZ_COOLDOWN - elapsed;
+
+                if (remaining > 0) {
+                    btn.disabled = true;
+                    btn.textContent = '⏳ ' + lichwiarzFormatTime(remaining);
+                    if (!lichwiarzInterval) {
+                        lichwiarzInterval = setInterval(lichwiarzUpdateButton, 1000);
+                    }
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = '💸 Weź pożyczkę';
+                    if (lichwiarzInterval) {
+                        clearInterval(lichwiarzInterval);
+                        lichwiarzInterval = null;
+                    }
+                }
+            }
+
+            window.wezPozyczke = function() {
+                const last = parseInt(localStorage.getItem(LICHWIARZ_KEY) || '0');
+                const elapsed = Date.now() - last;
+                if (elapsed < LICHWIARZ_COOLDOWN) {
+                    lichwiarzUpdateButton();
+                    return;
+                }
+
+                setBalance(getBalance() + LICHWIARZ_AMOUNT);
+                localStorage.setItem(LICHWIARZ_KEY, Date.now().toString());
+
+                const resultEl = document.getElementById('lichwiarz-result');
+                if (resultEl) {
+                    const msg = LICHWIARZ_MESSAGES[Math.floor(Math.random() * LICHWIARZ_MESSAGES.length)];
+                    resultEl.textContent = '+' + LICHWIARZ_AMOUNT + ' pkt. ' + msg;
+                }
+
+                lichwiarzUpdateButton();
+            };
+
             window.addEventListener('load', function() {
                 const canvas = document.getElementById('plinkoCanvas');
                 if (!canvas) return;
@@ -3719,7 +3882,9 @@
                 buildBucketLabels();
                 const el = document.getElementById('plinko-balance');
                 if (el) el.textContent = getBalance();
+                lichwiarzUpdateButton();
             });
+
         })();
 
         // ===== HAMBURGER - chowanie/pokazywanie sidebarów =====
