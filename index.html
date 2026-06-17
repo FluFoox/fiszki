@@ -686,6 +686,30 @@
             color: var(--text-muted);
         }
 
+        .bottom-gif-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 30px 20px 50px 20px;
+            box-sizing: border-box;
+        }
+
+        .bottom-gif-section img {
+            max-width: 320px;
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+        }
+
+        .bottom-gif-caption {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
         .footer-credits {
             position: fixed;
             bottom: 12px;
@@ -1661,6 +1685,12 @@
             <button class="lichwiarz-btn" id="lichwiarz-btn" onclick="wezPozyczke()">💸 Weź pożyczkę</button>
             <div class="lichwiarz-result" id="lichwiarz-result"></div>
         </div>
+    </div>
+
+    <!-- GIF NA SAMYM DOLE -->
+    <div class="bottom-gif-section">
+        <img src="assets/ayumu-monkey.gif" alt="Szympans Ayumu rozwiązujący test pamięci numerycznej" loading="lazy">
+        <div class="bottom-gif-caption">🐵 Ayumu w akcji</div>
     </div>
 
     <div class="footer-credits">Kontakt FB: Kacper Sobczyk</div>
