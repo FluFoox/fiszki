@@ -762,19 +762,6 @@
         }
 
         /* WORDLE */
-        .wordle-section {
-            width: calc(100% + 40px);
-            margin: 0 -20px 40px -20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border);
-            padding: 20px 20px 24px 20px;
-            box-sizing: border-box;
-        }
-
         .wordle-header {
             display: flex;
             align-items: center;
@@ -963,6 +950,191 @@
             text-align: center;
             min-height: 24px;
             color: var(--text-color);
+        }
+
+        /* WORDLE + PLINKO ROW */
+        .wordle-plinko-row {
+            display: flex;
+            gap: 0;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1500px;
+            margin-bottom: 40px;
+        }
+
+        .wordle-section {
+            flex: 1 1 340px;
+            min-width: 300px;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            padding: 20px 20px 24px 20px;
+            box-sizing: border-box;
+            margin: 0;
+            width: auto;
+        }
+
+        /* PLINKO */
+        .plinko-section {
+            flex: 1 1 420px;
+            min-width: 340px;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 20px 20px 24px 20px;
+            box-sizing: border-box;
+        }
+
+        .plinko-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .plinko-title {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .plinko-balance {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-color);
+            font-family: monospace;
+            background: #121212;
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        #plinkoCanvas {
+            background: #0a0a0a;
+            border: 2px solid var(--border);
+            border-radius: 8px 8px 0 0;
+            display: block;
+            max-width: 100%;
+        }
+
+        .plinko-buckets-display {
+            display: flex;
+            width: 480px;
+            max-width: 100%;
+            margin-top: 0;
+            border-radius: 0 0 6px 6px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            border-top: none;
+        }
+
+        .plinko-bucket-label {
+            flex: 1;
+            text-align: center;
+            font-size: 0.62rem;
+            font-weight: bold;
+            padding: 4px 1px;
+            color: #000;
+            font-family: monospace;
+        }
+
+        .plinko-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .plinko-bet-btn {
+            padding: 9px 14px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #3700b3, #4b01e3);
+            color: #fff;
+            border: 1px solid #6600ff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: filter 0.15s, transform 0.1s;
+        }
+
+        .plinko-bet-btn.plinko-mid {
+            background: linear-gradient(135deg, #0d6e6e, #0f9b9b);
+            border-color: #00e5e5;
+        }
+
+        .plinko-bet-btn.plinko-big {
+            background: linear-gradient(135deg, #7a2000, #c43000);
+            border-color: #ff6b35;
+        }
+
+        .plinko-bet-btn:hover:not(:disabled) {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
+        }
+
+        .plinko-bet-btn:disabled {
+            background: #333;
+            border-color: #444;
+            color: #777;
+            cursor: not-allowed;
+            transform: none;
+            filter: none;
+        }
+
+        .plinko-custom-bet {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .plinko-custom-bet input {
+            width: 130px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            background: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        .plinko-custom-bet input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .plinko-bet-btn.plinko-custom-go {
+            background: linear-gradient(135deg, #4a148c, #7b1fa2);
+            border-color: #ce93d8;
+        }
+
+        .plinko-result {
+            margin-top: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            min-height: 26px;
+            color: var(--primary);
+            font-family: monospace;
         }
     </style>
 
@@ -1352,15 +1524,38 @@
         <div class="flappy-hint">Spacja / Kliknięcie / Dotknięcie → skok ptaka</div>
     </div>
 
-    <!-- WORDLE (CODZIENNY) -->
-    <div class="wordle-section">
-        <div class="wordle-header">
-            <div class="wordle-title">🟩 Wordle dnia</div>
-            <div class="wordle-info" id="wordle-date"></div>
+    <!-- WORDLE + PLINKO (NA DOLE OBOK SIEBIE) -->
+    <div class="wordle-plinko-row">
+        <!-- WORDLE (CODZIENNY) -->
+        <div class="wordle-section">
+            <div class="wordle-header">
+                <div class="wordle-title">🟩 Wordle dnia</div>
+                <div class="wordle-info" id="wordle-date"></div>
+            </div>
+            <div class="wordle-board" id="wordle-board"></div>
+            <div class="wordle-keyboard" id="wordle-keyboard"></div>
+            <div class="wordle-message" id="wordle-message"></div>
         </div>
-        <div class="wordle-board" id="wordle-board"></div>
-        <div class="wordle-keyboard" id="wordle-keyboard"></div>
-        <div class="wordle-message" id="wordle-message"></div>
+
+        <!-- PLINKO -->
+        <div class="plinko-section">
+            <div class="plinko-header">
+                <div class="plinko-title">🎯 Plinko</div>
+                <div class="plinko-balance">Pkt z fiszek: <span id="plinko-balance">0</span></div>
+            </div>
+            <canvas id="plinkoCanvas" width="480" height="560"></canvas>
+            <div class="plinko-buckets-display" id="plinko-buckets-display"></div>
+            <div class="plinko-controls">
+                <button class="plinko-bet-btn" onclick="dropPlinko(5)">🎱 5 pkt</button>
+                <button class="plinko-bet-btn plinko-mid" onclick="dropPlinko(15)">🎱 15 pkt</button>
+                <button class="plinko-bet-btn plinko-big" onclick="dropPlinko(30)">🎱 30 pkt</button>
+            </div>
+            <div class="plinko-custom-bet">
+                <input type="number" id="plinko-custom-input" min="1" placeholder="Wpisz kwotę..." />
+                <button class="plinko-bet-btn plinko-custom-go" id="plinko-custom-btn" onclick="dropPlinkoCustom()">🎱 Rzuć</button>
+            </div>
+            <div class="plinko-result" id="plinko-result"></div>
+        </div>
     </div>
 
     <div class="footer-credits">Kontakt FB: Kacper Sobczyk</div>
@@ -1703,6 +1898,9 @@
 
         function updateScoreDisplay() {
             document.getElementById('score-value').innerText = totalScore;
+            // Synchronizuj wyświetlenie w Plinko
+            const pEl = document.getElementById('plinko-balance');
+            if (pEl) pEl.textContent = totalScore;
             const multEl = document.getElementById('mult-value');
             const mult = getMultiplierForCombo(currentCombo);
             if (mult > 1) {
@@ -3206,6 +3404,303 @@
             });
 
             window.addEventListener('load', initWordle);
+        })();
+
+        // ===== PLINKO =====
+        (function() {
+            const CANVAS_W = 480;
+            const CANVAS_H = 560;
+            const ROWS = 10;          // trochę więcej rzędów
+            const PEG_R = 6;
+            const BALL_R = 8;
+            const TOP_PAD = 40;
+            const BOTTOM_PAD = 60;
+            const SIDE_PAD = 20;
+
+            // Mnożniki ODWRÓCONE – najwyższe na BOKACH, najniższy w centrum
+            // 11 kubełków (ROWS+1 = 10+1)
+            const BUCKETS = [
+                { mult: 5.0, color: '#1565c0' },
+                { mult: 2.0, color: '#1976d2' },
+                { mult: 1.2, color: '#0288d1' },
+                { mult: 0.6, color: '#0097a7' },
+                { mult: 0.5, color: '#2e6b1f' },
+                { mult: 0.1, color: '#c62828' },
+                { mult: 0.5, color: '#2e6b1f' },
+                { mult: 0.6, color: '#0097a7' },
+                { mult: 1.2, color: '#0288d1' },
+                { mult: 2.0, color: '#1976d2' },
+                { mult: 5.0, color: '#1565c0' },
+            ];
+            const NUM_BUCKETS = BUCKETS.length; // = ROWS + 1
+
+            // Punkty z fiszek – ten sam localStorage co quiz
+            function getBalance() {
+                return parseInt(localStorage.getItem('quizScore') || '0');
+            }
+            function setBalance(val) {
+                localStorage.setItem('quizScore', val.toString());
+                // Aktualizuj wyświetlenie w fiszce
+                const scoreEl = document.getElementById('score-value');
+                if (scoreEl) scoreEl.innerText = val;
+                // Aktualizuj wyświetlenie w Plinko
+                const pEl = document.getElementById('plinko-balance');
+                if (pEl) pEl.textContent = val;
+            }
+            let ballInFlight = false;
+
+            // Piramida: stały odstęp między kołkami, rzędy wycentrowane
+            // Rząd 0 (góra) → 2 kołki, rząd ROWS-1 (dół) → ROWS+1 kołków
+            function getPegPositions() {
+                const usableH = CANVAS_H - TOP_PAD - BOTTOM_PAD;
+                // Odstęp bazowany na ostatnim (najszerszym) rzędzie który ma NUM_BUCKETS kołków
+                const SPACING = (CANVAS_W - SIDE_PAD * 2) / (NUM_BUCKETS + 1);
+                const pegs = [];
+                for (let r = 0; r < ROWS; r++) {
+                    const cols = r + 2;
+                    const rowW = (cols - 1) * SPACING;
+                    const x0 = (CANVAS_W - rowW) / 2;
+                    const y = TOP_PAD + (r / (ROWS - 1)) * usableH;
+                    for (let c = 0; c < cols; c++) {
+                        pegs.push({ x: x0 + c * SPACING, y });
+                    }
+                }
+                return pegs;
+            }
+
+            function getBucketRects() {
+                const bw = (CANVAS_W - SIDE_PAD * 2) / NUM_BUCKETS;
+                const by = CANVAS_H - BOTTOM_PAD;
+                return BUCKETS.map((b, i) => ({
+                    x: SIDE_PAD + i * bw,
+                    y: by,
+                    w: bw,
+                    h: BOTTOM_PAD,
+                    ...b
+                }));
+            }
+
+            function drawStatic(ctx) {
+                ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+                // Background gradient
+                const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_H);
+                grad.addColorStop(0, '#0d0d1a');
+                grad.addColorStop(1, '#0a0a0a');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+
+                // Pegs – rysowane jako wypełnione kółka (kuleczki)
+                const pegs = getPegPositions();
+                pegs.forEach(p => {
+                    // glow
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, PEG_R + 3, 0, Math.PI * 2);
+                    const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, PEG_R + 3);
+                    glow.addColorStop(0, 'rgba(187,134,252,0.25)');
+                    glow.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.fillStyle = glow;
+                    ctx.fill();
+
+                    // kuleczka
+                    const ballGrad = ctx.createRadialGradient(p.x - PEG_R * 0.3, p.y - PEG_R * 0.3, PEG_R * 0.1, p.x, p.y, PEG_R);
+                    ballGrad.addColorStop(0, '#e0c8ff');
+                    ballGrad.addColorStop(0.4, '#9c6fd4');
+                    ballGrad.addColorStop(1, '#3d1a6e');
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, PEG_R, 0, Math.PI * 2);
+                    ctx.fillStyle = ballGrad;
+                    ctx.fill();
+                });
+
+                // Kubełki
+                const buckets = getBucketRects();
+                buckets.forEach((b) => {
+                    // tło
+                    ctx.fillStyle = b.color;
+                    ctx.fillRect(b.x + 1, b.y + 2, b.w - 2, b.h - 2);
+
+                    // tekst
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 11px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(b.mult + 'x', b.x + b.w / 2, b.y + b.h / 2);
+
+                    // separator
+                    ctx.strokeStyle = '#0a0a0a';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(b.x, b.y);
+                    ctx.lineTo(b.x, b.y + b.h);
+                    ctx.stroke();
+                });
+            }
+
+            function buildBucketLabels() {
+                const container = document.getElementById('plinko-buckets-display');
+                if (!container) return;
+                container.innerHTML = '';
+                BUCKETS.forEach(b => {
+                    const el = document.createElement('div');
+                    el.className = 'plinko-bucket-label';
+                    el.style.background = b.color;
+                    el.style.color = '#fff';
+                    el.textContent = b.mult + 'x';
+                    container.appendChild(el);
+                });
+            }
+
+            function animateBall(ctx, bet, resolve) {
+                const pegs = getPegPositions();
+
+                // Kulka startuje blisko centrum, lekki losowy offset
+                let bx = CANVAS_W / 2 + (Math.random() - 0.5) * 12;
+                let by = 6;
+                let vy = 0.5;
+                let vx = (Math.random() - 0.5) * 0.4;
+                const GRAVITY = 0.18;
+                const DAMPING = 0.38;
+                const BOUNCE_RAND = 1.6;
+
+                function frame() {
+                    drawStatic(ctx);
+
+                    vy += GRAVITY;
+                    bx += vx;
+                    by += vy;
+
+                    // Kolizja z kołkami
+                    pegs.forEach(p => {
+                        const dx = bx - p.x;
+                        const dy = by - p.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const minDist = PEG_R + BALL_R;
+                        if (dist < minDist && dist > 0) {
+                            const nx = dx / dist;
+                            const ny = dy / dist;
+                            // Wypchnij
+                            bx = p.x + nx * (minDist + 0.5);
+                            by = p.y + ny * (minDist + 0.5);
+                            // Odbicie z tłumieniem + losowość
+                            const dot = vx * nx + vy * ny;
+                            vx = (vx - 2 * dot * nx) * DAMPING + (Math.random() - 0.5) * BOUNCE_RAND;
+                            vy = Math.abs((vy - 2 * dot * ny) * DAMPING) + 0.3;
+                        }
+                    });
+
+                    // Ściany
+                    if (bx - BALL_R < 4) { bx = 4 + BALL_R; vx = Math.abs(vx) * 0.6; }
+                    if (bx + BALL_R > CANVAS_W - 4) { bx = CANVAS_W - 4 - BALL_R; vx = -Math.abs(vx) * 0.6; }
+
+                    // Rysuj kulkę gracza
+                    const bg = ctx.createRadialGradient(bx - BALL_R * 0.3, by - BALL_R * 0.35, BALL_R * 0.1, bx, by, BALL_R);
+                    bg.addColorStop(0, '#fff');
+                    bg.addColorStop(0.3, '#ff8c00');
+                    bg.addColorStop(1, '#c43000');
+                    ctx.beginPath();
+                    ctx.arc(bx, by, BALL_R, 0, Math.PI * 2);
+                    ctx.fillStyle = bg;
+                    ctx.shadowColor = '#ff6b00';
+                    ctx.shadowBlur = 14;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    // Sprawdź czy wpadła do kubełka
+                    const bucketTop = CANVAS_H - BOTTOM_PAD;
+                    if (by + BALL_R >= bucketTop) {
+                        const bw = (CANVAS_W - SIDE_PAD * 2) / NUM_BUCKETS;
+                        let idx = Math.floor((bx - SIDE_PAD) / bw);
+                        idx = Math.max(0, Math.min(NUM_BUCKETS - 1, idx));
+                        const mult = BUCKETS[idx].mult;
+                        const win = Math.round(bet * mult);
+                        resolve({ idx, mult, win, finalX: bx });
+                        return;
+                    }
+
+                    requestAnimationFrame(frame);
+                }
+
+                requestAnimationFrame(frame);
+            }
+
+            window.dropPlinkoCustom = function() {
+                const input = document.getElementById('plinko-custom-input');
+                const val = parseInt(input.value);
+                if (!val || val < 1) {
+                    const resultEl = document.getElementById('plinko-result');
+                    if (resultEl) { resultEl.textContent = '⚠️ Wpisz poprawną kwotę!'; resultEl.style.color = '#ffb74d'; }
+                    return;
+                }
+                dropPlinko(val);
+            };
+
+            // Enter w polu kwoty
+            document.addEventListener('DOMContentLoaded', function() {
+                const inp = document.getElementById('plinko-custom-input');
+                if (inp) inp.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') { e.preventDefault(); dropPlinkoCustom(); }
+                });
+            });
+
+            window.dropPlinko = function(bet) {
+                if (ballInFlight) return;
+                const balance = getBalance();
+                if (balance < bet) {
+                    const resultEl = document.getElementById('plinko-result');
+                    if (resultEl) { resultEl.textContent = '❌ Za mało punktów z fiszek!'; resultEl.style.color = '#f44336'; }
+                    return;
+                }
+
+                setBalance(balance - bet);
+                ballInFlight = true;
+
+                const btns = document.querySelectorAll('.plinko-bet-btn, #plinko-custom-btn');
+                btns.forEach(b => b.disabled = true);
+
+                const resultEl = document.getElementById('plinko-result');
+                if (resultEl) { resultEl.textContent = '🎱 Leci...'; resultEl.style.color = '#bb86fc'; }
+
+                const canvas = document.getElementById('plinkoCanvas');
+                const ctx = canvas.getContext('2d');
+
+                new Promise(resolve => animateBall(ctx, bet, resolve)).then(({ idx, mult, win, finalX }) => {
+                    setBalance(getBalance() + win);
+                    ballInFlight = false;
+                    btns.forEach(b => b.disabled = false);
+
+                    const profit = win - bet;
+                    let msg = '';
+                    let color = '#bb86fc';
+                    if (mult >= 4) { msg = `🔥 ${mult}x → +${win} pkt!`; color = '#29b6f6'; }
+                    else if (profit >= 0) { msg = `✅ ${mult}x → +${win} pkt`; color = '#66bb6a'; }
+                    else { msg = `💸 ${mult}x → +${win} pkt (−${bet - win})`; color = '#ef5350'; }
+                    if (resultEl) { resultEl.textContent = msg; resultEl.style.color = color; }
+
+                    // Narysuj kulkę w kubełku
+                    drawStatic(ctx);
+                    const bw = (CANVAS_W - SIDE_PAD * 2) / NUM_BUCKETS;
+                    const fx = SIDE_PAD + idx * bw + bw / 2;
+                    const fy = CANVAS_H - BOTTOM_PAD / 2;
+                    ctx.beginPath();
+                    ctx.arc(fx, fy, BALL_R, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ff8c00';
+                    ctx.shadowColor = '#ff6b00';
+                    ctx.shadowBlur = 14;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                });
+            };
+
+            window.addEventListener('load', function() {
+                const canvas = document.getElementById('plinkoCanvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                drawStatic(ctx);
+                buildBucketLabels();
+                const el = document.getElementById('plinko-balance');
+                if (el) el.textContent = getBalance();
+            });
         })();
 
         // ===== HAMBURGER - chowanie/pokazywanie sidebarów =====
